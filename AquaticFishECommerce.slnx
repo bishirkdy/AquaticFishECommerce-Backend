@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="../AquaticFishECommerce.API/AquaticFishECommerce.API.csproj" />
+    <Project Path="../AquaticFishECommerce.Application/AquaticFishECommerce.Application.csproj" />
+    <Project Path="../AquaticFishECommerce.Domain/AquaticFishECommerce.Domain.csproj" />
+    <Project Path="../AquaticFishECommerce.Infrastructure/AquaticFishECommerce.Infrastructure.csproj" />
+    <Project Path="../AquaticFishECommerce.Persistence/AquaticFishECommerce.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>
