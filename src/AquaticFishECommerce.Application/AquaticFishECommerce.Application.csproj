@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Behaviors\" />
+    <Folder Include="Common\Validators\" />
+    <Folder Include="Features\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="DTOs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AquaticFishECommerce.Domain\AquaticFishECommerce.Domain.csproj" />
+    <ProjectReference Include="..\AquaticFishECommerce.Infrastructure\AquaticFishECommerce.Infrastructure.csproj" />
+    <ProjectReference Include="..\AquaticFishECommerce.Persistence\AquaticFishECommerce.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

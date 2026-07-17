@@ -3,11 +3,11 @@
     <File Path=".gitignore" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="../AquaticFishECommerce.API/AquaticFishECommerce.API.csproj" />
-    <Project Path="../AquaticFishECommerce.Application/AquaticFishECommerce.Application.csproj" />
-    <Project Path="../AquaticFishECommerce.Domain/AquaticFishECommerce.Domain.csproj" />
-    <Project Path="../AquaticFishECommerce.Infrastructure/AquaticFishECommerce.Infrastructure.csproj" />
-    <Project Path="../AquaticFishECommerce.Persistence/AquaticFishECommerce.Persistence.csproj" />
+    <Project Path="src/AquaticFishECommerce.API/AquaticFishECommerce.API.csproj" />
+    <Project Path="src/AquaticFishECommerce.Application/AquaticFishECommerce.Application.csproj" />
+    <Project Path="src/AquaticFishECommerce.Domain/AquaticFishECommerce.Domain.csproj" />
+    <Project Path="src/AquaticFishECommerce.Infrastructure/AquaticFishECommerce.Infrastructure.csproj" />
+    <Project Path="src/AquaticFishECommerce.Persistence/AquaticFishECommerce.Persistence.csproj" />
   </Folder>
   <Folder Name="/tests/" />
 </Solution>
