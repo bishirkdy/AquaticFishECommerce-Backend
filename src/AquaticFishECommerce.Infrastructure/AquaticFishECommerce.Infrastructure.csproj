@@ -8,11 +8,14 @@
 
   <ItemGroup>
     <Folder Include="Authentication\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AquaticFishECommerce.Application\AquaticFishECommerce.Application.csproj" />
   </ItemGroup>
 
 </Project>

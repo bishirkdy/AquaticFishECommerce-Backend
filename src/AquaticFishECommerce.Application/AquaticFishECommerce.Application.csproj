@@ -10,18 +10,17 @@
     <Folder Include="Common\Behaviors\" />
     <Folder Include="Common\Validators\" />
     <Folder Include="Features\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="DTOs\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AquaticFishECommerce.Domain\AquaticFishECommerce.Domain.csproj" />
-    <ProjectReference Include="..\AquaticFishECommerce.Infrastructure\AquaticFishECommerce.Infrastructure.csproj" />
-    <ProjectReference Include="..\AquaticFishECommerce.Persistence\AquaticFishECommerce.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
