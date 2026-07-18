@@ -4,7 +4,7 @@ using System.Text;
 using AquaticFishECommerce.Application.DTOs.User;
 using FluentValidation;
 
-namespace AquaticFishECommerce.Application.Validators
+namespace AquaticFishECommerce.Application.Common.Validators
 {
     public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
     {

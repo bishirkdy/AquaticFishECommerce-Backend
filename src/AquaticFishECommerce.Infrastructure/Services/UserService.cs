@@ -4,9 +4,7 @@ using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 namespace AquaticFishECommerce.Infrastructure.Services
 {
     internal class UserService : IUserService
@@ -34,29 +32,51 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
 
 
-        public Task<string> LoginAsync(LoginDto dto)
+        public async Task<string> LoginAsync(LoginDto dto)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByEmailAsync(dto.Email);
+            if (user == null)
+                throw new Exception("Invalid Email Or Password");
+
+            return "Login Successfull";
         }
 
-        public Task<IEnumerable<UserListDto>> GetAllAsync()
+        public async Task<IEnumerable<UserListDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var users = await _userRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<UserListDto>>(users);
         }
 
-        public Task<UserDto?> GetByIdAsync(Guid id)
+        public async Task<UserDto?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsyn(id);
+            if (user == null)
+                throw new Exception("User not found.");
+
+            return _mapper.Map<UserDto>(user);
+
         }
 
-        public Task UpdateAsync(Guid id, UpdateUserDto dto)
+        public async Task UpdateAsync(Guid id, UpdateUserDto dto)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsyn(id);
+
+            if (user == null)
+                throw new Exception("User not found.");
+
+            _mapper.Map(dto, user);
+
+            await _userRepository.UpdateAsync(user);
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsyn(id);
+
+            if (user == null)
+                throw new Exception("User not found.");
+
+            await _userRepository.DeleteAsync(user);
         }
     }
 }

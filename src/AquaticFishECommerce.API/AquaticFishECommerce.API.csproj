@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AquaticFishECommerce.Application\AquaticFishECommerce.Application.csproj" />
     <ProjectReference Include="..\AquaticFishECommerce.Domain\AquaticFishECommerce.Domain.csproj" />
     <ProjectReference Include="..\AquaticFishECommerce.Infrastructure\AquaticFishECommerce.Infrastructure.csproj" />

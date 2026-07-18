@@ -3,7 +3,7 @@ using AquaticFishECommerce.API.Extensions;
 using AquaticFishECommerce.Infrastructure;
 using AquaticFishECommerce.Application;
 using AquaticFishECommerce.Persistence;
-using Microsoft.Extensions.DependencyInjection;
+
 namespace AquaticFishECommerce.API
 {
     public class Program
