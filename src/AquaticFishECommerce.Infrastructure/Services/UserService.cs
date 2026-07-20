@@ -11,11 +11,13 @@ namespace AquaticFishECommerce.Infrastructure.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IJwtService _jwtService;
 
-        public UserService(IUserRepository userRepository , IMapper mapper)
+        public UserService(IUserRepository userRepository , IMapper mapper , IJwtService jwtService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _jwtService = jwtService;
         }
 
         public async Task RegisterAsync(RegisterUserDto dto)
@@ -26,7 +28,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             }
 
             var user = _mapper.Map<User>(dto);
-
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
             await _userRepository.AddAsync(user);
         }
 
@@ -37,8 +39,11 @@ namespace AquaticFishECommerce.Infrastructure.Services
             var user = await _userRepository.GetByEmailAsync(dto.Email);
             if (user == null)
                 throw new Exception("Invalid Email Or Password");
-
-            return "Login Successfull";
+            bool isValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash);
+            if (!isValid)
+                throw new Exception("Invalid Email or Password");
+            var accessToken = _jwtService.GenerateAccessToken(user);
+            return accessToken;
         }
 
         public async Task<IEnumerable<UserListDto>> GetAllAsync()

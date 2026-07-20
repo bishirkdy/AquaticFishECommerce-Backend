@@ -4,14 +4,20 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Infrastructure.Services;
+using AquaticFishECommerce.Application.Common.Settings;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace AquaticFishECommerce.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services , IConfiguration configuration)
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
             return services;
         }
     }

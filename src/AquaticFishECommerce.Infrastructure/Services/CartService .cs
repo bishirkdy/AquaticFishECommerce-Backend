@@ -1,0 +1,122 @@
+using AquaticFishECommerce.Application.DTOs.CartItem;
+using AquaticFishECommerce.Application.Interfaces.Repositories;
+using AquaticFishECommerce.Application.Interfaces.Services;
+using AquaticFishECommerce.Domain.Entities;
+using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace AquaticFishECommerce.Infrastructure.Services
+{
+    public class CartService : ICartService
+    {
+        private readonly ICartItemRepository _cartItemRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
+        public CartService(ICartItemRepository cartItemRepository , IProductRepository productRepository , IMapper mapper)
+        {
+            _cartItemRepository = cartItemRepository;
+            _productRepository = productRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<CartResponseDto> GetCartAsync(Guid userId)
+        {
+            var cartItems = await _cartItemRepository.GetByIdAsyn(userId);
+
+            var items = _mapper.Map<List<CartItemResponseDto>>(cartItems);
+
+            return new CartResponseDto
+            {
+                UserId = userId,
+                Items = items,
+                TotalItems = items.Sum(x => x.Quantity),
+                GrandTotal = items.Sum(x => x.TotalPrice)
+            };
+        }
+
+        public async Task AddToCartAsyn(Guid userId, AddToCartDto dto)
+        {
+            var product = await _productRepository.GetByIdAsyn(dto.ProductId);
+
+            if (product == null)
+                throw new Exception("Product not found.");
+
+            if (!product.IsActive)
+                throw new Exception("Product is not available.");
+
+            if (dto.Quantity > product.Stock)
+                throw new Exception("Insufficient stock.");
+
+            var cartItem = await _cartItemRepository
+                .GetCartItemAsync(userId, dto.ProductId);
+
+            if (cartItem != null)
+            {
+                if (cartItem.Quantity + dto.Quantity > product.Stock)
+                    throw new Exception("Insufficient stock.");
+
+                cartItem.Quantity += dto.Quantity;
+
+                await _cartItemRepository.UpdateAsync(cartItem);
+            }
+            else
+            {
+                cartItem = new CartItem
+                {
+                    UserId = userId,
+                    ProductId = dto.ProductId,
+                    Quantity = dto.Quantity
+                };
+
+                await _cartItemRepository.AddAsync(cartItem);
+            }
+        }
+
+        public async Task UpdateQuantityAsync(
+            Guid userId,
+            Guid cartItemId,
+            UpdateCartItemDto dto)
+        {
+            var cartItem = await _cartItemRepository.GetByIdAsyn(cartItemId);
+
+            if (cartItem == null)
+                throw new Exception("Cart item not found.");
+
+            if (cartItem.UserId != userId)
+                throw new Exception("Unauthorized.");
+
+            var product = await _productRepository.GetByIdAsyn(cartItem.ProductId);
+
+            if (product == null)
+                throw new Exception("Product not found.");
+
+            if (dto.Quantity > product.Stock)
+                throw new Exception("Insufficient stock.");
+
+            cartItem.Quantity = dto.Quantity;
+
+            await _cartItemRepository.UpdateAsync(cartItem);
+        }
+
+        public async Task RemoveItemAsync(Guid userId, Guid cartItemId)
+        {
+            var cartItem = await _cartItemRepository.GetByIdAsyn(cartItemId);
+
+            if (cartItem == null)
+                throw new Exception("Cart item not found.");
+
+            if (cartItem.UserId != userId)
+                throw new Exception("Unauthorized.");
+
+            await _cartItemRepository.DeleteAsync(cartItem);
+        }
+
+        public async Task ClearCartAsync(Guid userId)
+        {
+            await _cartItemRepository.ClearCartAsync(userId);
+        }
+    }
+
+}
