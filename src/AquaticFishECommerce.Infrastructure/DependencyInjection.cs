@@ -17,6 +17,7 @@ namespace AquaticFishECommerce.Infrastructure
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IFavoriteService, FavoriteService>();
             services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
             return services;
         }
