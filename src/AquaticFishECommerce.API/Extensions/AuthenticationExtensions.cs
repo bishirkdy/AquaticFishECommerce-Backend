@@ -22,6 +22,29 @@ namespace AquaticFishECommerce.API.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
 
                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine("AUTH FAILED");
+                        Console.WriteLine(context.Exception);
+                        return Task.CompletedTask;
+                    },
+
+                    OnTokenValidated = context =>
+                    {
+                        Console.WriteLine("TOKEN VALIDATED");
+                        return Task.CompletedTask;
+                    },
+
+                    OnChallenge = context =>
+                    {
+                        Console.WriteLine("CHALLENGE");
+                        Console.WriteLine($"Error: {context.Error}");
+                        Console.WriteLine($"Description: {context.ErrorDescription}");
+                        return Task.CompletedTask;
+                    }
+                };
             });
             services.AddAuthorization();
 

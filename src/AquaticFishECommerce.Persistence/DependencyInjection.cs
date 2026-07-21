@@ -1,6 +1,7 @@
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Persistence.Context;
 using AquaticFishECommerce.Persistence.Repositories;
+using AquaticFishECommerce.Persistence.Seed;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ namespace AquaticFishECommerce.Persistence
             });
             services.AddScoped(typeof(IGenericRepository<>) , typeof(GenericRepository<>));
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<DbInitializer>();
             //services.AddScoped<IProductRepository, ProductRepository>();
             //services.AddScoped<IFavoriteRepository, FavoriteRepository>();
             //services.AddScoped<IOrderRepository, OrderRepository>();

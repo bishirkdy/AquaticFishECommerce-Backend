@@ -81,7 +81,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
                     ProductId = product.Id,
                     Quantity = item.Quantity,
                     Price = product.Price,
-                    Descount = product.DiscountPercentage
+                    Discount = product.DiscountPercentage
                 });
             }
 

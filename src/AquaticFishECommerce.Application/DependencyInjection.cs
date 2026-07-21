@@ -1,10 +1,8 @@
 using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using AquaticFishECommerce.Application.Mappings;
 using FluentValidation;
 using System.Reflection;
-using AquaticFishECommerce.Application.Common.Settings;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AquaticFishECommerce.Application
 {

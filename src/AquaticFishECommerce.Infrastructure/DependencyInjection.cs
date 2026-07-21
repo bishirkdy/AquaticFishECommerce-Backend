@@ -14,6 +14,7 @@ namespace AquaticFishECommerce.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services , IConfiguration configuration)
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IJwtService, JwtService>();
             //services.AddScoped<IProductService, ProductService>();
             //services.AddScoped<IFavoriteService, FavoriteService>();
