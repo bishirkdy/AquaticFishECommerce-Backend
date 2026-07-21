@@ -36,7 +36,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task<string> LoginAsync(LoginDto dto)
         {
-            var user = await _userRepository.GetByEmailAsync(dto.Email);
+            var user = await _userRepository.GetByEmailAsync(dto.Email);ty
             if (user == null)
                 throw new Exception("Invalid Email Or Password");
             bool isValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash);

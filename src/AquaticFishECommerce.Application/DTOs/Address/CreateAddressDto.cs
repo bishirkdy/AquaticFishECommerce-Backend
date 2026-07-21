@@ -1,14 +1,11 @@
-using AquaticFishECommerce.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AquaticFishECommerce.Domain.Entities
+namespace AquaticFishECommerce.Application.DTOs.Address
 {
-    public class Address : BaseEntity
+    public class CreateAddressDto
     {
-        public Guid UserId { get; set; }
-        public User User { get; set; } = null!;
         public string FullName { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;
@@ -17,7 +14,5 @@ namespace AquaticFishECommerce.Domain.Entities
         public string State { get; set; } = string.Empty;
         public string Pincode { get; set; } = string.Empty;
         public string? Landmark { get; set; }
-        public ICollection<Order> Orders { get; set; } = [];
-
     }
 }

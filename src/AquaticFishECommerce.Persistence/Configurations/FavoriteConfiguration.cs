@@ -12,7 +12,6 @@ namespace AquaticFishECommerce.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Favorite> builder)
         {
             builder.ToTable("Favorites");
-
             builder.HasKey(f => f.Id);
 
             builder.HasOne(s => s.User)

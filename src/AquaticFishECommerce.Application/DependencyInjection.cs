@@ -12,7 +12,7 @@ namespace AquaticFishECommerce.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services )
         {
-            services.AddAutoMapper(typeof(MappingProfile).Assembly);
+            services.AddAutoMapper(typeof(UserProfile).Assembly);
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             return services;
         }

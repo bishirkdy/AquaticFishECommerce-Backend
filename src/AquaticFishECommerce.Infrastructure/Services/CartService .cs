@@ -103,13 +103,10 @@ namespace AquaticFishECommerce.Infrastructure.Services
         public async Task RemoveItemAsync(Guid userId, Guid cartItemId)
         {
             var cartItem = await _cartItemRepository.GetByIdAsyn(cartItemId);
-
             if (cartItem == null)
                 throw new Exception("Cart item not found.");
-
             if (cartItem.UserId != userId)
                 throw new Exception("Unauthorized.");
-
             await _cartItemRepository.DeleteAsync(cartItem);
         }
 

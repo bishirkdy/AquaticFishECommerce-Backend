@@ -1,7 +1,4 @@
 using AquaticFishECommerce.Application.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using AquaticFishECommerce.Application.Interfaces;
 using AquaticFishECommerce.Persistence.Context;
 using Microsoft.EntityFrameworkCore;

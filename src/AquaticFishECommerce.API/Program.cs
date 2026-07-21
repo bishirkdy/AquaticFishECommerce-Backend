@@ -15,7 +15,6 @@ namespace AquaticFishECommerce.API
                 .AddControllers();
             var app = builder.Build();
             app.UseSwaggerDocumentation();
-
             app.UseExceptionMiddleware();
             app.UseHttpsRedirection();
             app.UseAuthentication();

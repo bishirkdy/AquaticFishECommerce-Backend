@@ -20,8 +20,11 @@ namespace AquaticFishECommerce.Persistence.Context
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
+        //OnModelCreating() is a method that EF Core automatically calls once when the application starts.
+        //ModelBuilder is an object that helps EF Core build the database model.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Find every class in this project that implements IEntityTypeConfiguration<T> and apply it automatically
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
         }

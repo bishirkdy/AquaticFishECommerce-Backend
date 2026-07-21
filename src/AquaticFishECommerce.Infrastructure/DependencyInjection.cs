@@ -6,7 +6,6 @@ using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Infrastructure.Services;
 using AquaticFishECommerce.Application.Common.Settings;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
 namespace AquaticFishECommerce.Infrastructure
 {
@@ -16,8 +15,10 @@ namespace AquaticFishECommerce.Infrastructure
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtService, JwtService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IFavoriteService, FavoriteService>();
+            //services.AddScoped<IProductService, ProductService>();
+            //services.AddScoped<IFavoriteService, FavoriteService>();
+            //services.AddScoped<IOrderService, OrderService>();
+            //services.AddScoped<IAddressService, AddressService>();
             services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
             return services;
         }

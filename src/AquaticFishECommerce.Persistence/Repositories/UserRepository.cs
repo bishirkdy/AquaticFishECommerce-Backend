@@ -19,8 +19,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
 
         public async Task<bool> EmailExistsAsync(string email)
         {
-            return await _dbSet
-                .AnyAsync(x => x.Email == email);
+            return await _dbSet.AnyAsync(x => x.Email == email);
         }
     }
 }

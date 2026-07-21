@@ -7,9 +7,9 @@ using AutoMapper;
 
 namespace AquaticFishECommerce.Application.Mappings
 {
-    public class MappingProfile : Profile
+    public class UserProfile : Profile
     {
-        public MappingProfile()
+        public UserProfile()
         {
             CreateMap<RegisterUserDto, User>();
             CreateMap<UpdateUserDto, User>();
