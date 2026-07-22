@@ -27,7 +27,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task AddFavoriteAsync(Guid userId, AddFavoriteDto dto)
         {
-            var product = await _productRepository.GetByIdAsyn(dto.ProductId);
+            var product = await _productRepository.GetByIdAsync(dto.ProductId);
 
             if (product == null)
                 throw new Exception("Product not found.");
@@ -65,7 +65,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task RemoveFavoriteAsync(Guid userId, Guid favoriteId)
         {
-            var favorite = await _favoriteRepository.GetByIdAsyn(favoriteId);
+            var favorite = await _favoriteRepository.GetByIdAsync(favoriteId);
 
             if (favorite == null)
                 throw new Exception("Favorite not found.");

@@ -12,6 +12,7 @@ namespace AquaticFishECommerce.API
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddApplication().AddPersistence(builder.Configuration).AddInfrastructure(builder.Configuration);
+            builder.Services.AddApiService(builder.Configuration);
             var app = builder.Build();
 
             //CreateScope() creates a temporary Dependency Injection scope.

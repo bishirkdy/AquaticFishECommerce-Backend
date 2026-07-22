@@ -7,9 +7,7 @@ using AquaticFishECommerce.Infrastructure.Settings;
 using AquaticFishECommerce.Infrastructure.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Infrastructure
 {

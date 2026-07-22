@@ -24,7 +24,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
         }
         public async Task<ProductImageResponseDto> CreateAsync( Stream stream, string fileName, Guid productId, bool isPrimary)
         {
-            var product = await _productRepository.GetByIdAsyn(productId);
+            var product = await _productRepository.GetByIdAsync(productId);
 
             if (product == null)
                 throw new NotFoundException("Product not found.");
@@ -59,7 +59,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
         public async Task DeleteAsync(Guid id)
         {
             var image =
-                await _productImageRepository.GetByIdAsyn(id);
+                await _productImageRepository.GetByIdAsync(id);
 
             if (image == null)
                 throw new NotFoundException("Image not found.");

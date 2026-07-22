@@ -23,7 +23,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task<CartResponseDto> GetCartAsync(Guid userId)
         {
-            var cartItems = await _cartItemRepository.GetByIdAsyn(userId);
+            var cartItems = await _cartItemRepository.GetByIdAsync(userId);
 
             var items = _mapper.Map<List<CartItemResponseDto>>(cartItems);
 
@@ -38,7 +38,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task AddToCartAsyn(Guid userId, AddToCartDto dto)
         {
-            var product = await _productRepository.GetByIdAsyn(dto.ProductId);
+            var product = await _productRepository.GetByIdAsync(dto.ProductId);
 
             if (product == null)
                 throw new Exception("Product not found.");
@@ -79,7 +79,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             Guid cartItemId,
             UpdateCartItemDto dto)
         {
-            var cartItem = await _cartItemRepository.GetByIdAsyn(cartItemId);
+            var cartItem = await _cartItemRepository.GetByIdAsync(cartItemId);
 
             if (cartItem == null)
                 throw new Exception("Cart item not found.");
@@ -87,7 +87,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             if (cartItem.UserId != userId)
                 throw new Exception("Unauthorized.");
 
-            var product = await _productRepository.GetByIdAsyn(cartItem.ProductId);
+            var product = await _productRepository.GetByIdAsync(cartItem.ProductId);
 
             if (product == null)
                 throw new Exception("Product not found.");
@@ -102,7 +102,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task RemoveItemAsync(Guid userId, Guid cartItemId)
         {
-            var cartItem = await _cartItemRepository.GetByIdAsyn(cartItemId);
+            var cartItem = await _cartItemRepository.GetByIdAsync(cartItemId);
             if (cartItem == null)
                 throw new Exception("Cart item not found.");
             if (cartItem.UserId != userId)

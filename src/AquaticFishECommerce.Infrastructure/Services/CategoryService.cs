@@ -30,7 +30,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task<CategoryResponseDto> GetByIdAsync(Guid id)
         {
-            var category = await _categoryRepository.GetByIdAsyn(id);
+            var category = await _categoryRepository.GetByIdAsync(id);
 
             if (category == null)
                 throw new NotFoundException("Category not found.");
@@ -50,7 +50,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task UpdateAsync(Guid id, UpdateCategoryDto dto)
         {
-            var category = await _categoryRepository.GetByIdAsyn(id);
+            var category = await _categoryRepository.GetByIdAsync(id);
 
             if (category == null)
                 throw new NotFoundException("Category not found.");
@@ -62,7 +62,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task DeleteAsync(Guid id)
         {
-            var category = await _categoryRepository.GetByIdAsyn(id);
+            var category = await _categoryRepository.GetByIdAsync(id);
 
             if (category == null)
                 throw new NotFoundException("Category not found.");

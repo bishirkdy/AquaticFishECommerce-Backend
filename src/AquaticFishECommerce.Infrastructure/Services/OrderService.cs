@@ -32,12 +32,12 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task<Guid> CreateOrderAsync(Guid userId, CreateOrderDto dto)
         {
-            var user = await _userRepository.GetByIdAsyn(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
             if(user == null)
             {
                 throw new NotFoundException("User not fount");
             }
-            var address = await _addressReporitory.GetByIdAsyn(dto.AddressId);
+            var address = await _addressReporitory.GetByIdAsync(dto.AddressId);
             if(address == null)
             {
                 throw new NotFoundException("Address not fount");
@@ -52,7 +52,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             var orderItems = new List<OrderItem>();
             foreach(var item in dto.Items)
             {
-                var product = await _productRepository.GetByIdAsyn(item.ProductId);
+                var product = await _productRepository.GetByIdAsync(item.ProductId);
                 if (product == null)
                     throw new NotFoundException("Product is not fount");
 
@@ -115,7 +115,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task CancelOrderItemAsync(Guid userId ,Guid productId , Guid orderId)
         {
-            var order = await _orderRepository.GetByIdAsyn(orderId);
+            var order = await _orderRepository.GetByIdAsync(orderId);
             if(order == null)
             {
                 throw new KeyNotFoundException("Order Not Fount");

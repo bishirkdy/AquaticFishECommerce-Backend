@@ -98,11 +98,10 @@ namespace AquaticFishECommerce.API.Controllers
 
             await _userService.UpdateAsync(id, dto);
 
-            return Ok(new ApiResponse<object>
+            return Ok(new ApiResponse
             {
                 Success = true,
                 Message = "User updated successfully.",
-                Data = null
             });
         }
 
@@ -112,11 +111,10 @@ namespace AquaticFishECommerce.API.Controllers
         {
             await _userService.DeleteAsync(id);
 
-            return Ok(new ApiResponse<object>
+            return Ok(new ApiResponse
             {
                 Success = true,
                 Message = "User deleted successfully.",
-                Data = null
             });
         }
     }

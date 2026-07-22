@@ -24,7 +24,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task<AddressResponseDto> AddAddressAsync(Guid userId , CreateAddressDto dto)
         {
-            var user = await _userRepository.GetByIdAsyn(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
             if(user == null)
             {
                 throw new Exception("User not fount");
