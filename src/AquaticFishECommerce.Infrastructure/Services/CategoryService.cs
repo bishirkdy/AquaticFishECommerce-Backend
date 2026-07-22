@@ -21,6 +21,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             _mapper = mapper;
         }
 
+        //Service to take all category
         public async Task<IEnumerable<CategoryResponseDto>> GetAllAsync()
         {
             var categories = await _categoryRepository.GetAllAsync();
@@ -28,6 +29,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             return _mapper.Map<IEnumerable<CategoryResponseDto>>(categories);
         }
 
+        //Service to take one category
         public async Task<CategoryResponseDto> GetByIdAsync(Guid id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
@@ -38,6 +40,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             return _mapper.Map<CategoryResponseDto>(category);
         }
 
+        //Service to create category
         public async Task<CategoryResponseDto> CreateAsync(CreateCategoryDto dto)
         {
             if (await _categoryRepository.ExistsByNameAsync(dto.Name))
@@ -48,6 +51,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             return _mapper.Map<CategoryResponseDto>(category);
         }
 
+        //Service to update category
         public async Task UpdateAsync(Guid id, UpdateCategoryDto dto)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
@@ -59,7 +63,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             await _categoryRepository.UpdateAsync(category);
         }
 
-
+        //Service to delete category
         public async Task DeleteAsync(Guid id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
