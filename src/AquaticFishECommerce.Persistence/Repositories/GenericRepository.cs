@@ -18,7 +18,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
         }
 
         // Finds an entity using its primary key.
-        public async Task<T?> GetByIdAsyn(Guid id)
+        public async Task<T?> GetByIdAsync(Guid id)
         {
             return await _dbSet.FindAsync(id);
         }

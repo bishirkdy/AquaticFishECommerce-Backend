@@ -1,9 +1,7 @@
 using AquaticFishECommerce.Application.DTOs.Category;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace AquaticFishECommerce.Infrastructure.Services
+
+namespace AquaticFishECommerce.Application.Interfaces.Services
 {
     public interface ICategoryService
     {

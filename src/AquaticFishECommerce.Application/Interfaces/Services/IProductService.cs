@@ -9,8 +9,11 @@ namespace AquaticFishECommerce.Application.Interfaces.Services
     {
         Task<IEnumerable<ProductResponseDto>> GetAllAsync();
         Task<ProductResponseDto?> GetByIdAsync(Guid id);
-        Task<ProductResponseDto> CreateAsync(CreateProductDto dto);
-        Task UpdateAsync(Guid id, UpdateProductDto dto);
+        Task<ProductResponseDto> CreateAsync(
+            CreateProductDto dto,
+            Stream? stream,
+            string? fileName,
+            bool isPrimary); Task UpdateAsync(Guid id, UpdateProductDto dto);
         Task DeleteAsync(Guid id);
     }
 }

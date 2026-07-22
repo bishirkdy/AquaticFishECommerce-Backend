@@ -4,6 +4,7 @@ using System.Text;
 
 namespace AquaticFishECommerce.Application.DTOs.User
 {
+    //This is Dto for update user 
     public class UpdateUserDto
     {
         public string Name { get; set; } = string.Empty;

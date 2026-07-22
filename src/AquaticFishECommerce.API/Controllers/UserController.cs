@@ -2,7 +2,6 @@ using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Response;
 using AquaticFishECommerce.Application.DTOs.User;
 using AquaticFishECommerce.Application.Interfaces.Services;
-using AquaticFishECommerce.Domain.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +15,13 @@ namespace AquaticFishECommerce.API.Controllers
         private readonly IUserService _userService;
         private readonly IValidator<RegisterUserDto> _registerValidator;
         private readonly IValidator<LoginDto> _loginValidator;
-        public UserController(IUserService userService, IValidator<RegisterUserDto> registerValidator, IValidator<LoginDto> loginValidator)
+        private readonly IValidator<UpdateUserDto> _updateUserValidator;
+        public UserController(IUserService userService, IValidator<RegisterUserDto> registerValidator, IValidator<LoginDto> loginValidator , IValidator<UpdateUserDto> updateUserValidator)
         {
             _userService = userService;
             _registerValidator = registerValidator;
             _loginValidator = loginValidator;
+            _updateUserValidator = updateUserValidator;
         }
         //Controller for registration
         [HttpPost("register")]
@@ -32,9 +33,10 @@ namespace AquaticFishECommerce.API.Controllers
                 return BadRequest(validator.Errors);
             }
             await _userService.RegisterAsync(dto);
-            return StatusCode(StatusCodes.Status201Created, new
+            return StatusCode(StatusCodes.Status201Created, new ApiResponse
             {
-                Message = "User registered successfully"
+                Message = "User registered successfully",
+                Success = true
             });
         }
         //Controller for login
@@ -88,6 +90,12 @@ namespace AquaticFishECommerce.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, UpdateUserDto dto)
         {
+            var validator = await _updateUserValidator.ValidateAsync(dto);
+            if (!validator.IsValid)
+            {
+                return BadRequest(validator.Errors);
+            }
+
             await _userService.UpdateAsync(id, dto);
 
             return Ok(new ApiResponse<object>

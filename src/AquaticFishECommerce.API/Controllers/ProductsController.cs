@@ -1,3 +1,4 @@
+using AquaticFishECommerce.API.Requests.Product;
 using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Product;
 using AquaticFishECommerce.Application.Interfaces.Services;
@@ -47,26 +48,51 @@ namespace AquaticFishECommerce.API.Controllers
                     Data = product
                 });
             }
-
-            [HttpPost]
-            [Authorize(Roles = "Admin")]
-        //Controller to add product for admin
-        public async Task<IActionResult> Create(CreateProductDto dto)
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([FromForm] CreateProductRequest request)
+        {
+            // Step 1: Convert Request to DTO
+            var dto = new CreateProductDto
             {
-                var product = await _productService.CreateAsync(dto);
+                Name = request.Name,
+                Description = request.Description,
+                Price = request.Price,
+                Stock = request.Stock,
+                DiscountPercentage = request.DiscountPercentage,
+                IsActive = request.IsActive,
+                CategoryId = request.CategoryId
+            };
 
-                return CreatedAtAction(
-                    nameof(GetById),
-                    new { id = product.Id },
-                    new ApiResponse<ProductResponseDto>
-                    {
-                        Success = true,
-                        Message = $"{product.Name} Created Successfully",
-                        Data = product
-                    });
+            // Step 2: Open image stream
+            Stream? stream = null;
+            string? fileName = null;
+
+            if (request.Image != null)
+            {
+                stream = request.Image.OpenReadStream();
+                fileName = request.Image.FileName;
             }
 
-            [HttpPut("{id:guid}")]
+            // Step 3: Call service
+            var product = await _productService.CreateAsync(
+                dto,
+                stream,
+                fileName,
+                request.IsPrimary);
+
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = product.Id },
+                new ApiResponse<ProductResponseDto>
+                {
+                    Success = true,
+                    Message = $"{product.Name} created successfully.",
+                    Data = product
+                });
+        }
+
+        [HttpPut("{id:guid}")]
             [Authorize(Roles = "Admin")]
         //Controller to update products for admin
         public async Task<IActionResult> Update(Guid id, UpdateProductDto dto)

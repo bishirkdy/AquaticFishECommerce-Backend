@@ -7,8 +7,11 @@ namespace AquaticFishECommerce.API.Extensions
     {
         public static IServiceCollection AddJwtAuthentification(this IServiceCollection services , IConfiguration configuration)
         {
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) is equivalent to services.AddAuthentication("Bearer").
+            //AddJwtBearer() configures ASP.NET Core to authenticate and validate JWT Bearer tokens.
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
+                //TokenValidationParameters defines the rules ASP.NET Core uses to validate an incoming JWT.
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -22,6 +25,8 @@ namespace AquaticFishECommerce.API.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
 
                 };
+                //options.Events - property lets you execute your own code when specific authentication events occur.
+                //JwtBearerEvents provides event handlers that run during the JWT authentication lifecycle.
                 options.Events = new JwtBearerEvents
                 {
                     OnAuthenticationFailed = context =>

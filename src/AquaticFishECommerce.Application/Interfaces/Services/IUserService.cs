@@ -1,8 +1,6 @@
 using AquaticFishECommerce.Application.DTOs.Response;
 using AquaticFishECommerce.Application.DTOs.User;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Application.Interfaces.Services
 {

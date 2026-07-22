@@ -1,7 +1,6 @@
 using AquaticFishECommerce.Application.Common.Exceptions;
 using AquaticFishECommerce.Application.DTOs.Response;
 using AquaticFishECommerce.Application.DTOs.User;
-using AquaticFishECommerce.Application.Interfaces;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Domain.Entities;
@@ -78,7 +77,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             if (id == Guid.Empty)
                 throw new BadRequestException("Id is required");
 
-            var user = await _userRepository.GetByIdAsyn(id);
+            var user = await _userRepository.GetByIdAsync(id);
 
             if (user == null)
             {
@@ -93,7 +92,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             if (id == Guid.Empty)
                 throw new BadRequestException("Id is required");
 
-            var user = await _userRepository.GetByIdAsyn(id);
+            var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
                 throw new NotFoundException("User not found.");
@@ -110,7 +109,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             if (id == Guid.Empty)
                 throw new BadRequestException("Id is required");
 
-            var user = await _userRepository.GetByIdAsyn(id);
+            var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
                 throw new NotFoundException("User not found.");

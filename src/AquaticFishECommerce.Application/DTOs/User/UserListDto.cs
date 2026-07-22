@@ -4,6 +4,7 @@ using System.Text;
 
 namespace AquaticFishECommerce.Application.DTOs.User
 {
+    //This is Dto for take users as list 
     public class UserListDto
     {
         public Guid Id { get; set; }

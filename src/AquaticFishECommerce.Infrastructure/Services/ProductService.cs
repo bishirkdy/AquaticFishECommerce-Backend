@@ -1,5 +1,6 @@
 using AquaticFishECommerce.Application.Common.Exceptions;
 using AquaticFishECommerce.Application.DTOs.Product;
+using AquaticFishECommerce.Application.Interfaces.External;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Domain.Entities;
@@ -15,10 +16,14 @@ namespace AquaticFishECommerce.Infrastructure.Services
     {
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
-        public ProductService(IProductRepository productRepository, IMapper mapper)
+        private readonly ICloudinaryService _cloudinaryService;
+        private readonly IProductImageRepository _productImageRepository;
+        public ProductService(IProductRepository productRepository, IMapper mapper , ICloudinaryService cloudinaryService , IProductImageRepository productImageRepository)
         {
             _productRepository = productRepository;
             _mapper = mapper;
+            _cloudinaryService = cloudinaryService;
+            _productImageRepository = productImageRepository;
         }
 
         public async Task<IEnumerable<ProductResponseDto>> GetAllAsync()
@@ -33,10 +38,25 @@ namespace AquaticFishECommerce.Infrastructure.Services
             return _mapper.Map<ProductResponseDto>(product);
         }
 
-        public async Task<ProductResponseDto> CreateAsync(CreateProductDto dto)
+        public async Task<ProductResponseDto> CreateAsync(CreateProductDto dto,Stream? stream,string? fileName,bool isPrimary)
         {
             var product = _mapper.Map<Product>(dto);
             await _productRepository.AddAsync(product);
+            if (stream != null && fileName != null)
+            {
+                var upload =
+                    await _cloudinaryService.UploadAsync(stream, fileName);
+
+                var image = new ProductImage
+                {
+                    ProductId = product.Id,
+                    ImageUrl = upload.ImageUrl,
+                    PublicId = upload.PublicId,
+                    IsPrimary = isPrimary
+                };
+
+                await _productImageRepository.AddAsync(image);
+            }
             return _mapper.Map<ProductResponseDto>(product);
         }
 

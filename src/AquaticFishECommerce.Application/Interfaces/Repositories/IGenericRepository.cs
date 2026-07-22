@@ -6,7 +6,7 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<T?> GetByIdAsyn(Guid id);
+        Task<T?> GetByIdAsync(Guid id);
         Task<IEnumerable<T>> GetAllAsync();
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);

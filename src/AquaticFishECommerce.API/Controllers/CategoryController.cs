@@ -1,8 +1,9 @@
 using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Category;
-using AquaticFishECommerce.Infrastructure.Services;
+using AquaticFishECommerce.Application.Interfaces.External;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AquaticFishECommerce.Application.Interfaces.Services;
 
 namespace AquaticFishECommerce.API.Controllers
 {

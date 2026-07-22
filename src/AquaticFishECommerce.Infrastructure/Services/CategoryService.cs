@@ -1,6 +1,8 @@
 using AquaticFishECommerce.Application.Common.Exceptions;
 using AquaticFishECommerce.Application.DTOs.Category;
+using AquaticFishECommerce.Application.Interfaces.External;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
+using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
 
