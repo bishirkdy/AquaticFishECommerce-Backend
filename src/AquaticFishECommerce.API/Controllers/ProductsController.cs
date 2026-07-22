@@ -1,5 +1,7 @@
+using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Product;
 using AquaticFishECommerce.Application.Interfaces.Services;
+using AquaticFishECommerce.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,56 +20,77 @@ namespace AquaticFishECommerce.API.Controllers
 
             [HttpGet]
             [AllowAnonymous]
-            public async Task<IActionResult> GetAll()
+        //Controller to get all products
+        public async Task<IActionResult> GetAll()
             {
                 var products = await _productService.GetAllAsync();
 
-                return Ok(products);
+                return Ok(new ApiResponse<IEnumerable<ProductResponseDto>>
+                {
+                    Success = true,
+                    Message = "Product fetched successfully",
+                    Data = products
+                });
             }
 
             [HttpGet("{id:guid}")]
             [AllowAnonymous]
-            public async Task<IActionResult> GetById(Guid id)
+        //Controller to get only one product by id
+        public async Task<IActionResult> GetById(Guid id)
             {
                 var product = await _productService.GetByIdAsync(id);
 
-                if (product == null)
-                    return NotFound(new
-                    {
-                        Message = "Product not found."
-                    });
-
-                return Ok(product);
+                return Ok(new ApiResponse<ProductResponseDto>
+                {
+                    Success = true,
+                    Message = "Product fetched successfully",
+                    Data = product
+                });
             }
 
             [HttpPost]
             [Authorize(Roles = "Admin")]
-            public async Task<IActionResult> Create(CreateProductDto dto)
+        //Controller to add product for admin
+        public async Task<IActionResult> Create(CreateProductDto dto)
             {
                 var product = await _productService.CreateAsync(dto);
 
                 return CreatedAtAction(
                     nameof(GetById),
                     new { id = product.Id },
-                    product);
+                    new ApiResponse<ProductResponseDto>
+                    {
+                        Success = true,
+                        Message = $"{product.Name} Created Successfully",
+                        Data = product
+                    });
             }
 
             [HttpPut("{id:guid}")]
             [Authorize(Roles = "Admin")]
-            public async Task<IActionResult> Update(Guid id, UpdateProductDto dto)
+        //Controller to update products for admin
+        public async Task<IActionResult> Update(Guid id, UpdateProductDto dto)
             {
-                await _productService.UpdateAsync(id, dto);
-
-                return NoContent();
+            await _productService.UpdateAsync(id, dto);
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message= "Product updated successfully",
+            });
             }
 
             [HttpDelete("{id:guid}")]
             [Authorize(Roles = "Admin")]
-            public async Task<IActionResult> Delete(Guid id)
+        //Controller to delete products for admin
+        public async Task<IActionResult> Delete(Guid id)
             {
                 await _productService.DeleteAsync(id);
 
-                return NoContent();
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Message = "Product deleted successfully",
+                });
             }
         }
 }

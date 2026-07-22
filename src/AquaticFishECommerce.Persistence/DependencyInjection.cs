@@ -1,4 +1,5 @@
 using AquaticFishECommerce.Application.Interfaces.Repositories;
+using AquaticFishECommerce.Infrastructure.Services;
 using AquaticFishECommerce.Persistence.Context;
 using AquaticFishECommerce.Persistence.Repositories;
 using AquaticFishECommerce.Persistence.Seed;
@@ -22,7 +23,8 @@ namespace AquaticFishECommerce.Persistence
             services.AddScoped(typeof(IGenericRepository<>) , typeof(GenericRepository<>));
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<DbInitializer>();
-            //services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             //services.AddScoped<IFavoriteRepository, FavoriteRepository>();
             //services.AddScoped<IOrderRepository, OrderRepository>();
             //services.AddScoped<IAddressRepository, AddressRepository>();

@@ -5,8 +5,9 @@ using System.Text;
 
 namespace AquaticFishECommerce.Application.Interfaces.Repositories
 {
-    public interface IAddressRepository : IGenericRepository<Address>
+    public interface ICategoryRepository : IGenericRepository<Category>
     {
-        //Task<bool> ExistByNameAsync(string name);
+        Task<bool> ExistsByNameAsync(string name);
+        Task<bool> HasProductsAsync(Guid categoryId);
     }
 }

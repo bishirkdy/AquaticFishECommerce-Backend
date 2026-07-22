@@ -2,7 +2,7 @@ using AquaticFishECommerce.Application.DTOs.User;
 using FluentValidation;
 
 
-namespace AquaticFishECommerce.Application.Common.Validators.UserValidator
+namespace AquaticFishECommerce.Application.Validators.UserValidator
 {
     //FluentValidation - Validate request data
     //AbstractValidator<T> is the base class from the FluentValidation library. It lets you define validation rules for a specific model or DTO

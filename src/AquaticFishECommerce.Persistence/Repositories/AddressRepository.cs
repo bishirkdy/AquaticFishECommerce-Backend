@@ -10,6 +10,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
     public class AddressRepository : GenericRepository<Address> , IAddressRepository
     {
         public AddressRepository(AppDbContext context) : base(context) { }
+ 
 
     }
 }

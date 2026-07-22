@@ -1,3 +1,4 @@
+using AquaticFishECommerce.Application.Common.Exceptions;
 using AquaticFishECommerce.Application.DTOs.Product;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services;
@@ -29,8 +30,6 @@ namespace AquaticFishECommerce.Infrastructure.Services
         public async Task<ProductResponseDto> GetByIdAsync(Guid id)
         {
             var product = await _productRepository.GetByIdAsyn(id);
-            if (product == null)
-                return null;
             return _mapper.Map<ProductResponseDto>(product);
         }
 
@@ -44,7 +43,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
         public async Task UpdateAsync(Guid id, UpdateProductDto dto)
         {
             var product = await _productRepository.GetByIdAsyn(id);
-            if (product == null)
+            if(product == null)
                 throw new Exception("Product not found.");
             _mapper.Map(dto, product);
             await _productRepository.UpdateAsync(product);

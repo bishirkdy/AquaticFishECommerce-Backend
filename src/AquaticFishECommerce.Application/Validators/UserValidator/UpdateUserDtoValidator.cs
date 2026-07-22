@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AquaticFishECommerce.Application.Common.Validators.UserValidator
+namespace AquaticFishECommerce.Application.Validators.UserValidator
 {
     public class UpdateUserDtoValidator : AbstractValidator<UpdateUserDto>
     {

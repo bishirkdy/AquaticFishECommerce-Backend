@@ -16,7 +16,8 @@ namespace AquaticFishECommerce.Infrastructure
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IJwtService, JwtService>();
-            //services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
             //services.AddScoped<IFavoriteService, FavoriteService>();
             //services.AddScoped<IOrderService, OrderService>();
             //services.AddScoped<IAddressService, AddressService>();
