@@ -1,11 +1,10 @@
+using AquaticFishECommerce.Application.Common.Exceptions;
 using AquaticFishECommerce.Application.DTOs.CartItem;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Infrastructure.Services
 {
@@ -21,10 +20,10 @@ namespace AquaticFishECommerce.Infrastructure.Services
             _mapper = mapper;
         }
 
+        //Service for get cart item for user
         public async Task<CartResponseDto> GetCartAsync(Guid userId)
         {
             var cartItems = await _cartItemRepository.GetByIdAsync(userId);
-
             var items = _mapper.Map<List<CartItemResponseDto>>(cartItems);
 
             return new CartResponseDto
@@ -36,18 +35,19 @@ namespace AquaticFishECommerce.Infrastructure.Services
             };
         }
 
+        //Service for add to cart
         public async Task AddToCartAsyn(Guid userId, AddToCartDto dto)
         {
             var product = await _productRepository.GetByIdAsync(dto.ProductId);
 
             if (product == null)
-                throw new Exception("Product not found.");
+                throw new KeyNotFoundException("Product not found.");
 
             if (!product.IsActive)
-                throw new Exception("Product is not available.");
+                throw new KeyNotFoundException("Product is not available.");
 
             if (dto.Quantity > product.Stock)
-                throw new Exception("Insufficient stock.");
+                throw new BadRequestException("Insufficient stock.");
 
             var cartItem = await _cartItemRepository
                 .GetCartItemAsync(userId, dto.ProductId);
@@ -55,7 +55,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             if (cartItem != null)
             {
                 if (cartItem.Quantity + dto.Quantity > product.Stock)
-                    throw new Exception("Insufficient stock.");
+                    throw new BadRequestException("Insufficient stock.");
 
                 cartItem.Quantity += dto.Quantity;
 
@@ -74,39 +74,40 @@ namespace AquaticFishECommerce.Infrastructure.Services
             }
         }
 
-        public async Task UpdateQuantityAsync(
-            Guid userId,
-            Guid cartItemId,
-            UpdateCartItemDto dto)
+        //Service for update Quentity of cart item
+        public async Task UpdateQuantityAsync(Guid userId, Guid cartItemId, UpdateCartItemDto dto)
         {
             var cartItem = await _cartItemRepository.GetByIdAsync(cartItemId);
 
             if (cartItem == null)
-                throw new Exception("Cart item not found.");
+                throw new KeyNotFoundException("Cart item not found.");
 
             if (cartItem.UserId != userId)
-                throw new Exception("Unauthorized.");
+                throw new UnauthorizedAccessException("Unauthorized.");
 
             var product = await _productRepository.GetByIdAsync(cartItem.ProductId);
 
             if (product == null)
-                throw new Exception("Product not found.");
+                throw new KeyNotFoundException("Product not found.");
 
             if (dto.Quantity > product.Stock)
-                throw new Exception("Insufficient stock.");
+                throw new BadRequestException("Insufficient stock.");
 
             cartItem.Quantity = dto.Quantity;
 
             await _cartItemRepository.UpdateAsync(cartItem);
         }
 
+        //Service for remove item from cart
         public async Task RemoveItemAsync(Guid userId, Guid cartItemId)
         {
             var cartItem = await _cartItemRepository.GetByIdAsync(cartItemId);
             if (cartItem == null)
-                throw new Exception("Cart item not found.");
+                throw new KeyNotFoundException("Cart item not found.");
+
             if (cartItem.UserId != userId)
                 throw new Exception("Unauthorized.");
+
             await _cartItemRepository.DeleteAsync(cartItem);
         }
 

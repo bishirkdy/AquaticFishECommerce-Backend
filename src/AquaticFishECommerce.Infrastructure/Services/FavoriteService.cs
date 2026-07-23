@@ -3,9 +3,7 @@ using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Infrastructure.Services
 {
@@ -25,21 +23,22 @@ namespace AquaticFishECommerce.Infrastructure.Services
             _mapper = mapper;
         }
 
+        //Service to add favorite
         public async Task AddFavoriteAsync(Guid userId, AddFavoriteDto dto)
         {
             var product = await _productRepository.GetByIdAsync(dto.ProductId);
 
             if (product == null)
-                throw new Exception("Product not found.");
+                throw new KeyNotFoundException("Product not found.");
 
             if (!product.IsActive)
-                throw new Exception("Product is unavailable.");
+                throw new KeyNotFoundException("Product is unavailable.");
 
             var favorite = await _favoriteRepository
                 .GetFavoriteAsync(userId, dto.ProductId);
 
             if (favorite != null)
-                throw new Exception("Product already in favorites.");
+                throw new KeyNotFoundException("Product already in favorites.");
 
             favorite = new Favorite
             {
@@ -50,6 +49,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             await _favoriteRepository.AddAsync(favorite);
         }
 
+        //Service to get user favorite product
         public async Task<FavoriteListResponseDto> GetFavoritesAsync(Guid userId)
         {
             var favorites = await _favoriteRepository.GetUserFavoritesAsync(userId);
@@ -63,6 +63,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             };
         }
 
+        //Service to remove favorite of user
         public async Task RemoveFavoriteAsync(Guid userId, Guid favoriteId)
         {
             var favorite = await _favoriteRepository.GetByIdAsync(favoriteId);
@@ -76,6 +77,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             await _favoriteRepository.DeleteAsync(favorite);
         }
 
+        //Service to clear favorites
         public async Task ClearFavoritesAsync(Guid userId)
         {
             await _favoriteRepository.ClearFavoritesAsync(userId);

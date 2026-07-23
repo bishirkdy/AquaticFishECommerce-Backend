@@ -7,7 +7,8 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
 {
     public interface ICartItemRepository : IGenericRepository<CartItem>
     {
-        Task<CartItem> GetCartItemAsync(Guid userId, Guid productId);
+        Task<CartItem?> GetCartItemAsync(Guid userId, Guid productId);
         Task ClearCartAsync(Guid userId);
+        Task<IEnumerable<CartItem?>> GetUserCartAsync(Guid userId);
     }
 }

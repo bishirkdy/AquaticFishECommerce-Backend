@@ -1,3 +1,4 @@
+using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Favorite;
 using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Infrastructure.Services;
@@ -19,6 +20,7 @@ namespace AquaticFishECommerce.API.Controllers
             _favoriteService = favoriteService;
         }
 
+        //Take user id from header
         private Guid GetUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -31,6 +33,7 @@ namespace AquaticFishECommerce.API.Controllers
             return Guid.Parse(userId);
         }
 
+        //Get favorite of user
         [HttpGet]
         public async Task<IActionResult> GetFavorites()
         {
@@ -38,9 +41,16 @@ namespace AquaticFishECommerce.API.Controllers
 
             var favorites = await _favoriteService.GetFavoritesAsync(userId);
 
-            return Ok(favorites);
+            return Ok(new ApiResponse<FavoriteListResponseDto>
+            {
+                Success = true,
+                Message = "Fetched All Favorite Successfully",
+                Data = favorites
+                
+            });
         }
 
+        //Add to favorite method
         [HttpPost]
         public async Task<IActionResult> AddFavorite(AddFavoriteDto dto)
         {
@@ -48,12 +58,14 @@ namespace AquaticFishECommerce.API.Controllers
 
             await _favoriteService.AddFavoriteAsync(userId, dto);
 
-            return Ok(new
+            return Ok(new ApiResponse
             {
+                Success = true,
                 Message = "Product added to favorites successfully."
             });
         }
 
+        //Delete favorite by favorite uniqe id
         [HttpDelete("{favoriteId:guid}")]
         public async Task<IActionResult> RemoveFavorite(Guid favoriteId)
         {
@@ -61,12 +73,14 @@ namespace AquaticFishECommerce.API.Controllers
 
             await _favoriteService.RemoveFavoriteAsync(userId, favoriteId);
 
-            return Ok(new
+            return Ok(new ApiResponse
             {
+                Success = true,
                 Message = "Favorite removed successfully."
             });
         }
 
+        //Clear favorite of a user
         [HttpDelete("clear")]
         public async Task<IActionResult> ClearFavorites()
         {
@@ -74,8 +88,9 @@ namespace AquaticFishECommerce.API.Controllers
 
             await _favoriteService.ClearFavoritesAsync(userId);
 
-            return Ok(new
+            return Ok(new ApiResponse
             {
+                Success = true,
                 Message = "Favorites cleared successfully."
             });
         }
