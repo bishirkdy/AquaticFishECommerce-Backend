@@ -80,10 +80,11 @@ namespace AquaticFishECommerce.API.Controllers
 
         [HttpPut("{id:guid}")]
         [Authorize(Roles = "Admin")]
+        //Controller for update category
         public async Task<IActionResult> Update(Guid id, UpdateCategoryDto dto)
         {
             var validator = await _updateCategoryValidator.ValidateAsync(dto);
-            if (validator.IsValid)
+            if (!validator.IsValid)
             {
                 return BadRequest(validator.Errors);
             }
@@ -99,6 +100,7 @@ namespace AquaticFishECommerce.API.Controllers
 
         [HttpDelete("{id:guid}")]
         [Authorize(Roles = "Admin")]
+        //Controller for delete category
         public async Task<IActionResult> Delete(Guid id)
         {
             await _categoryService.DeleteAsync(id);

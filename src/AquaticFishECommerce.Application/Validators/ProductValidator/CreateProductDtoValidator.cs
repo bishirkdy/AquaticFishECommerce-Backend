@@ -5,6 +5,6 @@ namespace AquaticFishECommerce.Application.Validators.ProductValidator
 {
     public class CreateProductDtoValidator : ProductDtoValidator<CreateProductDto>
     {
-        public CreateProductDtoValidator(){}
+ 
     }
 }

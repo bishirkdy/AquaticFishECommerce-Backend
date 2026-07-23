@@ -18,28 +18,39 @@ namespace AquaticFishECommerce.Infrastructure.Services
         private readonly IMapper _mapper;
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IProductImageRepository _productImageRepository;
-        public ProductService(IProductRepository productRepository, IMapper mapper , ICloudinaryService cloudinaryService , IProductImageRepository productImageRepository)
+        private readonly ICategoryRepository _categoryRepository;
+        public ProductService(IProductRepository productRepository, IMapper mapper , ICloudinaryService cloudinaryService , IProductImageRepository productImageRepository , ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
             _mapper = mapper;
             _cloudinaryService = cloudinaryService;
             _productImageRepository = productImageRepository;
+            _categoryRepository = categoryRepository;
         }
 
+        //Service for get all images
         public async Task<IEnumerable<ProductResponseDto>> GetAllAsync()
         {
             var product = await _productRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<ProductResponseDto>>(product);
         }
 
-        public async Task<ProductResponseDto> GetByIdAsync(Guid id)
+        //Service for get image by id
+        public async Task<ProductResponseDto?> GetByIdAsync(Guid id)
         {
             var product = await _productRepository.GetByIdAsync(id);
             return _mapper.Map<ProductResponseDto>(product);
         }
 
+        //Service for add product image and product to database
         public async Task<ProductResponseDto> CreateAsync(CreateProductDto dto,Stream? stream,string? fileName,bool isPrimary)
         {
+            var category = await _categoryRepository.GetByIdAsync(dto.CategoryId);
+            if(category == null)
+            {
+                throw new KeyNotFoundException("Category not fount");
+            }
+
             var product = _mapper.Map<Product>(dto);
             await _productRepository.AddAsync(product);
             if (stream != null && fileName != null)
@@ -60,6 +71,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             return _mapper.Map<ProductResponseDto>(product);
         }
 
+        //Service for update product and image
         public async Task UpdateAsync(Guid id, UpdateProductDto dto)
         {
             var product = await _productRepository.GetByIdAsync(id);
@@ -69,6 +81,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             await _productRepository.UpdateAsync(product);
         }
 
+        //Service for delete product and image
         public async Task DeleteAsync(Guid id)
         {
             var product = await _productRepository.GetByIdAsync(id);

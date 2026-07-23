@@ -13,7 +13,8 @@ namespace AquaticFishECommerce.Application.Interfaces.Services
             CreateProductDto dto,
             Stream? stream,
             string? fileName,
-            bool isPrimary); Task UpdateAsync(Guid id, UpdateProductDto dto);
+            bool isPrimary);
+        Task UpdateAsync(Guid id, UpdateProductDto dto);
         Task DeleteAsync(Guid id);
     }
 }

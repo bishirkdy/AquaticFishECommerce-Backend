@@ -3,6 +3,7 @@ using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Product;
 using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Domain.Entities;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,14 +15,20 @@ namespace AquaticFishECommerce.API.Controllers
         public class ProductsController : ControllerBase
         {
             private readonly IProductService _productService;
-            public ProductsController(IProductService productService)
+            //private readonly IValidator<CreateProductDto> _createProductValidator;
+            //private readonly IValidator<UpdateProductDto> _updateProductValidator;
+            public ProductsController(IProductService productService  
+                //, IValidator<CreateProductDto> createProductValidator , IValidator<UpdateProductDto> updateProductValidator
+                )
             {
-                _productService = productService;
+            _productService = productService;
+            //_createProductValidator = createProductValidator;
+            //_updateProductValidator = updateProductValidator;
             }
 
-            [HttpGet]
-            [AllowAnonymous]
         //Controller to get all products
+        [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
             {
                 var products = await _productService.GetAllAsync();
@@ -34,9 +41,9 @@ namespace AquaticFishECommerce.API.Controllers
                 });
             }
 
-            [HttpGet("{id:guid}")]
-            [AllowAnonymous]
         //Controller to get only one product by id
+        [HttpGet("{id:guid}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(Guid id)
             {
                 var product = await _productService.GetByIdAsync(id);
@@ -48,11 +55,14 @@ namespace AquaticFishECommerce.API.Controllers
                     Data = product
                 });
             }
+
+        //Controller to create product with image
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        //[FromForm] is used when the client sends data as form data instead of JSON.
         public async Task<IActionResult> Create([FromForm] CreateProductRequest request)
         {
-            // Step 1: Convert Request to DTO
+            //Convert Request to DTO
             var dto = new CreateProductDto
             {
                 Name = request.Name,
@@ -63,18 +73,29 @@ namespace AquaticFishECommerce.API.Controllers
                 IsActive = request.IsActive,
                 CategoryId = request.CategoryId
             };
+            //var validator = await _createProductValidator.ValidateAsync(dto);
+            //if (!validator.IsValid)
+            //{
+            //    return BadRequest(new
+            //    {
+            //        Success = false,
+            //        Message = "Validation failed.",
+            //        Errors = validator.Errors.Select(e => e.ErrorMessage).ToList()
+            //    });
+            //}
 
-            // Step 2: Open image stream
+            //Open image stream
             Stream? stream = null;
             string? fileName = null;
 
             if (request.Image != null)
             {
+                //OpenReadStream() opens the uploaded file for reading and returns a Stream
                 stream = request.Image.OpenReadStream();
                 fileName = request.Image.FileName;
             }
 
-            // Step 3: Call service
+            // Call service
             var product = await _productService.CreateAsync(
                 dto,
                 stream,
@@ -92,11 +113,22 @@ namespace AquaticFishECommerce.API.Controllers
                 });
         }
 
-        [HttpPut("{id:guid}")]
-            [Authorize(Roles = "Admin")]
         //Controller to update products for admin
+        [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(Guid id, UpdateProductDto dto)
             {
+            //var validator = await _updateProductValidator.ValidateAsync(dto);
+            //if (!validator.IsValid)
+            //{
+            //    BadRequest(new
+            //    {
+            //        Success = false,
+            //        Message = $"{dto.Name} created successfully.",
+            //        Errors = validator.Errors.Select(e => e.ErrorMessage).ToList()
+            //    });
+            //}
+
             await _productService.UpdateAsync(id, dto);
             return Ok(new ApiResponse
             {
@@ -105,9 +137,9 @@ namespace AquaticFishECommerce.API.Controllers
             });
             }
 
-            [HttpDelete("{id:guid}")]
-            [Authorize(Roles = "Admin")]
         //Controller to delete products for admin
+        [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
             {
                 await _productService.DeleteAsync(id);

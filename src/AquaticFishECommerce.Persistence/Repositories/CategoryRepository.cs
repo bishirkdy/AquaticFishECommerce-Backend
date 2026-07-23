@@ -12,10 +12,12 @@ namespace AquaticFishECommerce.Persistence.Repositories
     {
         public CategoryRepository(AppDbContext context) : base(context) { }
 
+        //Method to fetch data by name from database
         public async Task<bool> ExistsByNameAsync(string name)
         {
             return await _dbSet.AnyAsync(x => x.Name == name);
         }
+        //Method to check if product available by category id
         public async Task<bool> HasProductsAsync(Guid categoryId)
         {
             return await _context.Products.AnyAsync(x => x.CategoryId == categoryId);

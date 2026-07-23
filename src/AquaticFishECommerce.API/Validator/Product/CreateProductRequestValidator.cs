@@ -1,11 +1,11 @@
-using AquaticFishECommerce.Application.DTOs.Product;
+using AquaticFishECommerce.API.Requests.Product;
 using FluentValidation;
 
-namespace AquaticFishECommerce.Application.Validators.ProductValidator
+namespace AquaticFishECommerce.API.Validator.Product
 {
-    public class ProductDtoValidator<T> : AbstractValidator<T> where T : IProductDto 
+    public class CreateProductRequestValidator : AbstractValidator<CreateProductRequest>
     {
-        public ProductDtoValidator()
+        public CreateProductRequestValidator()
         {
             RuleFor(p => p.Name)
                 .NotEmpty().WithMessage("Product name is required.")

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace AquaticFishECommerce.Application.Validators.ProductValidator
 {
-    public class UpdateProductDtoValidator : AbstractValidator<UpdateProductDto>
+    public class UpdateProductDtoValidator : ProductDtoValidator<UpdateProductDto>
     {
         public UpdateProductDtoValidator()
         {
