@@ -39,7 +39,11 @@ namespace AquaticFishECommerce.Application.Mappings
                             .FirstOrDefault()))
                 .ForMember(dest => dest.TotalPrice,
                     opt => opt.MapFrom(src =>
-                        (src.Price - (src.Price * src.Discount / 100)) * src.Quantity));
+                        (src.Price - (src.Price * src.Discount / 100)) * src.Quantity))
+                .ForMember(dest => dest.OrderStatus,
+                    opt => opt.MapFrom(src => src.OrderStatus))
+                .ForMember(dest => dest.CancelledAt,
+                    opt => opt.MapFrom(src => src.CancelledAt));
 
             // Address Response
             CreateMap<Address, AddressResponseDto>();

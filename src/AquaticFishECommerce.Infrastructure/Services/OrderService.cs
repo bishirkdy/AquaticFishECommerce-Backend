@@ -118,12 +118,12 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         public async Task CancelOrderItemAsync(Guid userId ,Guid productId , Guid orderId)
         {
-            var order = await _orderRepository.GetByIdAsync(orderId);
-            if(order == null)
+            var order = await _orderRepository.GetOrderWithItemsAsync(orderId); 
+            if (order == null)
             {
-                throw new KeyNotFoundException("Order Not Fount");
+                throw new NotFoundException("Order Not Fount");
             }
-            
+
             if(order.UserId != userId)
             {
                 throw new UnauthorizedException("UnAuthorized");
@@ -132,7 +132,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             var orderItem = order.Items.FirstOrDefault(i => i.ProductId == productId);
             if(orderItem == null)
             {
-                throw new KeyNotFoundException("Order item not fount");
+                throw new NotFoundException("Order item not fount");
             }
             orderItem.OrderStatus = OrderStatus.Cancelled;
             orderItem.CancelledAt = DateTime.UtcNow;

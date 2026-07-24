@@ -1,3 +1,4 @@
+using AquaticFishECommerce.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +14,8 @@ namespace AquaticFishECommerce.Application.DTOs.Order
         public decimal Discount { get; set; }
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public OrderStatus OrderStatus { get; set; }
+        public DateTime? CancelledAt { get; set; }
 
     }
 }

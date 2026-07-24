@@ -26,9 +26,9 @@ namespace AquaticFishECommerce.Persistence.Repositories
         //Repository for get one order with items
         public async Task<Order?> GetOrderWithItemsAsync(Guid orderId)
         {
-            return await _context.Orders
+            return await _dbSet
                 .Include(o => o.Items)
-                .ThenInclude(i => i.Product)
+                    .ThenInclude(i => i.Product)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
 
@@ -36,6 +36,8 @@ namespace AquaticFishECommerce.Persistence.Repositories
         {
             return await _dbSet.AnyAsync(o => o.AddressId == addressId);
         }
+
+
 
     }
 }
