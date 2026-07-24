@@ -13,6 +13,7 @@ namespace AquaticFishECommerce.API.Middlewares
             _logger = logger;
         }
 
+        //InvokeAsync is the method - calls automatically when a request reaches custom middleware
         public async Task InvokeAsync(HttpContext context) {
             try
             {
@@ -27,33 +28,49 @@ namespace AquaticFishECommerce.API.Middlewares
 
         private async Task HandleExceptionAsync(HttpContext context , Exception exception)
         {
-            var response = new ErrorResponse();
+            //ErrorResponse - DTO that represents the error response
+            var response = new ErrorResponse
+            {
+                Success = false,
+                Timestamp = DateTime.UtcNow
+            };
+
+
             switch (exception)
             {
-                case BadRequestException:
+                case BadRequestException ex:
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                    response.Message = exception.Message;
+                    response.Message = ex.Message;
+                    response.Error = new[] { ex.Message };
                     break;
 
-                case UnauthorizedException:
+                case UnauthorizedException ex:
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    response.Message = exception.Message;
+                    response.Message = ex.Message;
+                    response.Error = new[] { ex.Message };
                     break;
 
-                case ForbiddenException:
+                case ForbiddenException ex:
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                    response.Message = exception.Message;
+                    response.Message = ex.Message;
+                    response.Error = new[] { ex.Message };
                     break;
 
-                case NotFoundException:
-                    context.Response.StatusCode = StatusCodes.Status409Conflict;
-                    response.Message = exception.Message;
+                case NotFoundException ex:
+                    context.Response.StatusCode = StatusCodes.Status404NotFound;
+                    response.Message = ex.Message;
+                    response.Error = new[] { ex.Message };
                     break;
+
                 default:
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    response.Message = "Unexpected Error Occured.";
+                    response.Message = "An unexpected error occurred.";
+                    response.Error = new[] { exception.Message };
                     break;
             }
+
+            response.StatusCode = context.Response.StatusCode;
+            await context.Response.WriteAsJsonAsync(response);
         }
     }
 }
