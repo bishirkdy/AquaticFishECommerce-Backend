@@ -26,7 +26,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
         //Clear all cart items of user
         public async Task ClearCartAsync(Guid userId)
         {
-            var cartItem = await _dbSet.Where(u => u.Id == userId).ToListAsync();
+            var cartItem = await _dbSet.Where(u => u.UserId == userId).ToListAsync();
             _dbSet.RemoveRange(cartItem);
             await _context.SaveChangesAsync();
         }

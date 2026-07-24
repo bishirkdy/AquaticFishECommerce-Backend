@@ -5,7 +5,6 @@ using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
 
-
 namespace AquaticFishECommerce.Infrastructure.Services
 {
     public class CartService : ICartService
@@ -13,7 +12,11 @@ namespace AquaticFishECommerce.Infrastructure.Services
         private readonly ICartItemRepository _cartItemRepository;
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
-        public CartService(ICartItemRepository cartItemRepository , IProductRepository productRepository , IMapper mapper)
+
+        public CartService(
+            ICartItemRepository cartItemRepository,
+            IProductRepository productRepository,
+            IMapper mapper)
         {
             _cartItemRepository = cartItemRepository;
             _productRepository = productRepository;
@@ -23,7 +26,8 @@ namespace AquaticFishECommerce.Infrastructure.Services
         //Service for get cart item for user
         public async Task<CartResponseDto> GetCartAsync(Guid userId)
         {
-            var cartItems = await _cartItemRepository.GetByIdAsync(userId);
+            var cartItems = await _cartItemRepository.GetUserCartAsync(userId);
+
             var items = _mapper.Map<List<CartItemResponseDto>>(cartItems);
 
             return new CartResponseDto
@@ -74,7 +78,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             }
         }
 
-        //Service for update Quentity of cart item
+        //Service for update Quantity of cart item
         public async Task UpdateQuantityAsync(Guid userId, Guid cartItemId, UpdateCartItemDto dto)
         {
             var cartItem = await _cartItemRepository.GetByIdAsync(cartItemId);
@@ -102,6 +106,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
         public async Task RemoveItemAsync(Guid userId, Guid cartItemId)
         {
             var cartItem = await _cartItemRepository.GetByIdAsync(cartItemId);
+
             if (cartItem == null)
                 throw new KeyNotFoundException("Cart item not found.");
 
@@ -111,10 +116,10 @@ namespace AquaticFishECommerce.Infrastructure.Services
             await _cartItemRepository.DeleteAsync(cartItem);
         }
 
+        //Service for clear user cart
         public async Task ClearCartAsync(Guid userId)
         {
             await _cartItemRepository.ClearCartAsync(userId);
         }
     }
-
 }
