@@ -14,5 +14,7 @@ namespace AquaticFishECommerce.Application.DTOs.Product
         public decimal DiscountPercentage { get; set; }
         public bool IsActive { get; set; }
         public Guid CategoryId { get; set; }
+        public List<string> ImageUrls { get; set; } = new();
+
     }
 }

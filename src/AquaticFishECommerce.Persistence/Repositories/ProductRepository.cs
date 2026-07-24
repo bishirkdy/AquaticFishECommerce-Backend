@@ -16,5 +16,19 @@ namespace AquaticFishECommerce.Persistence.Repositories
         {
             return await _dbSet.AnyAsync(p => p.Id == id);
         }
+
+        public async Task<Product?> GetByIdWithImagesAsync(Guid id)
+        {
+            return await _context.Products
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<IEnumerable<Product>> GetAllWithImagesAsync()
+        {
+            return await _context.Products
+                .Include(p => p.Images)
+                .ToListAsync();
+        }
     }
 }

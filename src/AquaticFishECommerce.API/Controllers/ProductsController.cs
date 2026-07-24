@@ -114,7 +114,7 @@ namespace AquaticFishECommerce.API.Controllers
         }
 
         //Controller to update products for admin
-        [HttpPut("{id:guid}")]
+        [HttpPatch("{id:guid}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(Guid id, UpdateProductDto dto)
             {

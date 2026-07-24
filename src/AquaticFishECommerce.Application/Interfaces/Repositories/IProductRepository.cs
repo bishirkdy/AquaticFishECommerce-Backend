@@ -8,5 +8,7 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
     public interface IProductRepository : IGenericRepository<Product>
     {
         Task<bool> ExistsAsync(Guid id);
+        Task<Product?> GetByIdWithImagesAsync(Guid id);
+        Task<IEnumerable<Product>> GetAllWithImagesAsync();
     }
 }

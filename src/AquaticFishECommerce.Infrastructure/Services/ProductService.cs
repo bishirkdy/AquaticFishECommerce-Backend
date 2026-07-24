@@ -31,14 +31,14 @@ namespace AquaticFishECommerce.Infrastructure.Services
         //Service for get all images
         public async Task<IEnumerable<ProductResponseDto>> GetAllAsync()
         {
-            var product = await _productRepository.GetAllAsync();
+            var product = await _productRepository.GetAllWithImagesAsync();
             return _mapper.Map<IEnumerable<ProductResponseDto>>(product);
         }
 
         //Service for get image by id
         public async Task<ProductResponseDto?> GetByIdAsync(Guid id)
         {
-            var product = await _productRepository.GetByIdAsync(id);
+            var product = await _productRepository.GetByIdWithImagesAsync(id);
             return _mapper.Map<ProductResponseDto>(product);
         }
 
@@ -48,7 +48,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             var category = await _categoryRepository.GetByIdAsync(dto.CategoryId);
             if(category == null)
             {
-                throw new KeyNotFoundException("Category not fount");
+                throw new NotFoundException("Category not fount");
             }
 
             var product = _mapper.Map<Product>(dto);
@@ -75,9 +75,38 @@ namespace AquaticFishECommerce.Infrastructure.Services
         public async Task UpdateAsync(Guid id, UpdateProductDto dto)
         {
             var product = await _productRepository.GetByIdAsync(id);
-            if(product == null)
-                throw new Exception("Product not found.");
-            _mapper.Map(dto, product);
+
+            if (product == null)
+                throw new NotFoundException("Product not found.");
+
+            if (dto.Name is not null)
+                product.Name = dto.Name;
+
+            if (dto.Description is not null)
+                product.Description = dto.Description;
+
+            if (dto.Price.HasValue)
+                product.Price = dto.Price.Value;
+
+            if (dto.Stock.HasValue)
+                product.Stock = dto.Stock.Value;
+
+            if (dto.DiscountPercentage.HasValue)
+                product.DiscountPercentage = dto.DiscountPercentage.Value;
+
+            if (dto.IsActive.HasValue)
+                product.IsActive = dto.IsActive.Value;
+
+            if (dto.CategoryId.HasValue)
+            {
+                var category = await _categoryRepository.GetByIdAsync(dto.CategoryId.Value);
+
+                if (category == null)
+                    throw new NotFoundException("Category not found.");
+
+                product.CategoryId = dto.CategoryId.Value;
+            }
+
             await _productRepository.UpdateAsync(product);
         }
 
@@ -86,8 +115,14 @@ namespace AquaticFishECommerce.Infrastructure.Services
         {
             var product = await _productRepository.GetByIdAsync(id);
 
-            if(product == null)
-                throw new Exception("Product not found.");
+            if (product == null)
+                throw new NotFoundException("Product not found.");
+
+            foreach (var image in product.Images)
+            {
+                await _cloudinaryService.DeleteAsync(image.PublicId);
+            }
+
             await _productRepository.DeleteAsync(product);
         }
     }
