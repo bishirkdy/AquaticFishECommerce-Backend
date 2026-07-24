@@ -18,9 +18,4 @@
     <ProjectReference Include="..\AquaticFishECommerce.Domain\AquaticFishECommerce.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validators\AddressValidator\" />
-    <Folder Include="Validators\OrderValidator\" />
-  </ItemGroup>
-
 </Project>

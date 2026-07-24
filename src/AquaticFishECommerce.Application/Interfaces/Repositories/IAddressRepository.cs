@@ -7,6 +7,7 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
 {
     public interface IAddressRepository : IGenericRepository<Address>
     {
-        //Task<bool> ExistByNameAsync(string name);
+        Task<IEnumerable<Address>> GetUserAddressesAsync(Guid userId);
+
     }
 }

@@ -32,6 +32,10 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
 
+        public async Task<bool> HasOrdersWithAddressAsync(Guid addressId)
+        {
+            return await _dbSet.AnyAsync(o => o.AddressId == addressId);
+        }
 
     }
 }

@@ -1,3 +1,4 @@
+using AquaticFishECommerce.Application.Common.Exceptions;
 using AquaticFishECommerce.Application.DTOs.Favorite;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services;
@@ -38,7 +39,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
                 .GetFavoriteAsync(userId, dto.ProductId);
 
             if (favorite != null)
-                throw new KeyNotFoundException("Product already in favorites.");
+                throw new BadRequestException("Product already in favorites.");
 
             favorite = new Favorite
             {
@@ -69,10 +70,10 @@ namespace AquaticFishECommerce.Infrastructure.Services
             var favorite = await _favoriteRepository.GetByIdAsync(favoriteId);
 
             if (favorite == null)
-                throw new Exception("Favorite not found.");
+                throw new NotFoundException("Favorite not found.");
 
             if (favorite.UserId != userId)
-                throw new Exception("Unauthorized.");
+                throw new UnauthorizedException("Unauthorized.");
 
             await _favoriteRepository.DeleteAsync(favorite);
         }

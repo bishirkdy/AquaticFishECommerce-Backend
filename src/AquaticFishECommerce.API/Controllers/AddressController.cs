@@ -44,5 +44,37 @@ namespace AquaticFishECommerce.API.Controllers
                 Data = address
             });
         }
+
+        //Controller for delete address
+        [HttpDelete("{addressId:guid}")]
+        public async Task<IActionResult> Delete(Guid addressId)
+        {
+            var userId = GetUserId();
+
+            await _addressService.DeleteAddressAsync(userId, addressId);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Address deleted successfully."
+            });
+        }
+
+        //Controller for get user addresses
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUserAddresses()
+        {
+            var userId = GetUserId();
+
+            var addresses = await _addressService.GetUserAddressesAsync(userId);
+
+            return Ok(new ApiResponse<IEnumerable<AddressResponseDto>>
+            {
+                Success = true,
+                Message = "Addresses retrieved successfully.",
+                Data = addresses
+            });
+        }
     }
 }
