@@ -15,5 +15,6 @@ namespace AquaticFishECommerce.Application.DTOs.Address
         public string State { get; set; } = string.Empty;
         public string Pincode { get; set; } = string.Empty;
         public string? Landmark { get; set; }
+
     }
 }

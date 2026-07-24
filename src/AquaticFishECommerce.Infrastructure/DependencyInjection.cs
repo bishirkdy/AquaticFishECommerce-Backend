@@ -24,8 +24,8 @@ namespace AquaticFishECommerce.Infrastructure
             services.AddScoped<ICartService, CartService>();
             //services.AddScoped<IProductImageService, ProductImageService>();
             services.AddScoped<IFavoriteService, FavoriteService>();
-            //services.AddScoped<IOrderService, OrderService>();
-            //services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IAddressService, AddressService>();
             services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
             services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
             return services;

@@ -30,6 +30,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             _mapper = mapper;
         }
 
+        //Service for create order
         public async Task<Guid> CreateOrderAsync(Guid userId, CreateOrderDto dto)
         {
             var user = await _userRepository.GetByIdAsync(userId);
@@ -37,6 +38,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
             {
                 throw new NotFoundException("User not fount");
             }
+
             var address = await _addressReporitory.GetByIdAsync(dto.AddressId);
             if(address == null)
             {
@@ -63,7 +65,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
                 if(product.Stock < item.Quantity)
                 {
-                    throw new Exception($"{product.Name} has only {product.Stock} item(s) available.");
+                    throw new Exception($"{product.Name} has only {product.Stock} available.");
                 }
 
                 //Calculate price by reducing discount amount
@@ -99,6 +101,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
         }
 
+        //Service for get all orders of one user
         public async Task<List<OrderResponseDto>> GetMyOrdersAsync(Guid userId)
         {
             var orders = await _orderRepository.GetOrderByUserIdAsync(userId);
@@ -136,9 +139,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
             await _orderRepository.UpdateAsync(order);
 
-        }
-
-        
+        }      
         
     }
 }

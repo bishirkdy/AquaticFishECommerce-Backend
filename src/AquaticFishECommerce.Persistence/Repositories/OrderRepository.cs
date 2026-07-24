@@ -12,6 +12,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
     {
         public OrderRepository(AppDbContext context) : base(context) {}
 
+        //Repository for get orders of user
         public async Task<List<Order>> GetOrderByUserIdAsync(Guid userId)
         {
             return await _context.Orders.Where(o => o.UserId == userId)
@@ -22,6 +23,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .ToListAsync();
         }
 
+        //Repository for get one order with items
         public async Task<Order?> GetOrderWithItemsAsync(Guid orderId)
         {
             return await _context.Orders
