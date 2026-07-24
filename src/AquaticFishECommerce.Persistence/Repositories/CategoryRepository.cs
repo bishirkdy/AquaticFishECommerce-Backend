@@ -8,7 +8,7 @@ using System.Text;
 
 namespace AquaticFishECommerce.Persistence.Repositories
 {
-    internal class CategoryRepository : GenericRepository<Category> , ICategoryRepository
+    public class CategoryRepository : GenericRepository<Category> , ICategoryRepository
     {
         public CategoryRepository(AppDbContext context) : base(context) { }
 

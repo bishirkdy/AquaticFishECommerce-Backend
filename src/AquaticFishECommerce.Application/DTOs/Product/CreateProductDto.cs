@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AquaticFishECommerce.Application.DTOs.Product
 {
-    public class CreateProductDto : IProductDto
+    public class CreateProductDto 
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

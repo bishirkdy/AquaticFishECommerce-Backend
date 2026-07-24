@@ -86,20 +86,26 @@ namespace AquaticFishECommerce.Infrastructure.Services
             return _mapper.Map<UserDto>(user);
         }
 
-        // Update user information
+        // Update user 
         public async Task UpdateAsync(Guid id, UpdateUserDto dto)
         {
             if (id == Guid.Empty)
-                throw new BadRequestException("Id is required");
+                throw new BadRequestException("Id is required.");
 
             var user = await _userRepository.GetByIdAsync(id);
-            if (user == null)
-            {
-                throw new NotFoundException("User not found.");
-            }
 
-            // Copy updated values
-            _mapper.Map(dto, user);
+            if (user == null)
+                throw new NotFoundException("User not found.");
+
+            if (dto.Name is not null)
+                user.Name = dto.Name;
+
+            if (dto.Phone is not null)
+                user.Phone = dto.Phone;
+
+            if (dto.Password is not null)
+                user.PasswordHash = _passwordHasher.Hash(dto.Password);
+
             await _userRepository.UpdateAsync(user);
         }
 

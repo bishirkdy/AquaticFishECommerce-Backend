@@ -1,11 +1,9 @@
 using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Category;
-using AquaticFishECommerce.Application.Interfaces.External;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AquaticFishECommerce.Application.Interfaces.Services;
-using FluentValidation;
-using AquaticFishECommerce.Application.Validators.CategoryValidator;
+
 
 namespace AquaticFishECommerce.API.Controllers
 {
@@ -14,13 +12,9 @@ namespace AquaticFishECommerce.API.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        private readonly IValidator<CreateCategoryDto> _createCategoryValidator;
-        private readonly IValidator<UpdateCategoryDto> _updateCategoryValidator;
-        public CategoriesController(ICategoryService categoryService , IValidator<CreateCategoryDto> createCategoryValidator , IValidator<UpdateCategoryDto> updateCategoryValidator)
+        public CategoriesController(ICategoryService categoryService )
         {
             _categoryService = categoryService;
-            _createCategoryValidator = createCategoryValidator;
-            _updateCategoryValidator = updateCategoryValidator;
         }
 
         [HttpGet]
@@ -58,13 +52,6 @@ namespace AquaticFishECommerce.API.Controllers
         //Controller for create category
         public async Task<IActionResult> Create(CreateCategoryDto dto)
         {
-            var validator = await _createCategoryValidator.ValidateAsync(dto);
-            if (!validator.IsValid)
-            {
-                return BadRequest(validator.Errors);
-            }
-
-
             var category = await _categoryService.CreateAsync(dto);
 
             return CreatedAtAction(
@@ -83,12 +70,6 @@ namespace AquaticFishECommerce.API.Controllers
         //Controller for update category
         public async Task<IActionResult> Update(Guid id, UpdateCategoryDto dto)
         {
-            var validator = await _updateCategoryValidator.ValidateAsync(dto);
-            if (!validator.IsValid)
-            {
-                return BadRequest(validator.Errors);
-            }
-
             await _categoryService.UpdateAsync(id, dto);
 
             return Ok(new ApiResponse
@@ -104,7 +85,6 @@ namespace AquaticFishECommerce.API.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             await _categoryService.DeleteAsync(id);
-
             return Ok(new ApiResponse
             {
                 Success = true,

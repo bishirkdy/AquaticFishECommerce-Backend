@@ -13,25 +13,23 @@ namespace AquaticFishECommerce.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IValidator<RegisterUserDto> _registerValidator;
-        private readonly IValidator<LoginDto> _loginValidator;
-        private readonly IValidator<UpdateUserDto> _updateUserValidator;
-        public UserController(IUserService userService, IValidator<RegisterUserDto> registerValidator, IValidator<LoginDto> loginValidator , IValidator<UpdateUserDto> updateUserValidator)
+        //private readonly IValidator<LoginDto> _loginValidator;
+        //private readonly IValidator<UpdateUserDto> _updateUserValidator;
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _registerValidator = registerValidator;
-            _loginValidator = loginValidator;
-            _updateUserValidator = updateUserValidator;
+            //_loginValidator = loginValidator;
+            //_updateUserValidator = updateUserValidator;
         }
         //Controller for registration
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserDto dto)
         {
-            var validator = await _registerValidator.ValidateAsync(dto);
-            if (!validator.IsValid)
-            {
-                return BadRequest(validator.Errors);
-            }
+            //var validator = await _registerValidator.ValidateAsync(dto);
+            //if (!validator.IsValid)
+            //{
+            //    return BadRequest(validator.Errors);
+            //}
             await _userService.RegisterAsync(dto);
             return StatusCode(StatusCodes.Status201Created, new ApiResponse
             {
@@ -43,11 +41,11 @@ namespace AquaticFishECommerce.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
-            var validation = await _loginValidator.ValidateAsync(dto);
-            if (!validation.IsValid)
-            {
-                return BadRequest(validation.Errors);
-            }
+            //var validation = await _loginValidator.ValidateAsync(dto);
+            //if (!validation.IsValid)
+            //{
+            //    return BadRequest(validation.Errors);
+            //}
             var token = await _userService.LoginAsync(dto);
 
             return Ok(new ApiResponse<AuthResponseDto>
@@ -87,14 +85,14 @@ namespace AquaticFishECommerce.API.Controllers
         }
 
         //Controller for Update User taken by id and update
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> Update(Guid id, UpdateUserDto dto)
         {
-            var validator = await _updateUserValidator.ValidateAsync(dto);
-            if (!validator.IsValid)
-            {
-                return BadRequest(validator.Errors);
-            }
+            //var validator = await _updateUserValidator.ValidateAsync(dto);
+            //if (!validator.IsValid)
+            //{
+            //    return BadRequest(validator.Errors);
+            //}
 
             await _userService.UpdateAsync(id, dto);
 

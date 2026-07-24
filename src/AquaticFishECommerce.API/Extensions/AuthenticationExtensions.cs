@@ -1,3 +1,4 @@
+using AquaticFishECommerce.Application.Common.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -42,12 +43,36 @@ namespace AquaticFishECommerce.API.Extensions
                         return Task.CompletedTask;
                     },
 
-                    OnChallenge = context =>
+                    OnChallenge = async context =>
                     {
-                        Console.WriteLine("CHALLENGE");
-                        Console.WriteLine($"Error: {context.Error}");
-                        Console.WriteLine($"Description: {context.ErrorDescription}");
-                        return Task.CompletedTask;
+                        context.HandleResponse();
+
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.ContentType = "application/json";
+
+                        await context.Response.WriteAsJsonAsync(new ErrorResponse
+                        {
+                            Success = false,
+                            StatusCode = StatusCodes.Status401Unauthorized,
+                            Message = "Unauthorized",
+                            Error = new[] { "Authentication is required." },
+                            Timestamp = DateTime.UtcNow
+                        });
+                    },
+
+                    OnForbidden = async context =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                        context.Response.ContentType = "application/json";
+
+                        await context.Response.WriteAsJsonAsync(new ErrorResponse
+                        {
+                            Success = false,
+                            StatusCode = StatusCodes.Status403Forbidden,
+                            Message = "Forbidden",
+                            Error = new[] { "You do not have permission to access this resource." },
+                            Timestamp = DateTime.UtcNow
+                        });
                     }
                 };
             });
