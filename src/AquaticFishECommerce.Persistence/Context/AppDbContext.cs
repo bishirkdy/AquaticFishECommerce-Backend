@@ -25,6 +25,7 @@ namespace AquaticFishECommerce.Persistence.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Find every class in this project that implements IEntityTypeConfiguration<T> and apply it automatically
+            //instead of each configuration - modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
         }

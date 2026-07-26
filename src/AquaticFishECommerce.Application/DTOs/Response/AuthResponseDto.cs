@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+using AquaticFishECommerce.Application.DTOs.User;
 
-namespace AquaticFishECommerce.Application.DTOs.Response
+public class AuthResponseDto
 {
-    public class AuthResponseDto
-    {
-        public string AccessToken { get; set; } = string.Empty;
-    }
+    public UserDto User { get; set; } = default;
+    public string AccessToken { get; set; } = string.Empty;
 }

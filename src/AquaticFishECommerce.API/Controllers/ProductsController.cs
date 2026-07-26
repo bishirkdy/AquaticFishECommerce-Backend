@@ -2,8 +2,6 @@ using AquaticFishECommerce.API.Requests.Product;
 using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Product;
 using AquaticFishECommerce.Application.Interfaces.Services;
-using AquaticFishECommerce.Domain.Entities;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,20 +24,49 @@ namespace AquaticFishECommerce.API.Controllers
             //_updateProductValidator = updateProductValidator;
             }
 
-        //Controller to get all products
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAll()
-            {
-                var products = await _productService.GetAllAsync();
+        ////Controller to get all products
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> GetAll()
+        //    {
+        //        var products = await _productService.GetAllAsync();
 
-                return Ok(new ApiResponse<IEnumerable<ProductResponseDto>>
-                {
-                    Success = true,
-                    Message = "Product fetched successfully",
-                    Data = products
-                });
-            }
+        //        return Ok(new ApiResponse<IEnumerable<ProductResponseDto>>
+        //        {
+        //            Success = true,
+        //            Message = "Product fetched successfully",
+        //            Data = products
+        //        });
+        //    }
+
+        //Controller for get queriable image
+        [HttpGet]
+
+        public async Task<IActionResult> GetProducts([FromQuery] ProductQueryDto query)
+        {
+            var products = await _productService.GetQuariableAsync(query);
+
+            return Ok(new ApiResponse<IEnumerable<ProductResponseDto>>
+            {
+                Success = true,
+                Message = "Products fetched successfully.",
+                Data = products
+            });
+        }
+
+        //Controller for get six products
+        [HttpGet("six-product")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetSixProduct()
+        {
+            var product = await _productService.GetSixAsync();
+            return Ok(new ApiResponse<IEnumerable<ProductResponseDto>>
+            {
+                Success = true,
+                Message = "Product featched successfully",
+                Data = product
+            });
+        }
 
         //Controller to get only one product by id
         [HttpGet("{id:guid}")]

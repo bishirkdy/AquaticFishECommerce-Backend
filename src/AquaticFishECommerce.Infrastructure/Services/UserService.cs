@@ -1,5 +1,4 @@
 using AquaticFishECommerce.Application.Common.Exceptions;
-using AquaticFishECommerce.Application.DTOs.Response;
 using AquaticFishECommerce.Application.DTOs.User;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services;
@@ -60,6 +59,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
             return new AuthResponseDto
             {
+                User = _mapper.Map<UserDto>(user),
                 AccessToken = accessToken
             };
         }

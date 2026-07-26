@@ -8,6 +8,8 @@ namespace AquaticFishECommerce.Application.Interfaces.Services
     public interface IProductService
     {
         Task<IEnumerable<ProductResponseDto>> GetAllAsync();
+        Task<IEnumerable<ProductResponseDto>> GetQuariableAsync(ProductQueryDto dto);
+        Task<IEnumerable<ProductResponseDto>> GetSixAsync();
         Task<ProductResponseDto?> GetByIdAsync(Guid id);
         Task<ProductResponseDto> CreateAsync(
             CreateProductDto dto,

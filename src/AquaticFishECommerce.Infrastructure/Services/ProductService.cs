@@ -28,14 +28,28 @@ namespace AquaticFishECommerce.Infrastructure.Services
             _categoryRepository = categoryRepository;
         }
 
-        //Service for get all images
+        //Service for get all with images
         public async Task<IEnumerable<ProductResponseDto>> GetAllAsync()
         {
             var product = await _productRepository.GetAllWithImagesAsync();
             return _mapper.Map<IEnumerable<ProductResponseDto>>(product);
         }
 
-        //Service for get image by id
+        //Service for get queriable product with image
+        public async Task<IEnumerable<ProductResponseDto>> GetQuariableAsync(ProductQueryDto dto)
+        {
+            var product = await _productRepository.GetAllProductsAsyncWithImg(dto);
+            return _mapper.Map<IEnumerable<ProductResponseDto>>(product);
+        }
+
+        //Service for get six with image
+        public async Task<IEnumerable<ProductResponseDto>> GetSixAsync()
+        {
+            var product = await _productRepository.GetSixProductAsync();
+            return _mapper.Map<IEnumerable<ProductResponseDto>>(product);
+        }
+
+        //Service for get by id
         public async Task<ProductResponseDto?> GetByIdAsync(Guid id)
         {
             var product = await _productRepository.GetByIdWithImagesAsync(id);

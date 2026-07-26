@@ -28,7 +28,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
         {
             return await _dbSet
                 .Include(o => o.Items)
-                    .ThenInclude(i => i.Product)
+                .ThenInclude(i => i.Product)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
 

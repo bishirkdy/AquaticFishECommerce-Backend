@@ -12,6 +12,7 @@ namespace AquaticFishECommerce.Application.Mappings
             // Create Order
             CreateMap<CreateOrderDto, Order>();
             CreateMap<CreateOrderItemDto, OrderItem>();
+          
             // Order Response
             CreateMap<Order, OrderResponseDto>()
                 .ForMember(dest => dest.ShippingAddress,

@@ -8,10 +8,11 @@ namespace AquaticFishECommerce.API.Extensions
             app.UseExceptionMiddleware();
             app.UseSwaggerDocumentation();
             app.UseHttpsRedirection();
+            app.UseCorsPolicy();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
-
+            
             return app;
         }    
     }

@@ -1,10 +1,9 @@
 using AquaticFishECommerce.Application.Common.Responses;
-using AquaticFishECommerce.Application.DTOs.Response;
 using AquaticFishECommerce.Application.DTOs.User;
 using AquaticFishECommerce.Application.Interfaces.Services;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AquaticFishECommerce.API.Controllers
 {
@@ -46,13 +45,22 @@ namespace AquaticFishECommerce.API.Controllers
             //{
             //    return BadRequest(validation.Errors);
             //}
-            var token = await _userService.LoginAsync(dto);
-
-            return Ok(new ApiResponse<AuthResponseDto>
+            var response = await _userService.LoginAsync(dto);
+            Response.Cookies.Append(
+                "accessToken",
+                response.AccessToken,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.None,
+                    Secure = true,
+                    Expires = DateTime.UtcNow.AddMinutes(60)
+                });
+            return Ok(new ApiResponse<UserDto>
             {
                 Success = true,
                 Message = "Login Successfull",
-                Data = token
+                Data = response.User
             });
         }
         //Controller for get all users for admin
@@ -70,11 +78,13 @@ namespace AquaticFishECommerce.API.Controllers
             });
         }
 
-        //Controller for get current user by id
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        //Controller for get current user
+        [Authorize]
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetById()
         {
-            var user = await _userService.GetByIdAsync(id);
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userService.GetByIdAsync(Guid.Parse(id));
 
             return Ok(new ApiResponse<UserDto>
             {

@@ -13,6 +13,7 @@ namespace AquaticFishECommerce.API.Extensions
             service.AddSwaggerDocumentation();
             service.AddJwtAuthentification(configuration);
             service.AddControllers();
+            service.AddCorsPolicy();
 
             service.AddScoped<IValidator<CreateProductRequest> , CreateProductRequestValidator>();
             //Whenever a request is received, automatically run the registered FluentValidation validator for the model
