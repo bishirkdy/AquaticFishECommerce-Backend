@@ -15,8 +15,10 @@ namespace AquaticFishECommerce.Persistence.Repositories
         {
             return await _dbSet
                 .Include(f => f.Product)
+                    .ThenInclude(p => p.Images)
                 .Where(f => f.UserId == userId)
                 .ToListAsync();
+
         }
 
         //Ttake of one user and one product that is favorite
@@ -24,6 +26,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
         {
             return await _dbSet
                 .Include(f => f.Product)
+                    .ThenInclude(p => p.Images)
                 .FirstOrDefaultAsync(f =>
                     f.UserId == userId &&
                     f.ProductId == productId);

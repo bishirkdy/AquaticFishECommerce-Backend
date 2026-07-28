@@ -6,7 +6,7 @@ using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
 
 
-namespace AquaticFishECommerce.Infrastructure.Storage
+namespace AquaticFishECommerce.Infrastructure.Services.Storage
 {
     public class CloudinaryService : ICloudinaryService
     {

@@ -10,6 +10,5 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
         Task<IEnumerable<Favorite>> GetUserFavoritesAsync(Guid userId);
         Task<Favorite?> GetFavoriteAsync(Guid userId, Guid productId);
         Task ClearFavoritesAsync(Guid userId);
-
     }
 }

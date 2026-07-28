@@ -5,7 +5,7 @@ using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
 
-namespace AquaticFishECommerce.Infrastructure.Services
+namespace AquaticFishECommerce.Infrastructure.Services.Business
 {
     internal class UserService : IUserService
     {

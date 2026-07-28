@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AquaticFishECommerce.Infrastructure.Services
+namespace AquaticFishECommerce.Infrastructure.Services.Business
 {
 
     public class ProductService : IProductService

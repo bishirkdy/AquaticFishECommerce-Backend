@@ -1,5 +1,5 @@
 using AquaticFishECommerce.Application.Interfaces.Services;
-namespace AquaticFishECommerce.Infrastructure.Authentication
+namespace AquaticFishECommerce.Infrastructure.Services.Authentication
 {
     //It is included method to hash and verity password by BCrypt
     public class PasswordHasher : IPasswordHasher

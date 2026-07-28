@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace AquaticFishECommerce.Infrastructure.Authentication
+namespace AquaticFishECommerce.Infrastructure.Services.Authentication
 {
     public class JwtService : IJwtService
     {

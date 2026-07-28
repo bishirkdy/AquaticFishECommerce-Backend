@@ -46,7 +46,7 @@ namespace AquaticFishECommerce.API.Controllers
         }
 
         // Get Orders of user
-        [HttpGet]
+        [HttpGet("me")]
         public async Task<IActionResult> GetMyOrders()
         {
             var userId = GetUserId();

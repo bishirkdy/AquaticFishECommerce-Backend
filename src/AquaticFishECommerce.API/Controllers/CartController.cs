@@ -7,14 +7,14 @@ using System.Security.Claims;
 
 namespace AquaticFishECommerce.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService) 
         {
             _cartService = cartService;
         }
@@ -36,9 +36,7 @@ namespace AquaticFishECommerce.API.Controllers
         public async Task<IActionResult> GetCart()
         {
             var userId = GetUserId();
-
             var cart = await _cartService.GetCartAsync(userId);
-
             return Ok(new ApiResponse<CartResponseDto>
             {
                 Success = true,
@@ -52,7 +50,7 @@ namespace AquaticFishECommerce.API.Controllers
         public async Task<IActionResult> AddToCart(AddToCartDto dto)
         {
             var userId = GetUserId();
-
+            Console.WriteLine(dto);
             await _cartService.AddToCartAsyn(userId, dto);
 
             return Ok(new ApiResponse
@@ -63,7 +61,7 @@ namespace AquaticFishECommerce.API.Controllers
         }
 
         //Controller for update quantity of user
-        [HttpPut("{cartItemId:guid}")]
+        [HttpPatch("{cartItemId:guid}")]
         public async Task<IActionResult> UpdateQuantity(
             Guid cartItemId,
             UpdateCartItemDto dto)

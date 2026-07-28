@@ -6,7 +6,7 @@ using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
 
 
-namespace AquaticFishECommerce.Infrastructure.Services
+namespace AquaticFishECommerce.Infrastructure.Services.Business
 {
     public class FavoriteService : IFavoriteService
     {
@@ -65,15 +65,12 @@ namespace AquaticFishECommerce.Infrastructure.Services
         }
 
         //Service to remove favorite of user
-        public async Task RemoveFavoriteAsync(Guid userId, Guid favoriteId)
+        public async Task RemoveFavoriteAsync(Guid userId, Guid productId)
         {
-            var favorite = await _favoriteRepository.GetByIdAsync(favoriteId);
+            var favorite = await _favoriteRepository.GetFavoriteAsync(userId, productId);
 
             if (favorite == null)
                 throw new NotFoundException("Favorite not found.");
-
-            if (favorite.UserId != userId)
-                throw new UnauthorizedException("Unauthorized.");
 
             await _favoriteRepository.DeleteAsync(favorite);
         }

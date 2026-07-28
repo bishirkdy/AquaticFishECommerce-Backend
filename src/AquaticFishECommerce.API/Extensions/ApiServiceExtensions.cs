@@ -3,6 +3,7 @@ using AquaticFishECommerce.API.Requests.Product;
 using AquaticFishECommerce.API.Validator.Product;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using System.Text.Json.Serialization;
 
 namespace AquaticFishECommerce.API.Extensions
 {
@@ -12,7 +13,10 @@ namespace AquaticFishECommerce.API.Extensions
         {
             service.AddSwaggerDocumentation();
             service.AddJwtAuthentification(configuration);
-            service.AddControllers();
+            service.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
             service.AddCorsPolicy();
 
             service.AddScoped<IValidator<CreateProductRequest> , CreateProductRequestValidator>();

@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace AquaticFishECommerce.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
     public class FavoriteController : ControllerBase
@@ -66,13 +66,11 @@ namespace AquaticFishECommerce.API.Controllers
         }
 
         //Delete favorite by favorite uniqe id
-        [HttpDelete("{favoriteId:guid}")]
-        public async Task<IActionResult> RemoveFavorite(Guid favoriteId)
+        [HttpDelete("{productId:guid}")]
+        public async Task<IActionResult> RemoveFavorite(Guid productId)
         {
             var userId = GetUserId();
-
-            await _favoriteService.RemoveFavoriteAsync(userId, favoriteId);
-
+            await _favoriteService.RemoveFavoriteAsync(userId, productId);
             return Ok(new ApiResponse
             {
                 Success = true,

@@ -6,7 +6,7 @@ using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
 
 
-namespace AquaticFishECommerce.Infrastructure.Services
+namespace AquaticFishECommerce.Infrastructure.Services.Business
 {
     public class AddressService : IAddressService
     {

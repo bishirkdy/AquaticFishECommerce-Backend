@@ -5,7 +5,7 @@ using AquaticFishECommerce.Application.Interfaces.Services;
 using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
 
-namespace AquaticFishECommerce.Infrastructure.Services
+namespace AquaticFishECommerce.Infrastructure.Services.Business
 {
     public class CartService : ICartService
     {
@@ -58,12 +58,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
 
             if (cartItem != null)
             {
-                if (cartItem.Quantity + dto.Quantity > product.Stock)
-                    throw new BadRequestException("Insufficient stock.");
-
-                cartItem.Quantity += dto.Quantity;
-
-                await _cartItemRepository.UpdateAsync(cartItem);
+                throw new BadRequestException("Item already in cart");
             }
             else
             {
@@ -98,7 +93,7 @@ namespace AquaticFishECommerce.Infrastructure.Services
                 throw new BadRequestException("Insufficient stock.");
 
             cartItem.Quantity = dto.Quantity;
-
+                
             await _cartItemRepository.UpdateAsync(cartItem);
         }
 
