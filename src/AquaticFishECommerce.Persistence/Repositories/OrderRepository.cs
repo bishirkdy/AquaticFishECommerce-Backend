@@ -37,6 +37,15 @@ namespace AquaticFishECommerce.Persistence.Repositories
             return await _dbSet.AnyAsync(o => o.AddressId == addressId);
         }
 
+        public async Task<List<Order>> GetAllOrderAsync()
+        {
+            return await _context.Orders
+                .Include(o => o.Address)
+                .Include(o => o.Items)
+                .ThenInclude(i => i.Product)
+                .OrderByDescending(o => o.CreatedAt)
+                .ToListAsync();
+        }
 
 
     }

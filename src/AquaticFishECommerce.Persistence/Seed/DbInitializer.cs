@@ -1,4 +1,4 @@
-using AquaticFishECommerce.Application.Interfaces.Services;
+using AquaticFishECommerce.Application.Interfaces.External;
 using AquaticFishECommerce.Domain.Entities;
 using AquaticFishECommerce.Domain.Enums;
 using AquaticFishECommerce.Persistence.Context;

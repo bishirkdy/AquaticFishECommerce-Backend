@@ -1,4 +1,5 @@
-using AquaticFishECommerce.Application.Interfaces.Services;
+using AquaticFishECommerce.Application.Interfaces.External;
+
 namespace AquaticFishECommerce.Infrastructure.Services.Authentication
 {
     //It is included method to hash and verity password by BCrypt

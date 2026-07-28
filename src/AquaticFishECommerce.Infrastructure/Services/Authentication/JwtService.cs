@@ -1,5 +1,5 @@
 using AquaticFishECommerce.Application.Common.Settings;
-using AquaticFishECommerce.Application.Interfaces.Services;
+using AquaticFishECommerce.Application.Interfaces.External;
 using AquaticFishECommerce.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
