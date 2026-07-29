@@ -3,7 +3,6 @@ using AquaticFishECommerce.Application.DTOs.User;
 using AquaticFishECommerce.Application.Interfaces.External;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.User;
-using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
 
 namespace AquaticFishECommerce.Infrastructure.Services.Business.UserService
@@ -66,13 +65,6 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.UserService
                 User = _mapper.Map<UserDto>(user),
                 AccessToken = accessToken
             };
-        }
-
-        // Get all users
-        public async Task<IEnumerable<UserListDto>> GetAllAsync()
-        {
-            var users = await _userRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<UserListDto>>(users);
         }
 
         // Get user by ID

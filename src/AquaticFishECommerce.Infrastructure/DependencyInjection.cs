@@ -37,6 +37,7 @@ namespace AquaticFishECommerce.Infrastructure
             services.AddScoped<IRazorpayService, RazorpayService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IAdminOrderService, AdminOrderService>();
+            services.AddScoped<IAdminProductService, AdminProductService>();
             //services.AddScoped<IProductImageService, ProductImageService>();
             services.AddScoped<IFavoriteService, FavoriteService>();
             services.AddScoped<IOrderService, OrderService>();

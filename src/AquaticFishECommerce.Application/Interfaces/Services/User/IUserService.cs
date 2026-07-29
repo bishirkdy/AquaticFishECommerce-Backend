@@ -7,7 +7,6 @@ namespace AquaticFishECommerce.Application.Interfaces.Services.User
         Task RegisterAsync(RegisterUserDto dto);
         Task<AuthResponseDto> LoginAsync(LoginDto dto);
         Task<UserDto?> GetByIdAsync(Guid id);
-        Task<IEnumerable<UserListDto>> GetAllAsync();
         Task UpdateAsync(Guid id, UpdateUserDto dto);
         Task DeleteAsync(Guid id);
     }

@@ -22,6 +22,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
         {
             return await _context.Products
                 .Include(p => p.Images)
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -29,6 +30,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
         {
             return await _context.Products
                 .Include(p => p.Images)
+                .Include(p => p.Category)
                 .ToListAsync();
         }
 
@@ -37,6 +39,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
             return await _context.Products
                 .AsNoTracking()
                 .Include(p => p.Images)
+                .Include(p => p.Category)
                 .Take(6)
                 .ToListAsync();
         }

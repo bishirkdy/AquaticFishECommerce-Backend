@@ -11,12 +11,6 @@ namespace AquaticFishECommerce.Application.Interfaces.Services.Product
         Task<IEnumerable<ProductResponseDto>> GetQuariableAsync(ProductQueryDto dto);
         Task<IEnumerable<ProductResponseDto>> GetSixAsync();
         Task<ProductResponseDto?> GetByIdAsync(Guid id);
-        Task<ProductResponseDto> CreateAsync(
-            CreateProductDto dto,
-            Stream? stream,
-            string? fileName,
-            bool isPrimary);
-        Task UpdateAsync(Guid id, UpdateProductDto dto);
-        Task DeleteAsync(Guid id);
+
     }
 }
