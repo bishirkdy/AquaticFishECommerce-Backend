@@ -1,11 +1,13 @@
+using AquaticFishECommerce.Application.DTOs.User;
+using AquaticFishECommerce.Application.Interfaces;
+using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Domain.Entities;
+using AquaticFishECommerce.Domain.Enums;
+using AquaticFishECommerce.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using AquaticFishECommerce.Application.Interfaces;
-using AquaticFishECommerce.Application.Interfaces.Repositories;
-using AquaticFishECommerce.Persistence.Context;
-using Microsoft.EntityFrameworkCore;
 namespace AquaticFishECommerce.Persistence.Repositories
 {
     internal class UserRepository : GenericRepository<User> , IUserRepository
@@ -20,6 +22,12 @@ namespace AquaticFishECommerce.Persistence.Repositories
         public async Task<bool> EmailExistsAsync(string email)
         {
             return await _dbSet.AnyAsync(x => x.Email == email);
+        }
+
+        public async Task<IEnumerable<User>> GetAllAsyncUser()
+        {
+            return await _dbSet.Where(u => u.Role != UserRole.Admin)
+                .ToListAsync();
         }
     }
 }

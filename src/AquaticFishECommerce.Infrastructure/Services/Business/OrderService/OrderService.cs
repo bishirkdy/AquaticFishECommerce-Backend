@@ -31,72 +31,97 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
         //Service for create order
         public async Task<Guid> CreateOrderAsync(Guid userId, CreateOrderDto dto)
         {
+            // Validate User
             var user = await _userRepository.GetByIdAsync(userId);
-            if(user == null)
-            {
-                throw new NotFoundException("User not fount");
-            }
+            if (user == null)
+                throw new NotFoundException("User not found.");
 
+            // Validate Address
             var address = await _addressReporitory.GetByIdAsync(dto.AddressId);
-            if(address == null)
-            {
-                throw new NotFoundException("Address not fount");
-            }
+            if (address == null)
+                throw new NotFoundException("Address not found.");
 
-            if(address.UserId != userId)
-            {
+            if (address.UserId != userId)
                 throw new BadRequestException("This address does not belong to the current user.");
-            }
 
             decimal totalAmount = 0;
+            decimal totalProfit = 0;
+
             var orderItems = new List<OrderItem>();
-            foreach(var item in dto.Items)
+
+            foreach (var item in dto.Items)
             {
                 var product = await _productRepository.GetByIdAsync(item.ProductId);
+
                 if (product == null)
-                    throw new NotFoundException("Product is not fount");
+                    throw new NotFoundException("Product not found.");
 
                 if (!product.IsActive)
-                {
-                    throw new NotFoundException("Product is not available");
-                }
+                    throw new BadRequestException($"{product.Name} is not available.");
 
-                if(product.Stock < item.Quantity)
-                {
-                    throw new Exception($"{product.Name} has only {product.Stock} available.");
-                }
+                if (product.Stock < item.Quantity)
+                    throw new BadRequestException($"{product.Name} has only {product.Stock} items remaining.");
 
-                //Calculate price by reducing discount amount
-                var discountAmount = product.Price * ( product.DiscountPercentage / 100);
-                var itemPrice = product.Price - discountAmount;
-                totalAmount += itemPrice * item.Quantity;
+                // Selling price before discount
+                decimal unitPrice = product.Price;
 
-                //Reduce stock
+                // Cost price
+                decimal costPrice = product.CostPrice;
+
+                // Discount amount
+                decimal discountAmount = unitPrice * (product.DiscountPercentage / 100);
+
+                // Selling price after discount
+                decimal finalPrice = unitPrice - discountAmount;
+
+                // Total amount of this item
+                decimal itemTotal = finalPrice * item.Quantity;
+
+                // Profit of this item
+                decimal itemProfit = (finalPrice - costPrice) * item.Quantity;
+
+                totalAmount += itemTotal;
+                totalProfit += itemProfit;
+
+                // Reduce stock
                 product.Stock -= item.Quantity;
-
                 await _productRepository.UpdateAsync(product);
 
+                // Create Order Item Snapshot
                 orderItems.Add(new OrderItem
                 {
                     ProductId = product.Id,
                     Quantity = item.Quantity,
-                    Price = product.Price,
-                    Discount = product.DiscountPercentage
+
+                    UnitPrice = unitPrice,
+                    CostPrice = costPrice,
+
+                    DiscountPercentage = product.DiscountPercentage,
+
+                    TotalPrice = itemTotal,
+
+                    OrderStatus = OrderStatus.OrderPlaced
                 });
             }
 
-            var order = _mapper.Map<Order>(dto);
-            order.UserId = userId;
-            order.TotalAmount = totalAmount;
-            order.PaymentStatus = PaymentStatus.Pending;
-            order.OrderStatus = OrderStatus.OrderPlaced;
-            order.Items = orderItems;
+            var order = new Order
+            {
+                UserId = userId,
+                AddressId = dto.AddressId,
+                PaymentMethod = dto.PaymentMethod,
 
+                TotalAmount = totalAmount,
+                Profit = totalProfit,
+
+                PaymentStatus = PaymentStatus.Pending,
+                OrderStatus = OrderStatus.OrderPlaced,
+
+                Items = orderItems
+            };
             await _orderRepository.AddAsync(order);
+            // Clear Cart
             await _cartItemRepository.ClearCartAsync(userId);
-
             return order.Id;
-
         }
 
         //Service for get all orders of one user

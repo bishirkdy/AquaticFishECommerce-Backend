@@ -27,6 +27,9 @@ namespace AquaticFishECommerce.Persistence.Configurations
             builder.Property(p => p.Price)
                 .HasPrecision(18, 2);
 
+            builder.Property(p => p.CostPrice)
+                .HasPrecision(18, 2);
+
             builder.Property(p => p.DiscountPercentage)
                     .HasPrecision(5, 2);
 

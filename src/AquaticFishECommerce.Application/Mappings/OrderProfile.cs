@@ -12,7 +12,7 @@ namespace AquaticFishECommerce.Application.Mappings
             // Create Order
             CreateMap<CreateOrderDto, Order>();
             CreateMap<CreateOrderItemDto, OrderItem>();
-          
+
             // Order Response
             CreateMap<Order, OrderResponseDto>()
                 .ForMember(dest => dest.ShippingAddress,
@@ -24,31 +24,41 @@ namespace AquaticFishECommerce.Application.Mappings
             CreateMap<OrderItem, OrderItemResponseDto>()
                 .ForMember(dest => dest.ProductId,
                     opt => opt.MapFrom(src => src.ProductId))
+
                 .ForMember(dest => dest.ProductName,
                     opt => opt.MapFrom(src => src.Product.Name))
+
                 .ForMember(dest => dest.Quantity,
                     opt => opt.MapFrom(src => src.Quantity))
+
+                // Selling price before discount
                 .ForMember(dest => dest.Price,
-                    opt => opt.MapFrom(src => src.Price))
+                    opt => opt.MapFrom(src => src.UnitPrice))
+
+                // Discount percentage
                 .ForMember(dest => dest.Discount,
-                    opt => opt.MapFrom(src => src.Discount))
+                    opt => opt.MapFrom(src => src.DiscountPercentage))
+
+                // Primary Product Image
                 .ForMember(dest => dest.ProductImage,
                     opt => opt.MapFrom(src =>
                         src.Product.Images
                             .Where(i => i.IsPrimary)
                             .Select(i => i.ImageUrl)
                             .FirstOrDefault()))
+
+                // Total price after discount × quantity
                 .ForMember(dest => dest.TotalPrice,
-                    opt => opt.MapFrom(src =>
-                        (src.Price - (src.Price * src.Discount / 100)) * src.Quantity))
+                    opt => opt.MapFrom(src => src.TotalPrice))
+
                 .ForMember(dest => dest.OrderStatus,
                     opt => opt.MapFrom(src => src.OrderStatus))
+
                 .ForMember(dest => dest.CancelledAt,
                     opt => opt.MapFrom(src => src.CancelledAt));
 
             // Address Response
             CreateMap<Address, AddressResponseDto>();
-                
         }
     }
 }

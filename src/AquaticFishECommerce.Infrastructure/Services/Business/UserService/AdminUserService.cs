@@ -18,7 +18,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.User
         // Get all users
         public async Task<IEnumerable<UserListDto>> GetAllAsync()
         {
-            var users = await _userRepository.GetAllAsync();
+            var users = await _userRepository.GetAllAsyncUser();
             return _mapper.Map<IEnumerable<UserListDto>>(users);
         }
     }

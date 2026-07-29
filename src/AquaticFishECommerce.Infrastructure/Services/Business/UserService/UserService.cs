@@ -3,6 +3,7 @@ using AquaticFishECommerce.Application.DTOs.User;
 using AquaticFishECommerce.Application.Interfaces.External;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.User;
+using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
 
 namespace AquaticFishECommerce.Infrastructure.Services.Business.UserService
@@ -35,7 +36,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.UserService
                 throw new ConflictException("Email already exists.");
             }
 
-            var user = _mapper.Map<User>(dto);
+            var user = _mapper.Map<AquaticFishECommerce.Domain.Entities.User>(dto);
 
             // Hash the password before saving
             user.PasswordHash = _passwordHasher.Hash(dto.Password);
@@ -51,9 +52,6 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.UserService
 
             if (user == null || !_passwordHasher.Verify(dto.Password, user.PasswordHash))
             {
-                Console.WriteLine(dto.Email);
-                Console.WriteLine(dto.Password);
-                Console.WriteLine(user.PasswordHash);
                 throw new UnauthorizedException("Invalid email or password.");
             }
 

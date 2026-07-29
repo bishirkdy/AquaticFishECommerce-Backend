@@ -7,6 +7,7 @@ namespace AquaticFishECommerce.API.Requests.Product
             public decimal Price { get; set; }
             public int Stock { get; set; }
             public decimal DiscountPercentage { get; set; }
+            public decimal CostPrice { get; set; }
             public bool IsActive { get; set; } = true;
             public Guid CategoryId { get; set; }
             public bool IsPrimary { get; set; } = true;

@@ -12,11 +12,17 @@ namespace AquaticFishECommerce.Persistence.Configurations
 
             builder.HasKey(oi => oi.Id);
 
-            builder.Property(oi => oi.Price)
+            builder.Property(x => x.UnitPrice)
                 .HasPrecision(18, 2);
 
-            builder.Property(oi => oi.Discount)
-                .HasPrecision(5, 2);
+            builder.Property(x => x.CostPrice)
+                .HasPrecision(18, 2);
+
+            builder.Property(x => x.DiscountPercentage)
+                .HasPrecision(18, 2);
+
+            builder.Property(x => x.TotalPrice)
+                .HasPrecision(18, 2);
 
             builder.Property(oi => oi.Quantity)
                 .IsRequired();

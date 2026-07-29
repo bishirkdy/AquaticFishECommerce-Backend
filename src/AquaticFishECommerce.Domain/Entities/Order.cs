@@ -13,6 +13,7 @@ namespace AquaticFishECommerce.Domain.Entities
         public Guid AddressId { get; set; }
         public Address Address { get; set; } = null!;
         public decimal TotalAmount { get; set; }
+        public decimal Profit { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public OrderStatus OrderStatus { get; set; }

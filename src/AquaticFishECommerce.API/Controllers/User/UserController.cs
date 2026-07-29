@@ -63,20 +63,7 @@ namespace AquaticFishECommerce.API.Controllers.User
                 Data = response.User
             });
         }
-        //Controller for get all users for admin
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAll()
-        {
-            var users = await _userService.GetAllAsync();
 
-            return Ok(new ApiResponse<IEnumerable<UserListDto>>
-            {
-                Success = true,
-                Message = "All User featched successfully",
-                Data = users
-            });
-        }
 
         //Controller for get current user
         [Authorize]

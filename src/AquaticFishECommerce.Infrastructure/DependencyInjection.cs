@@ -14,6 +14,7 @@ using AquaticFishECommerce.Infrastructure.Services.Business.CartService;
 using AquaticFishECommerce.Infrastructure.Services.Business.CategoryService;
 using AquaticFishECommerce.Infrastructure.Services.Business.OrderServices;
 using AquaticFishECommerce.Infrastructure.Services.Business.ProductService;
+using AquaticFishECommerce.Infrastructure.Services.Business.User;
 using AquaticFishECommerce.Infrastructure.Services.Business.UserService;
 using AquaticFishECommerce.Infrastructure.Services.Payment;
 using AquaticFishECommerce.Infrastructure.Services.Storage;
@@ -36,6 +37,7 @@ namespace AquaticFishECommerce.Infrastructure
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IRazorpayService, RazorpayService>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IAdminUserService, AdminUserService>();
             services.AddScoped<IAdminOrderService, AdminOrderService>();
             services.AddScoped<IAdminProductService, AdminProductService>();
             //services.AddScoped<IProductImageService, ProductImageService>();
