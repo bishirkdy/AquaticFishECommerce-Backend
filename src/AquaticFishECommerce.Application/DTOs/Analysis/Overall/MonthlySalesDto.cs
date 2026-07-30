@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AquaticFishECommerce.Application.DTOs.Analysis
+namespace AquaticFishECommerce.Application.DTOs.Analysis.Overall
 {
     public class MonthlySalesDto
     {

@@ -13,5 +13,6 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
         Task<IEnumerable<Product>> GetSixProductAsync();
         Task<IEnumerable<Product>> GetAllWithImagesAsync();
         Task<IEnumerable<Product>> GetAllProductsAsyncWithImg(ProductQueryDto query);
+        Task<IEnumerable<Product>> GetProductsAsync();
     }
 }

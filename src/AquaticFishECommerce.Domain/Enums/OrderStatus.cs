@@ -5,8 +5,10 @@ namespace AquaticFishECommerce.Domain.Enums
         OrderPlaced,
         Confirmed,
         Packed,
+        Shipping,
         Shipped,
         Delivered,
         Cancelled
     }
 }
+

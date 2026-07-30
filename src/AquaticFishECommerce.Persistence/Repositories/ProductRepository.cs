@@ -44,6 +44,14 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .ToListAsync();
         }
 
+        //Get product with category and without image
+        public async Task<IEnumerable<Product>> GetProductsAsync()
+        {
+            return await _context.Products
+                .Include(x => x.Category)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Product>> GetAllProductsAsyncWithImg(ProductQueryDto query)
         {
             IQueryable<Product> products = _context.Products

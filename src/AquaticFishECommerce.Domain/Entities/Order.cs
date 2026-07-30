@@ -1,8 +1,6 @@
 using AquaticFishECommerce.Domain.Common;
 using AquaticFishECommerce.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Domain.Entities
 {

@@ -28,6 +28,7 @@ namespace AquaticFishECommerce.Persistence
             services.AddScoped<IFavoriteRepository, FavoriteRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<IAnalysisRepository, AnalysisRepository>();
             return services;
         }
     }
