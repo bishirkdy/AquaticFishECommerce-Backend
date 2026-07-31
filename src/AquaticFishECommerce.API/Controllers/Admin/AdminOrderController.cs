@@ -1,6 +1,7 @@
 using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Order;
 using AquaticFishECommerce.Application.Interfaces.Services.Order;
+using AquaticFishECommerce.Infrastructure.Services.Business.OrderServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,18 @@ namespace AquaticFishECommerce.API.Controllers.Admin
                 Success = true,
                 Message = "All Order Fetched Successfully",
                 Data = orders
+            });
+        }
+
+        [HttpPatch("{orderId}/products/{productId}/status")]
+        public async Task<IActionResult> UpdateOrderStatus(Guid orderId, Guid productId, UpdateOrderStatusDto dto)
+        {
+            await _adminOrderService.UpdateOrderStatusAsync(orderId, productId, dto);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Order Updated Successfully"
             });
         }
     }

@@ -1,6 +1,8 @@
+using AquaticFishECommerce.Application.Common.Exceptions;
 using AquaticFishECommerce.Application.DTOs.Order;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.Order;
+using AquaticFishECommerce.Domain.Enums;
 using AutoMapper;
 
 
@@ -26,6 +28,50 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
                 res.Add(orderDto);
             }
             return res;
+        }
+
+        public async Task UpdateOrderStatusAsync(Guid orderId, Guid productId, UpdateOrderStatusDto dto)
+        {
+            var order = await _orderRepository.GetOrderWithItemsAsync(orderId);
+
+            if (order == null)
+                throw new NotFoundException("Order not found");
+            var item = order.Items
+                .FirstOrDefault(x => x.ProductId == productId);
+            
+            if (item == null)
+                throw new NotFoundException("Product not found");
+
+            item.OrderStatus = dto.Status;
+
+            switch (dto.Status)
+            {
+                case OrderStatus.Confirmed:
+                    item.ConfirmedAt = DateTime.UtcNow;
+                    break;
+
+                case OrderStatus.Packed:
+                    item.PackedAt = DateTime.UtcNow;
+                    break;
+
+                case OrderStatus.Shipping:
+                    item.ShippingAt = DateTime.UtcNow;
+                    break;
+
+                case OrderStatus.Shipped:
+                    item.OutForDeliveryAt = DateTime.UtcNow;
+                    break;
+
+                case OrderStatus.Delivered:
+                    item.DeliveredAt = DateTime.UtcNow;
+                    break;
+
+                case OrderStatus.Cancelled:
+                    item.CancelledAt = DateTime.UtcNow;
+                    break;
+            }
+
+            await _orderRepository.UpdateAsync(order);
         }
     }
 }

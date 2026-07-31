@@ -6,6 +6,7 @@ namespace AquaticFishECommerce.Application.Interfaces.Services.Order
     public interface IAdminOrderService
     {
         Task<List<OrderResponseDto>> GetAllOrderAsync();
+        Task UpdateOrderStatusAsync(Guid orderId, Guid productId, UpdateOrderStatusDto dto);
 
     }
 }

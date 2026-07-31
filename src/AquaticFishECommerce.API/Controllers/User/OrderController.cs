@@ -62,7 +62,7 @@ namespace AquaticFishECommerce.API.Controllers.User
         }
 
         // Cancel Order Item
-        [HttpPut("{orderId:guid}/cancel/{productId:guid}")]
+        [HttpPatch("{orderId:guid}/cancel/{productId:guid}")]
         public async Task<IActionResult> CancelOrderItem(Guid orderId, Guid productId)
         {
             var userId = GetUserId();
