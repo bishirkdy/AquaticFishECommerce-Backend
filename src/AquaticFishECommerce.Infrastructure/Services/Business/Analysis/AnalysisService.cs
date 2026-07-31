@@ -17,8 +17,9 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.Analysis
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IOrderItemsRepository _orderItemRepository;
         private readonly IReviewRepository _reviewRepository;
-        public AnalysisService(IAnalysisRepository analysisRepository , IProductRepository productRepository , IOrderRepository orderRepository , IUserRepository userRepository , ICategoryRepository categoryRepository , IReviewRepository reviewRepository)
+        public AnalysisService(IAnalysisRepository analysisRepository , IProductRepository productRepository , IOrderRepository orderRepository , IUserRepository userRepository , ICategoryRepository categoryRepository , IReviewRepository reviewRepository , IOrderItemsRepository orderItemsRepository)
         {
             _analysisRepository = analysisRepository;
             _productRepository = productRepository;
@@ -26,6 +27,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.Analysis
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
             _reviewRepository = reviewRepository;
+            _orderItemRepository = orderItemsRepository;
         }
 
         public async Task<IEnumerable<MonthlySalesDto>> GetMonthlySalesAsync()
@@ -136,7 +138,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.Analysis
 
         public async Task<OrderSummaryDto> GetOrderSummaryAsync()
         {
-            var orders = await _orderRepository.GetAllAsync();
+            var orders = await _orderItemRepository.GetAllAsync();
 
             return new OrderSummaryDto
             {

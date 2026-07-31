@@ -21,5 +21,16 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.User
             var users = await _userRepository.GetAllAsyncUser();
             return _mapper.Map<IEnumerable<UserListDto>>(users);
         }
+
+        public async Task<bool> UpdateUserBlockStatusAsync(Guid userId, bool isBlocked)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                return false;
+
+            user.IsBlocked = isBlocked;
+            await _userRepository.UpdateAsync(user);
+            return true;
+        }
     }
 }

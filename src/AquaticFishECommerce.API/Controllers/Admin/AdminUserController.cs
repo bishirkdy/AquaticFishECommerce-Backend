@@ -31,5 +31,26 @@ namespace AquaticFishECommerce.API.Controllers.Admin
                 Data = users
             });
         }
+
+        [HttpPatch("{id}/block")]
+        public async Task<IActionResult> UpdateBlockStatus(Guid id,[FromBody] UserBlockDto dto)
+        {
+            var result = await _adminUserService.UpdateUserBlockStatusAsync(id, dto.IsBlocked);
+
+            if (!result)
+                return NotFound(new ApiResponse
+                {
+                    Success = false,
+                    Message = "User not found"
+                });
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = dto.IsBlocked
+                    ? "User blocked successfully."
+                    : "User unblocked successfully."
+            });
+        }
     }
 }
