@@ -1,13 +1,12 @@
+using AquaticFishECommerce.Application.DTOs.Analysis.DashboardPage;
 using AquaticFishECommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Application.Interfaces.Repositories
 {
     public interface IAnalysisRepository
     {
         Task<List<Order>> GetOrdersAsync();
-
+        Task<RatingSummaryDto> GetRatingSummaryAsync();
     }
 }

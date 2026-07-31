@@ -3,9 +3,7 @@ using AquaticFishECommerce.Application.DTOs.Analysis.AnalisysPage;
 using AquaticFishECommerce.Application.DTOs.Analysis.DashboardPage;
 using AquaticFishECommerce.Application.DTOs.Analysis.OrderPage;
 using AquaticFishECommerce.Application.DTOs.Analysis.Overall;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Application.Interfaces.Services.Analysis
 {
@@ -17,6 +15,6 @@ namespace AquaticFishECommerce.Application.Interfaces.Services.Analysis
         Task<DashboardSummaryDto> GetDashboardSummaryAsync();
         Task<AnalysisSummaryDto> GetSummaryAsync();
         Task<OrderSummaryDto> GetOrderSummaryAsync();
-
+        Task<RatingSummaryDto> GetRatingSummaryAsync();
     }
 }

@@ -2,7 +2,6 @@ using AquaticFishECommerce.API.Requests.Product;
 using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Product;
 using AquaticFishECommerce.Application.Interfaces.Services.Product;
-using AquaticFishECommerce.Infrastructure.Services.Business.ProductService;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

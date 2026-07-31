@@ -17,13 +17,15 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.Analysis
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICategoryRepository _categoryRepository;
-        public AnalysisService(IAnalysisRepository analysisRepository , IProductRepository productRepository , IOrderRepository orderRepository , IUserRepository userRepository , ICategoryRepository categoryRepository)
+        private readonly IReviewRepository _reviewRepository;
+        public AnalysisService(IAnalysisRepository analysisRepository , IProductRepository productRepository , IOrderRepository orderRepository , IUserRepository userRepository , ICategoryRepository categoryRepository , IReviewRepository reviewRepository)
         {
             _analysisRepository = analysisRepository;
             _productRepository = productRepository;
             _orderRepository = orderRepository;
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
+            _reviewRepository = reviewRepository;
         }
 
         public async Task<IEnumerable<MonthlySalesDto>> GetMonthlySalesAsync()
@@ -148,5 +150,11 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.Analysis
                 Cancelled = orders.Count(x => x.OrderStatus == OrderStatus.Cancelled)
             };
         }
+
+        public async Task<RatingSummaryDto> GetRatingSummaryAsync()
+        {
+            return await _analysisRepository.GetRatingSummaryAsync();
+        }
+
     }
 }

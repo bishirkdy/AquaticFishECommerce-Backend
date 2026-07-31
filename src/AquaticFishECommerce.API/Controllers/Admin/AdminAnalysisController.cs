@@ -99,5 +99,18 @@ namespace AquaticFishECommerce.API.Controllers.Admin
             });
         }
 
+        [HttpGet("rating-summary")]
+        public async Task<IActionResult> GetRatingSummary()
+        {
+            var result = await _analysisService.GetRatingSummaryAsync();
+
+            return Ok(new ApiResponse<RatingSummaryDto>
+            {
+                Success = true,
+                Data = result,
+                Message = "Overall rating fetched successfully"
+            });
+        }
+
     }
 }
