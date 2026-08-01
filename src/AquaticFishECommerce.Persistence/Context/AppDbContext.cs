@@ -19,6 +19,7 @@ namespace AquaticFishECommerce.Persistence.Context
         public DbSet<Review> Reviews => Set<Review>();
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+        public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
 
         //OnModelCreating() is a method that EF Core automatically calls once when the application starts.
         //ModelBuilder is an object that helps EF Core build the database model.

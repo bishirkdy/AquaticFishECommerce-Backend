@@ -12,10 +12,12 @@ namespace AquaticFishECommerce.Domain.Entities
         public string Phone { get; set; } = string.Empty;
         public UserRole Role { get; set; }
         public bool IsBlocked { get; set; }
+
         public ICollection<Address> Addresses { get; set; } = [];
         public ICollection<Order> Orders { get; set; } = [];
         public ICollection<CartItem> CartItems { get; set; } = [];
         public ICollection<Favorite> Favorites { get; set; } = [];
         public ICollection<Review> Reviews { get; set; } = [];
+        public ICollection<PasswordResetToken> PasswordResetTokens { get; set; } = [];
     }
 }

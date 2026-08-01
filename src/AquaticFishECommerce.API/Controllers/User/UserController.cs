@@ -1,9 +1,7 @@
 using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.User;
 using AquaticFishECommerce.Application.Interfaces.Services.User;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace AquaticFishECommerce.API.Controllers.User
 {
@@ -19,66 +17,6 @@ namespace AquaticFishECommerce.API.Controllers.User
             _userService = userService;
             //_loginValidator = loginValidator;
             //_updateUserValidator = updateUserValidator;
-        }
-        //Controller for registration
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterUserDto dto)
-        {
-            //var validator = await _registerValidator.ValidateAsync(dto);
-            //if (!validator.IsValid)
-            //{
-            //    return BadRequest(validator.Errors);
-            //}
-            await _userService.RegisterAsync(dto);
-            return StatusCode(StatusCodes.Status201Created, new ApiResponse
-            {
-                Message = "User registered successfully",
-                Success = true
-            });
-        }
-        //Controller for login
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto dto)
-        {
-            //var validation = await _loginValidator.ValidateAsync(dto);
-            //if (!validation.IsValid)
-            //{
-            //    return BadRequest(validation.Errors);
-            //}
-            var response = await _userService.LoginAsync(dto);
-            Response.Cookies.Append(
-                "accessToken",
-                response.AccessToken,
-                new CookieOptions
-                {
-                    HttpOnly = true,
-                    SameSite = SameSiteMode.None,
-                    Secure = true,
-                    Expires = DateTime.UtcNow.AddMinutes(60)
-                });
-            return Ok(new ApiResponse<UserDto>
-            {
-                Success = true,
-                Message = "Login Successfull",
-                Data = response.User
-            });
-        }
-
-
-        //Controller for get current user
-        [Authorize]
-        [HttpGet("profile")]
-        public async Task<IActionResult> GetById()
-        {
-            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await _userService.GetByIdAsync(Guid.Parse(id));
-
-            return Ok(new ApiResponse<UserDto>
-            {
-                Success = true,
-                Message = "User fetched successfully",
-                Data = user
-            });
         }
 
         //Controller for Update User taken by id and update

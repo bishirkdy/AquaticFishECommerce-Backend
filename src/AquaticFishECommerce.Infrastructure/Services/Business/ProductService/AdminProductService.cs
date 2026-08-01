@@ -145,7 +145,6 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.ProductService
             {
                 await _cloudinaryService.DeleteAsync(image.PublicId);
             }
-
             await _productRepository.DeleteAsync(product);
         }
     }

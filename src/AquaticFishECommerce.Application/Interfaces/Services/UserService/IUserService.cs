@@ -4,9 +4,6 @@ namespace AquaticFishECommerce.Application.Interfaces.Services.User
 {
     public interface IUserService
     {
-        Task RegisterAsync(RegisterUserDto dto);
-        Task<AuthResponseDto> LoginAsync(LoginDto dto);
-        Task<UserDto?> GetByIdAsync(Guid id);
         Task UpdateAsync(Guid id, UpdateUserDto dto);
         Task DeleteAsync(Guid id);
     }

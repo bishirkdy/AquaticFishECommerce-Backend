@@ -62,6 +62,14 @@ namespace AquaticFishECommerce.API.Middlewares
                     response.Error = new[] { ex.Message };
                     break;
 
+                case DatabaseException ex:
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    response.Message = ex.Message;
+                    response.Error = new[]
+                    {
+                    ex.InnerException?.Message ?? ex.Message};
+                    break;
+
                 default:
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     response.Message = "An unexpected error occurred.";
