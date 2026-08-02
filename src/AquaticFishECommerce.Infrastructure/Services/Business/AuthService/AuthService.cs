@@ -6,7 +6,6 @@ using AquaticFishECommerce.Application.Interfaces.External;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.AuthService;
 using AquaticFishECommerce.Domain.Entities;
-using AquaticFishECommerce.Infrastructure.Services.Authentication;
 using AutoMapper;
 
 namespace AquaticFishECommerce.Infrastructure.Services.Business.AuthService
@@ -59,11 +58,80 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.AuthService
 
             // Generate JWT access token
             var accessToken = _jwtService.GenerateAccessToken(user);
+            var refreshToken = _jwtService.GenerateRefreshToken();
+            var refreshTokenHash = _jwtService.HashRefreshToken(refreshToken);
+
+            user.RefreshTokenHash = refreshTokenHash;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(60);
+            await _userRepository.UpdateAsync(user);
 
             return new AuthResponseDto
             {
                 User = _mapper.Map<UserDto>(user),
-                AccessToken = accessToken
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+
+            };
+        }
+
+        public async Task<RefreshTokenResponseDto> RefreshTokenAsync(string refreshToken)
+        {
+            if (string.IsNullOrWhiteSpace(refreshToken))
+            {
+                return new RefreshTokenResponseDto
+                {
+                    Success = false,
+                    Message = "Refresh token not found."
+                };
+            }
+
+            // Hash received refresh token
+            var currentRefreshTokenHash = _jwtService.HashRefreshToken(refreshToken);
+
+            // Find user
+            var user = await _userRepository.GetByRefreshTokenHashAsync(currentRefreshTokenHash);
+
+            if (user is null)
+            {
+                return new RefreshTokenResponseDto
+                {
+                    Success = false,
+                    Message = "Invalid refresh token."
+                };
+            }
+
+            // Check expiry
+            if (user.RefreshTokenExpiryTime is null ||
+                user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            {
+                return new RefreshTokenResponseDto
+                {
+                    Success = false,
+                    Message = "Refresh token has expired."
+                };
+            }
+
+            // Generate new access token
+            var newAccessToken = _jwtService.GenerateAccessToken(user);
+
+            // Generate new refresh token
+            var newRefreshToken = _jwtService.GenerateRefreshToken();
+
+            // Hash new refresh token
+            var newRefreshTokenHash = _jwtService.HashRefreshToken(newRefreshToken);
+
+            // Save new values
+            user.RefreshTokenHash = newRefreshTokenHash;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(60);
+
+            await _userRepository.UpdateAsync(user);
+
+            return new RefreshTokenResponseDto
+            {
+                Success = true,
+                Message = "Token refreshed successfully.",
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken
             };
         }
 
@@ -82,6 +150,18 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.AuthService
             return _mapper.Map<UserDto>(user);
         }
 
+        public async Task LogoutAsync(Guid userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+
+            if (user is null)
+                return;
+
+            user.RefreshTokenHash = null;
+            user.RefreshTokenExpiryTime = null;
+
+            await _userRepository.UpdateAsync(user);
+        }
 
         public async Task ForgotPasswordAsync(ForgotPasswordDto dto)
         {

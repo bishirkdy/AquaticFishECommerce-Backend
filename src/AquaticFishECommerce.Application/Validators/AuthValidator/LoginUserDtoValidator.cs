@@ -1,4 +1,4 @@
-using AquaticFishECommerce.Application.DTOs.User;
+using AquaticFishECommerce.Application.DTOs.Auth;
 using FluentValidation;
 
 

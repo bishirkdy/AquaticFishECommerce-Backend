@@ -1,7 +1,5 @@
 using AquaticFishECommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Application.Interfaces.External
 {
@@ -9,5 +7,6 @@ namespace AquaticFishECommerce.Application.Interfaces.External
     {
         string GenerateAccessToken(User user);
         string GenerateRefreshToken();
+        string HashRefreshToken(string refreshToken);
     }
 }

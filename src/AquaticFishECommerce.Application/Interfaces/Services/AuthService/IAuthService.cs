@@ -11,5 +11,7 @@ namespace AquaticFishECommerce.Application.Interfaces.Services.AuthService
         Task<UserDto?> GetByIdAsync(Guid id);
         Task ForgotPasswordAsync(ForgotPasswordDto dto);
         Task ResetPasswordAsync(ResetPasswordDto dto);
+        Task<RefreshTokenResponseDto> RefreshTokenAsync(string refreshToken);
+        Task LogoutAsync(Guid userId);
     }
 }

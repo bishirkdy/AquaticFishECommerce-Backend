@@ -29,5 +29,11 @@ namespace AquaticFishECommerce.Persistence.Repositories
             return await _dbSet.Where(u => u.Role != UserRole.Admin)
                 .ToListAsync();
         }
+
+        public async Task<User?> GetByRefreshTokenHashAsync(string refreshTokenHash)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(x => x.RefreshTokenHash == refreshTokenHash);
+        }
     }
 }

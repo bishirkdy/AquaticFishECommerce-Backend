@@ -55,5 +55,13 @@ namespace AquaticFishECommerce.Infrastructure.Services.Authentication
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
         }
+
+        public string HashRefreshToken(string refreshToken)
+        {
+            using var sha256 = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(refreshToken);
+            var hash = sha256.ComputeHash(bytes);
+            return Convert.ToHexString(hash);
+        }
     }
 }

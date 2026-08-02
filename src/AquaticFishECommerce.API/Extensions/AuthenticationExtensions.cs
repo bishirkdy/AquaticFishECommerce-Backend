@@ -22,16 +22,19 @@ namespace AquaticFishECommerce.API.Extensions
 
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audience"],
-
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
-
+                    
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
+                    ClockSkew = TimeSpan.Zero,
                 };
+
                 //options.Events - property lets you execute your own code when specific authentication events occur.
                 //JwtBearerEvents provides event handlers that run during the JWT authentication lifecycle.
                 options.Events = new JwtBearerEvents
                 {
+                    //This event runs before JWT validation starts.
                     OnMessageReceived = context =>
                     {
+                        //context.Token is the token that the JWT middleware will validate.
                         context.Token = context.Request.Cookies["accessToken"];
                         return Task.CompletedTask;
                     },
@@ -51,7 +54,6 @@ namespace AquaticFishECommerce.API.Extensions
                     OnChallenge = async context =>
                     {
                         context.HandleResponse();
-
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         context.Response.ContentType = "application/json";
 

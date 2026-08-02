@@ -1,3 +1,4 @@
+using AquaticFishECommerce.Application.DTOs.Auth;
 using AquaticFishECommerce.Application.DTOs.User;
 using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;

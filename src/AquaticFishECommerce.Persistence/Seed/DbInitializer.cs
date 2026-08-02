@@ -19,16 +19,19 @@ namespace AquaticFishECommerce.Persistence.Seed
             _context = context;
             _passwordHasher = passwordHasher;
         }
+        //Funtion for if there is not admin exist - create admin user
         public async Task SeedAsync()
         {
+
             if(await _context.Users.AnyAsync(x => x.Role == UserRole.Admin))
             {
                 return;
             }
+
             var admin = new User
             {
                 Name = "Admin",
-                Email = "admin@gmail.com",
+                Email = "bishirkdy@gmail.com",
                 PasswordHash = _passwordHasher.Hash("ABcd@@11"),
                 Role = UserRole.Admin
             };

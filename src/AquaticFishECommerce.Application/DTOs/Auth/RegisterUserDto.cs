@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AquaticFishECommerce.Application.DTOs.User
+namespace AquaticFishECommerce.Application.DTOs.Auth
 {
     //This is Dto for register user 
     public class RegisterUserDto

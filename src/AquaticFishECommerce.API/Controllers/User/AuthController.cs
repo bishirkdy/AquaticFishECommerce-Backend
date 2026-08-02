@@ -1,8 +1,8 @@
 using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Auth;
 using AquaticFishECommerce.Application.DTOs.User;
+using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.AuthService;
-using AquaticFishECommerce.Application.Interfaces.Services.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -35,23 +35,68 @@ namespace AquaticFishECommerce.API.Controllers.User
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
-
             var response = await _authService.LoginAsync(dto);
+
+            // Access Token Cookie
             Response.Cookies.Append(
                 "accessToken",
                 response.AccessToken,
                 new CookieOptions
                 {
                     HttpOnly = true,
-                    SameSite = SameSiteMode.None,
                     Secure = true,
-                    Expires = DateTime.UtcNow.AddMinutes(60)
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(15)
                 });
+
+            // Refresh Token Cookie
+            Response.Cookies.Append(
+                "refreshToken",
+                response.RefreshToken,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(60)
+                });
+
             return Ok(new ApiResponse<UserDto>
             {
                 Success = true,
-                Message = "Login Successfull",
+                Message = "Login Successful",
                 Data = response.User
+            });
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            var response = await _authService.RefreshTokenAsync(refreshToken!);
+
+            if (!response.Success)
+            {
+                return Unauthorized(response.Message);
+            }
+
+            Response.Cookies.Append(
+                "refreshToken",
+                response.RefreshToken,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(60)
+                });
+
+            return Ok(new ApiResponse<string>
+            {
+                Success = true,
+                Message = response.Message,
+                Data = response.AccessToken
             });
         }
 
@@ -59,14 +104,31 @@ namespace AquaticFishECommerce.API.Controllers.User
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim is null)
+            {
+                return Unauthorized();
+            }
+
+            await _authService.LogoutAsync(Guid.Parse(userIdClaim.Value));
 
             Response.Cookies.Delete("accessToken", new CookieOptions
             {
-                SameSite = SameSiteMode.None,
+                HttpOnly = true,
                 Secure = true,
+                SameSite = SameSiteMode.None,
                 Path = "/"
             });
-            
+
+            Response.Cookies.Delete("refreshToken", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Path = "/"
+            });
+
             return Ok(new ApiResponse
             {
                 Success = true,

@@ -1,4 +1,3 @@
-
 using AquaticFishECommerce.API.Extensions;
 using AquaticFishECommerce.Infrastructure;
 using AquaticFishECommerce.Application;
@@ -11,8 +10,7 @@ namespace AquaticFishECommerce.API
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddApplication().AddPersistence(builder.Configuration).AddInfrastructure(builder.Configuration);
-            builder.Services.AddApiService(builder.Configuration);
+            builder.Services.AddApplication().AddPersistence(builder.Configuration).AddInfrastructure(builder.Configuration).AddApiService(builder.Configuration);
             var app = builder.Build();
 
             //CreateScope() creates a temporary Dependency Injection scope.
@@ -29,3 +27,4 @@ namespace AquaticFishECommerce.API
         }
     }
 }
+

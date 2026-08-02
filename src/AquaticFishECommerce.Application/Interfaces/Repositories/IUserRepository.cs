@@ -11,6 +11,7 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
         Task<User?> GetByEmailAsync(string email);
         Task<bool> EmailExistsAsync(string email);
         Task<IEnumerable<User>> GetAllAsyncUser();
+        Task<User?> GetByRefreshTokenHashAsync(string refreshTokenHash);
 
     }
 }
