@@ -2,7 +2,7 @@ using AquaticFishECommerce.Application.DTOs.User;
 using FluentValidation;
 
 
-namespace AquaticFishECommerce.Application.Validators.UserValidator
+namespace AquaticFishECommerce.Application.Validators.AuthValidator
 {
     public class LoginUserDtoValidator : AbstractValidator<LoginDto>
     {

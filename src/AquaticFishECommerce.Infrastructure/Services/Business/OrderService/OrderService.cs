@@ -1,4 +1,5 @@
 using AquaticFishECommerce.Application.Common.Exceptions;
+using AquaticFishECommerce.Application.Common.Helpers;
 using AquaticFishECommerce.Application.DTOs.Order;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.Order;
@@ -18,7 +19,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
         private readonly IAddressRepository _addressReporitory;
         private readonly IMapper _mapper;
         
-        public OrderService(IUserRepository userRepository , IOrderRepository orderRepository , IProductRepository productRepository , ICartItemRepository cartItemRepository , IAddressRepository addressRepository , IMapper mapper)
+        public OrderService(IUserRepository userRepository , IOrderRepository orderRepository , IProductRepository productRepository , ICartItemRepository cartItemRepository , IAddressRepository addressRepository , IMapper mapper )
         {
             _userRepository = userRepository;
             _cartItemRepository = cartItemRepository;
@@ -29,7 +30,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
         }
 
         //Service for create order
-        public async Task<Guid> CreateOrderAsync(Guid userId, CreateOrderDto dto)
+        public async Task<Guid> CreateOrderAsync(Guid userId, CreateOrderDto dto, PaymentStatus paymentStatus = PaymentStatus.Pending)
         {
             // Validate User
             var user = await _userRepository.GetByIdAsync(userId);
@@ -62,22 +63,17 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
                 if (product.Stock < item.Quantity)
                     throw new BadRequestException($"{product.Name} has only {product.Stock} items remaining.");
 
-                // Selling price before discount
                 decimal unitPrice = product.Price;
 
-                // Cost price
                 decimal costPrice = product.CostPrice;
 
-                // Discount amount
-                decimal discountAmount = unitPrice * (product.DiscountPercentage / 100);
+                decimal finalPrice = Math.Floor(
+                    PriceCalculation.GetDiscountedPrice(
+                        unitPrice,
+                        product.DiscountPercentage));
 
-                // Selling price after discount
-                decimal finalPrice = unitPrice - discountAmount;
-
-                // Total amount of this item
                 decimal itemTotal = finalPrice * item.Quantity;
 
-                // Profit of this item
                 decimal itemProfit = (finalPrice - costPrice) * item.Quantity;
 
                 totalAmount += itemTotal;
@@ -94,8 +90,9 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
                     Quantity = item.Quantity,
 
                     UnitPrice = unitPrice,
-                    CostPrice = costPrice,
+                    DiscountedUnitPrice = finalPrice,
 
+                    CostPrice = costPrice,
                     DiscountPercentage = product.DiscountPercentage,
 
                     TotalPrice = itemTotal,
@@ -113,7 +110,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
                 TotalAmount = totalAmount,
                 Profit = totalProfit,
 
-                PaymentStatus = PaymentStatus.Pending,
+                PaymentStatus = paymentStatus,
                 OrderStatus = OrderStatus.OrderPlaced,
 
                 Items = orderItems
@@ -128,15 +125,8 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
         public async Task<List<OrderResponseDto>> GetMyOrdersAsync(Guid userId)
         {
             var orders = await _orderRepository.GetOrderByUserIdAsync(userId);
-            var response = new List<OrderResponseDto>();
 
-            foreach (var order in orders)
-            {
-                var orderDto = _mapper.Map<OrderResponseDto>(order);
-                response.Add(orderDto);
-            }
-
-            return response;
+            return _mapper.Map<List<OrderResponseDto>>(orders);
         }
 
         public async Task CancelOrderItemAsync(Guid userId ,Guid productId , Guid orderId)

@@ -2,7 +2,7 @@ using AquaticFishECommerce.Application.DTOs.User;
 using FluentValidation;
 
 
-namespace AquaticFishECommerce.Application.Validators.UserValidator
+namespace AquaticFishECommerce.Application.Validators.AuthValidator
 {
     //FluentValidation - Validate request data
     //AbstractValidator<T> is the base class from the FluentValidation library. It lets you define validation rules for a specific model or DTO
@@ -14,6 +14,7 @@ namespace AquaticFishECommerce.Application.Validators.UserValidator
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name is Required")
                 .MaximumLength(100);
+
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("Invalid email address.");

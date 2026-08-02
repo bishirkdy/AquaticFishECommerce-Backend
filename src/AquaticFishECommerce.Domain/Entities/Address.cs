@@ -1,7 +1,5 @@
 using AquaticFishECommerce.Domain.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Domain.Entities
 {
@@ -11,6 +9,7 @@ namespace AquaticFishECommerce.Domain.Entities
         public User User { get; set; } = null!;
         public string FullName { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;
         public string Post { get; set; } = string.Empty;
         public string District { get; set; } = string.Empty;

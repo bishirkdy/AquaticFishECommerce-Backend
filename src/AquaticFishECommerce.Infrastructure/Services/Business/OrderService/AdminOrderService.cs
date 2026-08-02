@@ -21,13 +21,8 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
         public async Task<List<OrderResponseDto>> GetAllOrderAsync()
         {
             var orders = await _orderRepository.GetAllOrderAsync();
-            var res = new List<OrderResponseDto>();
-            foreach (var order in orders)
-            {
-                var orderDto = _mapper.Map<OrderResponseDto>(order);
-                res.Add(orderDto);
-            }
-            return res;
+
+            return _mapper.Map<List<OrderResponseDto>>(orders);
         }
 
         public async Task UpdateOrderStatusAsync(Guid orderId, Guid productId, UpdateOrderStatusDto dto)

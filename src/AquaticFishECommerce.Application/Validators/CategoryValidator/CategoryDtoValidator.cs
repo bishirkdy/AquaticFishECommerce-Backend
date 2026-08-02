@@ -12,10 +12,10 @@ namespace AquaticFishECommerce.Application.Validators.CategoryValidator
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .MaximumLength(100);
+                .MaximumLength(100).WithMessage("Category name cannot exceed 100 characters.");
 
             RuleFor(x => x.Description)
-                .MaximumLength(500);
+                .MaximumLength(500).WithMessage("Category description cannot exceed 500 characters.");
 
             RuleFor(x => x.ImageUrl)
                 .MaximumLength(500);

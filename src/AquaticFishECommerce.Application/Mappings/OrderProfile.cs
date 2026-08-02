@@ -31,15 +31,15 @@ namespace AquaticFishECommerce.Application.Mappings
                 .ForMember(dest => dest.Quantity,
                     opt => opt.MapFrom(src => src.Quantity))
 
-                // Selling price before discount
-                .ForMember(dest => dest.Price,
+                .ForMember(dest => dest.OriginalPrice,
                     opt => opt.MapFrom(src => src.UnitPrice))
 
-                // Discount percentage
-                .ForMember(dest => dest.Discount,
+                .ForMember(dest => dest.DiscountPercentage,
                     opt => opt.MapFrom(src => src.DiscountPercentage))
 
-                // Primary Product Image
+                .ForMember(dest => dest.DiscountedPrice,
+                    opt => opt.MapFrom(src => src.DiscountedUnitPrice))
+
                 .ForMember(dest => dest.ProductImage,
                     opt => opt.MapFrom(src =>
                         src.Product.Images
@@ -47,7 +47,6 @@ namespace AquaticFishECommerce.Application.Mappings
                             .Select(i => i.ImageUrl)
                             .FirstOrDefault()))
 
-                // Total price after discount × quantity
                 .ForMember(dest => dest.TotalPrice,
                     opt => opt.MapFrom(src => src.TotalPrice))
 

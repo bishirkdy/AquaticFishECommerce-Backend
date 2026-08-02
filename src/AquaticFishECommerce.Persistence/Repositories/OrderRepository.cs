@@ -19,6 +19,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .Include(o => o.Address)
                 .Include(o => o.Items)
                 .ThenInclude(i => i.Product)
+                .ThenInclude(p => p.Images)
                 .OrderByDescending(o => o.CreatedAt)
                 .ToListAsync();
         }
@@ -43,6 +44,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .Include(o => o.Address)
                 .Include(o => o.Items)
                 .ThenInclude(i => i.Product)
+                .ThenInclude(p => p.Images)
                 .OrderByDescending(o => o.CreatedAt)
                 .ToListAsync();
         }

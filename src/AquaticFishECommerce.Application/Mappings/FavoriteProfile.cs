@@ -1,9 +1,7 @@
 using AquaticFishECommerce.Application.DTOs.Favorite;
 using AquaticFishECommerce.Domain.Entities;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Application.Mappings
 {
@@ -14,19 +12,28 @@ namespace AquaticFishECommerce.Application.Mappings
             CreateMap<Favorite, FavoriteResponseDto>()
                 .ForMember(d => d.FavoriteId,
                     o => o.MapFrom(s => s.Id))
+
                 .ForMember(d => d.Id,
                     o => o.MapFrom(s => s.ProductId))
-                .ForMember(d => d.Title,
+
+                .ForMember(d => d.Name,
                     o => o.MapFrom(s => s.Product.Name))
-                .ForMember(d => d.Price,
+
+                .ForMember(d => d.OriginalPrice,
                     o => o.MapFrom(s => s.Product.Price))
+
                 .ForMember(d => d.DiscountPercentage,
                     o => o.MapFrom(s => s.Product.DiscountPercentage))
+
                 .ForMember(d => d.IsActive,
                     o => o.MapFrom(s => s.Product.IsActive))
+
                 .ForMember(d => d.ImageUrl,
                     o => o.MapFrom(s =>
-                        s.Product.Images.FirstOrDefault(i => i.IsPrimary)!.ImageUrl));
+                        s.Product.Images
+                         .Where(i => i.IsPrimary)
+                         .Select(i => i.ImageUrl)
+                         .FirstOrDefault()));
         }
     }
 }

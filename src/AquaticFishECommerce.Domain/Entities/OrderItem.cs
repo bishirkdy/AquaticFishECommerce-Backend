@@ -12,6 +12,7 @@ namespace AquaticFishECommerce.Domain.Entities
         public Product Product { get; set; } = null!;
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
+        public decimal DiscountedUnitPrice { get; set; }
         public decimal CostPrice { get; set; }
         public decimal DiscountPercentage { get; set; }
         public decimal TotalPrice { get; set; }

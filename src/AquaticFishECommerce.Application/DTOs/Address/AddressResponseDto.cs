@@ -9,6 +9,7 @@ namespace AquaticFishECommerce.Application.DTOs.Address
         public Guid Id { get; set; }
         public string FullName { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;
         public string Post { get; set; } = string.Empty;
         public string District { get; set; } = string.Empty;

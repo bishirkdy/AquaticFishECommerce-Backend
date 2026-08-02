@@ -1,4 +1,5 @@
 using AquaticFishECommerce.Application.Common.Exceptions;
+using AquaticFishECommerce.Application.Common.Helpers;
 using AquaticFishECommerce.Application.DTOs.Favorite;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.Favorite;
@@ -54,7 +55,18 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business
         public async Task<FavoriteListResponseDto> GetFavoritesAsync(Guid userId)
         {
             var favorites = await _favoriteRepository.GetUserFavoritesAsync(userId);
+
             var favoriteItems = _mapper.Map<List<FavoriteResponseDto>>(favorites);
+
+            foreach (var item in favoriteItems)
+            {
+                item.DiscountedPrice = Math.Floor(
+                    PriceCalculation.GetDiscountedPrice(
+                        item.OriginalPrice,
+                        item.DiscountPercentage
+                    )
+                );
+            }
 
             return new FavoriteListResponseDto
             {

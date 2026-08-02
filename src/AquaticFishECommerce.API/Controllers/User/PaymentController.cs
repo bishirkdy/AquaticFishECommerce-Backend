@@ -4,6 +4,7 @@ using AquaticFishECommerce.Application.DTOs.Razorpay;
 using AquaticFishECommerce.Application.DTOs.User;
 using AquaticFishECommerce.Application.Interfaces.External;
 using AquaticFishECommerce.Application.Interfaces.Services.Order;
+using AquaticFishECommerce.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -62,7 +63,7 @@ namespace AquaticFishECommerce.API.Controllers.User
             }
 
             // Payment verified
-            var order = await _orderService.CreateOrderAsync(Guid.Parse(userId) , dto.Order);
+            var order = await _orderService.CreateOrderAsync(Guid.Parse(userId) , dto.Order , PaymentStatus.Paid);
 
             return Ok(new ApiResponse<Guid>
             {
@@ -71,5 +72,6 @@ namespace AquaticFishECommerce.API.Controllers.User
                 Data = order
             });
         }
+    
     }
 }

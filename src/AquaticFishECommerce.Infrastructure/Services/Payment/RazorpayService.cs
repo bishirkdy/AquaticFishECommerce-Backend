@@ -1,3 +1,5 @@
+using AquaticFishECommerce.Application.Common.Exceptions;
+using AquaticFishECommerce.Application.Common.Helpers;
 using AquaticFishECommerce.Application.DTOs.Payment;
 using AquaticFishECommerce.Application.DTOs.Razorpay;
 using AquaticFishECommerce.Application.Interfaces.External;
@@ -29,9 +31,13 @@ namespace AquaticFishECommerce.Infrastructure.Services.Payment
                 var product = await _productRepository.GetByIdAsync(item.ProductId);
 
                 if (product == null)
-                    throw new Exception("Product not found.");
+                    throw new NotFoundException("Product not found.");
 
-                totalAmount += product.Price * item.Quantity;
+                var discountedPrice = Math.Floor(PriceCalculation.GetDiscountedPrice(
+                    product.Price,
+                    product.DiscountPercentage));
+
+                totalAmount += discountedPrice * item.Quantity;
             }
 
             RazorpayClient client = new RazorpayClient(
@@ -39,21 +45,21 @@ namespace AquaticFishECommerce.Infrastructure.Services.Payment
                 _settings.KeySecret);
 
             Dictionary<string, object> options = new()
-            {
-                { "amount", (int)(totalAmount * 100) }, // Paise
-                { "currency", "INR" },
-                { "receipt", Guid.NewGuid().ToString() }
-            };
+    {
+        { "amount", (int)(Math.Floor(totalAmount) * 100) }, // Convert to paise
+        { "currency", "INR" },
+        { "receipt", Guid.NewGuid().ToString() }
+    };
 
             Order order = client.Order.Create(options);
 
-            return await Task.FromResult(new RazorpayOrderResponseDto
+            return new RazorpayOrderResponseDto
             {
                 RazorpayOrderId = order["id"].ToString()!,
                 Amount = Convert.ToDecimal(order["amount"]) / 100,
                 Currency = order["currency"].ToString()!,
                 Key = _settings.KeyId
-            });
+            };
         }
 
         public bool VerifyPayment(

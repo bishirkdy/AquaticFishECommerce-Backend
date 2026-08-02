@@ -1,4 +1,3 @@
-
 using AquaticFishECommerce.API.Requests.Product;
 using AquaticFishECommerce.API.Validator.Product;
 using FluentValidation;

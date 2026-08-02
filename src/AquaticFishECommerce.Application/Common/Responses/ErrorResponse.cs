@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace AquaticFishECommerce.Application.Common.Responses
 {
     public class ErrorResponse

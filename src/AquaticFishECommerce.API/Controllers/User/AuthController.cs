@@ -55,6 +55,25 @@ namespace AquaticFishECommerce.API.Controllers.User
             });
         }
 
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+
+            Response.Cookies.Delete("accessToken", new CookieOptions
+            {
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                Path = "/"
+            });
+            
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Logout successful."
+            });
+        }
+
         //Controller for get current user
         [Authorize]
         [HttpGet("profile")]

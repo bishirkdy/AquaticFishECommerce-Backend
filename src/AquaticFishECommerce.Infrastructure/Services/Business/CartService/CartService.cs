@@ -1,4 +1,5 @@
 using AquaticFishECommerce.Application.Common.Exceptions;
+using AquaticFishECommerce.Application.Common.Helpers;
 using AquaticFishECommerce.Application.DTOs.CartItem;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.Cart;
@@ -29,6 +30,18 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.CartService
             var cartItems = await _cartItemRepository.GetUserCartAsync(userId);
 
             var items = _mapper.Map<List<CartItemResponseDto>>(cartItems);
+
+            foreach (var item in items)
+            {
+                item.DiscountedPrice = Math.Floor(
+                    PriceCalculation.GetDiscountedPrice(
+                        item.OriginalPrice,
+                        item.DiscountPercentage
+                    )
+                );
+
+                item.TotalPrice = item.DiscountedPrice * item.Quantity;
+            }
 
             return new CartResponseDto
             {
