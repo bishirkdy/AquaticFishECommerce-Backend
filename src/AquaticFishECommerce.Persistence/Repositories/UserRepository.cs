@@ -5,9 +5,7 @@ using AquaticFishECommerce.Domain.Entities;
 using AquaticFishECommerce.Domain.Enums;
 using AquaticFishECommerce.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 namespace AquaticFishECommerce.Persistence.Repositories
 {
     internal class UserRepository : GenericRepository<User> , IUserRepository

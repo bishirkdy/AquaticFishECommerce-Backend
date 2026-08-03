@@ -39,5 +39,25 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .Where(c => c.UserId == userId)
                 .ToListAsync();
         }
+
+        public async Task DeleteByProductIdAsync(Guid productId)
+        {
+            var items = await _context.CartItems
+                .Where(x => x.ProductId == productId)
+                .ToListAsync();
+
+            _context.CartItems.RemoveRange(items);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteByUserIdAsync(Guid userId)
+        {
+            var items = await _context.CartItems
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+
+            _context.CartItems.RemoveRange(items);
+            await _context.SaveChangesAsync();
+        }
     }
 }

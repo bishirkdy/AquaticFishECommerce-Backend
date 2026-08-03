@@ -2,9 +2,7 @@ using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Domain.Entities;
 using AquaticFishECommerce.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Persistence.Repositories
 {
@@ -54,6 +52,11 @@ namespace AquaticFishECommerce.Persistence.Repositories
         {
             return await _context.OrderItems
                 .AnyAsync(x => x.ProductId == productId);
+        }
+
+        public async Task<bool> HasOrdersByUserIdAsync(Guid userId)
+        {
+            return await _context.Orders.AnyAsync(o => o.UserId == userId);
         }
     }
 }

@@ -1,7 +1,5 @@
 using AquaticFishECommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Application.Interfaces.Repositories
 {
@@ -12,6 +10,7 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
         Task<bool> HasOrdersWithAddressAsync(Guid addressId);
         Task<List<Order>> GetAllOrderAsync();
         Task<bool> HasOrdersAsync(Guid productId);
+        Task<bool> HasOrdersByUserIdAsync(Guid userId);
     }
 
 }

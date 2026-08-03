@@ -1,7 +1,5 @@
 using AquaticFishECommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Application.Interfaces.Repositories
 {
@@ -10,5 +8,7 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
         Task<IEnumerable<Favorite>> GetUserFavoritesAsync(Guid userId);
         Task<Favorite?> GetFavoriteAsync(Guid userId, Guid productId);
         Task ClearFavoritesAsync(Guid userId);
+        Task DeleteByProductIdAsync(Guid productId);
+        Task DeleteByUserIdAsync(Guid userId);
     }
 }

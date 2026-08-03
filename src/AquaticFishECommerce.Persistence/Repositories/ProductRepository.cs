@@ -3,9 +3,7 @@ using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Domain.Entities;
 using AquaticFishECommerce.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Persistence.Repositories
 {
@@ -40,6 +38,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .AsNoTracking()
                 .Include(p => p.Images)
                 .Include(p => p.Category)
+                .Where(p => p.IsActive)
                 .Take(6)
                 .ToListAsync();
         }
@@ -57,7 +56,8 @@ namespace AquaticFishECommerce.Persistence.Repositories
             IQueryable<Product> products = _context.Products
                 .AsNoTracking()
                 .Include(p => p.Images)
-                .Include(p => p.Category);
+                .Include(p => p.Category)
+                .Where(p => p.IsActive);
 
             // Search
             if (!string.IsNullOrWhiteSpace(query.Search))

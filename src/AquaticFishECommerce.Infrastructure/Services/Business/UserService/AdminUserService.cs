@@ -11,9 +11,15 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.User
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        public AdminUserService(IUserRepository userRepository , IMapper mapper)
+        private readonly IOrderRepository _orderRepository;
+        private readonly ICartItemRepository _cartItemRepository;
+        private readonly IFavoriteRepository _favoriteRepository;
+        public AdminUserService(IUserRepository userRepository , IMapper mapper , IOrderRepository orderRepository , IFavoriteRepository favoriteRepository , ICartItemRepository cartItemRepository)
         {
             _userRepository = userRepository;
+            _orderRepository = orderRepository;
+            _cartItemRepository = cartItemRepository;
+            _favoriteRepository = favoriteRepository;
             _mapper = mapper;
         }
         // Get all users
@@ -44,6 +50,16 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.User
             {
                 throw new NotFoundException("User not found.");
             }
+            bool hasOrders = await _orderRepository.HasOrdersByUserIdAsync(userId);
+            if (hasOrders)
+                throw new BadRequestException("Cannot delete a user who has placed orders.");
+
+            // Delete cart items and favorite of user
+            await _cartItemRepository.DeleteByUserIdAsync(userId);
+            await _favoriteRepository.DeleteByUserIdAsync(userId);
+
+            // Delete user
+            await _userRepository.DeleteAsync(user);
 
             await _userRepository.DeleteAsync(user);
         }

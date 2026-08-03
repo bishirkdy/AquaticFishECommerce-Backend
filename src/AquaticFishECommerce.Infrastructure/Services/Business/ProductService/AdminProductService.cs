@@ -18,7 +18,9 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.ProductService
         private readonly ICategoryRepository _categoryRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IReviewRepository _reviewRepository;
-        public AdminProductService(IProductRepository productRepository, IMapper mapper, ICloudinaryService cloudinaryService, IProductImageRepository productImageRepository, ICategoryRepository categoryRepository , IOrderRepository orderRepository , IReviewRepository reviewRepository)
+        private readonly ICartItemRepository _cartItemRepository;
+        private readonly IFavoriteRepository _favoriteRepository;
+        public AdminProductService(IProductRepository productRepository, IMapper mapper, ICloudinaryService cloudinaryService, IProductImageRepository productImageRepository, ICategoryRepository categoryRepository , IOrderRepository orderRepository , IReviewRepository reviewRepository , ICartItemRepository cartItemRepository , IFavoriteRepository favoriteRepository)
         {
             _productRepository = productRepository;
             _mapper = mapper;
@@ -27,6 +29,8 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.ProductService
             _categoryRepository = categoryRepository;
             _orderRepository = orderRepository;
             _reviewRepository = reviewRepository;
+            _cartItemRepository = cartItemRepository;
+            _favoriteRepository = favoriteRepository;
         }
 
         //Service for add product image and product to database
@@ -157,7 +161,9 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.ProductService
                 return;
             }
 
-            // Remove reviews
+            // Remove user cart, favorite and reviews of product
+            await _cartItemRepository.DeleteByProductIdAsync(id);
+            await _favoriteRepository.DeleteByProductIdAsync(id);
             await _reviewRepository.DeleteByProductIdAsync(id);
 
             // Delete Cloudinary images
