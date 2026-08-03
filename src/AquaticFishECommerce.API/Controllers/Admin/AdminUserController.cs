@@ -8,6 +8,7 @@ namespace AquaticFishECommerce.API.Controllers.Admin
 {
     [ApiController]
     [Route("api/v1/admin/users")]
+    [Authorize(Roles = "Admin")]
     public class AdminUserController : ControllerBase
     {
         private readonly IAdminUserService _adminUserService;
@@ -19,7 +20,6 @@ namespace AquaticFishECommerce.API.Controllers.Admin
      
         //Controller for get all users for admin
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             var users = await _adminUserService.GetAllAsync();
@@ -32,6 +32,8 @@ namespace AquaticFishECommerce.API.Controllers.Admin
             });
         }
 
+
+        //Controller for block and unblock user
         [HttpPatch("{id}/block")]
         public async Task<IActionResult> UpdateBlockStatus(Guid id,[FromBody] UserBlockDto dto)
         {
@@ -50,6 +52,18 @@ namespace AquaticFishECommerce.API.Controllers.Admin
                 Message = dto.IsBlocked
                     ? "User blocked successfully."
                     : "User unblocked successfully."
+            });
+        }
+
+        [HttpDelete("{userId:guid}")]
+        public async Task<IActionResult> DeleteUser(Guid userId)
+        {
+            await _adminUserService.DeleteUserAsync(userId);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "User deleted successfully."
             });
         }
     }

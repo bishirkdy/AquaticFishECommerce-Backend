@@ -6,5 +6,6 @@ namespace AquaticFishECommerce.Application.Interfaces.Services.User
     {
         Task<IEnumerable<UserListDto>> GetAllAsync();
         Task<bool> UpdateUserBlockStatusAsync(Guid userId, bool isBlocked);
+        Task DeleteUserAsync(Guid userId);
     }
 }

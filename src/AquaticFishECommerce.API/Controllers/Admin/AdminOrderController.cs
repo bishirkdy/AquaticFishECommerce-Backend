@@ -43,5 +43,17 @@ namespace AquaticFishECommerce.API.Controllers.Admin
                 Message = "Order Updated Successfully"
             });
         }
+
+        [HttpDelete("{orderId:guid}")]
+        public async Task<IActionResult> DeleteOrder(Guid orderId)
+        {
+            await _adminOrderService.DeleteOrderOfUser(orderId);
+
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Order deleted successfully."
+            });
+        }
     }
 }

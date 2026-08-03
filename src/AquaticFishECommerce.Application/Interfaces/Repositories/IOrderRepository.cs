@@ -11,6 +11,7 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
         Task<Order?> GetOrderWithItemsAsync(Guid orderId);
         Task<bool> HasOrdersWithAddressAsync(Guid addressId);
         Task<List<Order>> GetAllOrderAsync();
+        Task<bool> HasOrdersAsync(Guid productId);
     }
 
 }

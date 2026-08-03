@@ -49,6 +49,11 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .ToListAsync();
         }
 
-
+        
+        public async Task<bool> HasOrdersAsync(Guid productId)
+        {
+            return await _context.OrderItems
+                .AnyAsync(x => x.ProductId == productId);
+        }
     }
 }

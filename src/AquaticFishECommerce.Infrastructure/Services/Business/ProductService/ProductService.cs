@@ -1,6 +1,5 @@
 using AquaticFishECommerce.Application.Common.Helpers;
 using AquaticFishECommerce.Application.DTOs.Product;
-using AquaticFishECommerce.Application.Interfaces.External;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.Product;
 using AutoMapper;
@@ -13,16 +12,12 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.ProductService
     {
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
-        private readonly ICloudinaryService _cloudinaryService;
-        private readonly IProductImageRepository _productImageRepository;
-        private readonly ICategoryRepository _categoryRepository;
-        public ProductService(IProductRepository productRepository, IMapper mapper , ICloudinaryService cloudinaryService , IProductImageRepository productImageRepository , ICategoryRepository categoryRepository)
+
+        public ProductService(IProductRepository productRepository, IMapper mapper, IProductImageRepository productImageRepository)
         {
             _productRepository = productRepository;
             _mapper = mapper;
-            _cloudinaryService = cloudinaryService;
-            _productImageRepository = productImageRepository;
-            _categoryRepository = categoryRepository;
+
         }
 
         private List<ProductResponseDto> ApplyDiscount(List<ProductResponseDto> products)

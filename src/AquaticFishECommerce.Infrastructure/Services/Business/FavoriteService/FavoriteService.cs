@@ -31,10 +31,10 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business
             var product = await _productRepository.GetByIdAsync(dto.ProductId);
 
             if (product == null)
-                throw new KeyNotFoundException("Product not found.");
+                throw new NotFoundException("Product not found.");
 
             if (!product.IsActive)
-                throw new KeyNotFoundException("Product is unavailable.");
+                throw new NotFoundException("Product is unavailable.");
 
             var favorite = await _favoriteRepository
                 .GetFavoriteAsync(userId, dto.ProductId);

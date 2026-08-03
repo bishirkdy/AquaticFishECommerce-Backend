@@ -8,5 +8,6 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
     {
         Task<List<Review>> GetProductReviewsAsync(Guid productId);
         Task<bool> AlreadyReviewedAsync(Guid userId, Guid productId);
+        Task DeleteByProductIdAsync(Guid productId);
     }
 }

@@ -16,6 +16,7 @@ public static class SwaggerExtensions
                 Title = "AquaticFishECommerce API",
                 Version = "v1",
             });
+
             //API uses JWT Bearer Authentication.Without this, Swagger doesn't show the Authorize button.
             options.AddSecurityDefinition(schemeId, new OpenApiSecurityScheme //This describes how authentication works.
             {

@@ -16,14 +16,17 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.ProductService
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IProductImageRepository _productImageRepository;
         private readonly ICategoryRepository _categoryRepository;
-        public AdminProductService(IProductRepository productRepository, IMapper mapper, ICloudinaryService cloudinaryService, IProductImageRepository productImageRepository, ICategoryRepository categoryRepository)
+        private readonly IOrderRepository _orderRepository;
+        private readonly IReviewRepository _reviewRepository;
+        public AdminProductService(IProductRepository productRepository, IMapper mapper, ICloudinaryService cloudinaryService, IProductImageRepository productImageRepository, ICategoryRepository categoryRepository , IOrderRepository orderRepository , IReviewRepository reviewRepository)
         {
             _productRepository = productRepository;
             _mapper = mapper;
             _cloudinaryService = cloudinaryService;
             _productImageRepository = productImageRepository;
             _categoryRepository = categoryRepository;
-
+            _orderRepository = orderRepository;
+            _reviewRepository = reviewRepository;
         }
 
         //Service for add product image and product to database
@@ -76,6 +79,8 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.ProductService
 
             if (dto.Price.HasValue)
                 product.Price = dto.Price.Value;
+            if (dto.CostPrice.HasValue)
+                product.CostPrice = dto.CostPrice.Value;
 
             if (dto.Stock.HasValue)
                 product.Stock = dto.Stock.Value;
@@ -141,10 +146,27 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.ProductService
             if (product == null)
                 throw new NotFoundException("Product not found.");
 
+            bool hasOrders = await _orderRepository.HasOrdersAsync(id);
+
+            if (hasOrders)
+            {
+                product.IsActive = false;
+                product.Stock = 0;
+
+                await _productRepository.UpdateAsync(product);
+                return;
+            }
+
+            // Remove reviews
+            await _reviewRepository.DeleteByProductIdAsync(id);
+
+            // Delete Cloudinary images
             foreach (var image in product.Images)
             {
                 await _cloudinaryService.DeleteAsync(image.PublicId);
             }
+
+            // Delete product
             await _productRepository.DeleteAsync(product);
         }
     }

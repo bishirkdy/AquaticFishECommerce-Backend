@@ -13,31 +13,13 @@ namespace AquaticFishECommerce.API.Controllers.User
         public class ProductsController : ControllerBase
         {
             private readonly IProductService _productService;
-            //private readonly IValidator<CreateProductDto> _createProductValidator;
-            //private readonly IValidator<UpdateProductDto> _updateProductValidator;
             public ProductsController(IProductService productService  
-                //, IValidator<CreateProductDto> createProductValidator , IValidator<UpdateProductDto> updateProductValidator
                 )
             {
             _productService = productService;
-            //_createProductValidator = createProductValidator;
-            //_updateProductValidator = updateProductValidator;
+
             }
 
-        ////Controller to get all products
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> GetAll()
-        //    {
-        //        var products = await _productService.GetAllAsync();
-
-        //        return Ok(new ApiResponse<IEnumerable<ProductResponseDto>>
-        //        {
-        //            Success = true,
-        //            Message = "Product fetched successfully",
-        //            Data = products
-        //        });
-        //    }
 
         //Controller for get queriable image
         [HttpGet]

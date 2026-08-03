@@ -31,7 +31,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Authentication
                 new Claim(ClaimTypes.Role , user.Role.ToString())
             };
 
-            //Create secrect key after converted to bytes from jwtsettings
+            //Create secrect key after converted to bytes
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             //An object that combines the security key and the signing algorithm used to digitally sign the JWT
             var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -44,10 +44,11 @@ namespace AquaticFishECommerce.Infrastructure.Services.Authentication
                 expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryInMinutes),
                 signingCredentials: credential
                 );
-            //JwtSecurityTokenHandler is a .NET class used to create, serialize, read, and validate JSON Web Tokens
+            //JwtSecurityTokenHandler - .NET class used to create, serialize, read, and validate JSON Web Tokens
             return new JwtSecurityTokenHandler().WriteToken(token); //It converts the object into the compact JWT string.
         }
 
+        //Service to generate random string for refresh token
         public string GenerateRefreshToken()
         {
             var randomNumber = new byte[64];
@@ -56,6 +57,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Authentication
             return Convert.ToBase64String(randomNumber);
         }
 
+        //Service for hash token of refresh token
         public string HashRefreshToken(string refreshToken)
         {
             using var sha256 = SHA256.Create();

@@ -25,6 +25,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
             return _mapper.Map<List<OrderResponseDto>>(orders);
         }
 
+        //Update order status
         public async Task UpdateOrderStatusAsync(Guid orderId, Guid productId, UpdateOrderStatusDto dto)
         {
             var order = await _orderRepository.GetOrderWithItemsAsync(orderId);
@@ -67,6 +68,19 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
             }
 
             await _orderRepository.UpdateAsync(order);
+        }
+
+        //Delete Order of user
+        public async Task DeleteOrderOfUser(Guid orderId)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+
+            if (order == null)
+            {
+                throw new NotFoundException("Order not found.");
+            }
+
+            await _orderRepository.DeleteAsync(order);
         }
     }
 }

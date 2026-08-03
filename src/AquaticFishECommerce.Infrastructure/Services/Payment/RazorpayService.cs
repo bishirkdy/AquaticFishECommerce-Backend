@@ -40,6 +40,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Payment
                 totalAmount += discountedPrice * item.Quantity;
             }
 
+            //Connect to razorpay
             RazorpayClient client = new RazorpayClient(
                 _settings.KeyId,
                 _settings.KeySecret);

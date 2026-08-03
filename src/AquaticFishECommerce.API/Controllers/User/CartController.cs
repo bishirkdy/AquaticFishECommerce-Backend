@@ -3,14 +3,13 @@ using AquaticFishECommerce.Application.DTOs.CartItem;
 using AquaticFishECommerce.Application.Interfaces.Services.Cart;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace AquaticFishECommerce.API.Controllers.User
 {
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    public class CartController : ControllerBase
+    public class CartController : BaseController
     {
         private readonly ICartService _cartService;
 
@@ -19,24 +18,13 @@ namespace AquaticFishECommerce.API.Controllers.User
             _cartService = cartService;
         }
 
-        private Guid GetUserId()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                throw new UnauthorizedAccessException("User is not authenticated.");
-            }
-
-            return Guid.Parse(userId);
-        }
 
         //Controller for get Cart item of user
         [HttpGet]
         public async Task<IActionResult> GetCart()
         {
-            var userId = GetUserId();
-            var cart = await _cartService.GetCartAsync(userId);
+            var cart = await _cartService.GetCartAsync(UserId);
             return Ok(new ApiResponse<CartResponseDto>
             {
                 Success = true,
@@ -49,9 +37,8 @@ namespace AquaticFishECommerce.API.Controllers.User
         [HttpPost]
         public async Task<IActionResult> AddToCart(AddToCartDto dto)
         {
-            var userId = GetUserId();
             Console.WriteLine(dto);
-            await _cartService.AddToCartAsyn(userId, dto);
+            await _cartService.AddToCartAsyn(UserId, dto);
 
             return Ok(new ApiResponse
             {
@@ -66,9 +53,8 @@ namespace AquaticFishECommerce.API.Controllers.User
             Guid cartItemId,
             UpdateCartItemDto dto)
         {
-            var userId = GetUserId();
 
-            await _cartService.UpdateQuantityAsync(userId, cartItemId, dto);
+            await _cartService.UpdateQuantityAsync(UserId, cartItemId, dto);
 
             return Ok(new ApiResponse
             {
@@ -81,9 +67,8 @@ namespace AquaticFishECommerce.API.Controllers.User
         [HttpDelete("{cartItemId:guid}")]
         public async Task<IActionResult> RemoveItem(Guid cartItemId)
         {
-            var userId = GetUserId();
 
-            await _cartService.RemoveItemAsync(userId, cartItemId);
+            await _cartService.RemoveItemAsync(UserId, cartItemId);
 
             return Ok(new ApiResponse
             {
@@ -96,9 +81,7 @@ namespace AquaticFishECommerce.API.Controllers.User
         [HttpDelete("clear")]
         public async Task<IActionResult> ClearCart()
         {
-            var userId = GetUserId();
-
-            await _cartService.ClearCartAsync(userId);
+            await _cartService.ClearCartAsync(UserId);
 
             return Ok(new ApiResponse
             {

@@ -1,7 +1,6 @@
 using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Auth;
 using AquaticFishECommerce.Application.DTOs.User;
-using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.AuthService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -69,6 +68,7 @@ namespace AquaticFishECommerce.API.Controllers.User
             });
         }
 
+        //Refresh token controller
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
@@ -76,10 +76,17 @@ namespace AquaticFishECommerce.API.Controllers.User
 
             var response = await _authService.RefreshTokenAsync(refreshToken!);
 
-            if (!response.Success)
-            {
-                return Unauthorized(response.Message);
-            }
+            // Access Token Cookie
+            Response.Cookies.Append(
+                "accessToken",
+                response.AccessToken,
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(15)
+                });
 
             Response.Cookies.Append(
                 "refreshToken",
@@ -95,11 +102,12 @@ namespace AquaticFishECommerce.API.Controllers.User
             return Ok(new ApiResponse<string>
             {
                 Success = true,
-                Message = response.Message,
+                Message = "Token refreshed successfully",
                 Data = response.AccessToken
             });
         }
 
+        //Controller for logout
         [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
@@ -152,8 +160,9 @@ namespace AquaticFishECommerce.API.Controllers.User
             });
         }
 
+        //Controller for forgot password
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto dto)
         {
             await _authService.ForgotPasswordAsync(dto);
 
@@ -164,8 +173,9 @@ namespace AquaticFishECommerce.API.Controllers.User
             });
         }
 
+        //Controller for reset password
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
         {
             await _authService.ResetPasswordAsync(dto);
 

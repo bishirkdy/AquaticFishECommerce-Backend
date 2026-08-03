@@ -1,7 +1,4 @@
 using AquaticFishECommerce.Application.DTOs.Favorite;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AquaticFishECommerce.Application.Interfaces.Services.Favorite
 {

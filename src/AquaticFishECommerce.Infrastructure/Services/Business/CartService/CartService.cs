@@ -39,7 +39,6 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.CartService
                         item.DiscountPercentage
                     )
                 );
-
                 item.TotalPrice = item.DiscountedPrice * item.Quantity;
             }
 
@@ -116,10 +115,10 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.CartService
             var cartItem = await _cartItemRepository.GetByIdAsync(cartItemId);
 
             if (cartItem == null)
-                throw new KeyNotFoundException("Cart item not found.");
+                throw new NotFoundException("Cart item not found.");
 
             if (cartItem.UserId != userId)
-                throw new Exception("Unauthorized.");
+                throw new UnauthorizedException("Unauthorized.");
 
             await _cartItemRepository.DeleteAsync(cartItem);
         }

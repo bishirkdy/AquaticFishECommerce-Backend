@@ -4,6 +4,7 @@ namespace AquaticFishECommerce.API.Extensions
     {
         public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
         {
+            //Register frondent with policy
             services.AddCors(options =>
             {
                 options.AddPolicy("ReactPolicy", policy =>

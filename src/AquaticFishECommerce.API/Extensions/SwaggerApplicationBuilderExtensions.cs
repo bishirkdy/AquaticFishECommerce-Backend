@@ -5,6 +5,7 @@ namespace AquaticFishECommerce.API.Extensions
         //WebApplication represents the running ASP.NET Core web application.
         public static WebApplication UseSwaggerDocumentation(this WebApplication app)
         {
+            //use swagger
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

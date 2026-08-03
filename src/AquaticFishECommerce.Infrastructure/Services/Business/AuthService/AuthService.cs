@@ -1,4 +1,3 @@
-
 using AquaticFishECommerce.Application.Common.Exceptions;
 using AquaticFishECommerce.Application.DTOs.Auth;
 using AquaticFishECommerce.Application.DTOs.User;
@@ -39,14 +38,12 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.AuthService
 
             var user = _mapper.Map<AquaticFishECommerce.Domain.Entities.User>(dto);
 
-            // Hash the password before saving
+            // Hash the password
             user.PasswordHash = _passwordHasher.Hash(dto.Password);
-
-            // Save the user
             await _userRepository.AddAsync(user);
         }
 
-        // Login user and return access token
+        // Login user services included jwt tokens
         public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
         {
             var user = await _userRepository.GetByEmailAsync(dto.Email);
@@ -56,7 +53,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.AuthService
                 throw new UnauthorizedException("Invalid email or password.");
             }
 
-            // Generate JWT access token
+            // Generate JWT access and refresh token
             var accessToken = _jwtService.GenerateAccessToken(user);
             var refreshToken = _jwtService.GenerateRefreshToken();
             var refreshTokenHash = _jwtService.HashRefreshToken(refreshToken);
@@ -74,65 +71,60 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.AuthService
             };
         }
 
+        //Refresh token service
         public async Task<RefreshTokenResponseDto> RefreshTokenAsync(string refreshToken)
         {
             if (string.IsNullOrWhiteSpace(refreshToken))
             {
-                return new RefreshTokenResponseDto
-                {
-                    Success = false,
-                    Message = "Refresh token not found."
-                };
+                throw new UnauthorizedException("Unauthorized.");
             }
 
             // Hash received refresh token
             var currentRefreshTokenHash = _jwtService.HashRefreshToken(refreshToken);
-
             // Find user
             var user = await _userRepository.GetByRefreshTokenHashAsync(currentRefreshTokenHash);
 
             if (user is null)
             {
-                return new RefreshTokenResponseDto
-                {
-                    Success = false,
-                    Message = "Invalid refresh token."
-                };
+                throw new UnauthorizedException("Invalid refresh token.");
             }
 
             // Check expiry
             if (user.RefreshTokenExpiryTime is null ||
                 user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
-                return new RefreshTokenResponseDto
-                {
-                    Success = false,
-                    Message = "Refresh token has expired."
-                };
+                throw new UnauthorizedException("Refresh token has expired.");
             }
 
-            // Generate new access token
+            // Generate new tokens
             var newAccessToken = _jwtService.GenerateAccessToken(user);
-
-            // Generate new refresh token
             var newRefreshToken = _jwtService.GenerateRefreshToken();
-
-            // Hash new refresh token
             var newRefreshTokenHash = _jwtService.HashRefreshToken(newRefreshToken);
 
             // Save new values
             user.RefreshTokenHash = newRefreshTokenHash;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(60);
-
             await _userRepository.UpdateAsync(user);
 
             return new RefreshTokenResponseDto
             {
-                Success = true,
-                Message = "Token refreshed successfully.",
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken
             };
+        }
+
+        //Service for logout
+        public async Task LogoutAsync(Guid userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+
+            if (user is null)
+                return;
+
+            user.RefreshTokenHash = null;
+            user.RefreshTokenExpiryTime = null;
+
+            await _userRepository.UpdateAsync(user);
         }
 
         // Get user by ID
@@ -150,19 +142,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.AuthService
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task LogoutAsync(Guid userId)
-        {
-            var user = await _userRepository.GetByIdAsync(userId);
-
-            if (user is null)
-                return;
-
-            user.RefreshTokenHash = null;
-            user.RefreshTokenExpiryTime = null;
-
-            await _userRepository.UpdateAsync(user);
-        }
-
+        //Service for forgot password with send token to email
         public async Task ForgotPasswordAsync(ForgotPasswordDto dto)
         {
             var user = await _userRepository.GetByEmailAsync(dto.Email);
@@ -176,17 +156,13 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.AuthService
             {
                 UserId = user.Id,
                 Token = token,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(30),
+                ExpiresAt = DateTime.UtcNow.AddMinutes(5),
                 IsUsed = false
             };
 
             await _passwordResetRepository.AddAsync(resetToken);
 
             var resetLink = $"http://localhost:5173/reset-password?token={token}";
-
-            Console.WriteLine(_emailService == null);
-            Console.WriteLine(user == null);
-            Console.WriteLine(user?.Email);
 
             await _emailService.SendEmailAsync(
                 user.Email,
@@ -195,15 +171,15 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.AuthService
                 <h2>Reset Password</h2>
                 <p>Click the link below to reset your password.</p>
                 <a href="{resetLink}">Reset Password</a>
-                <p>This link expires in 30 minutes.</p>
+                <p>This link expires in 5 minutes.</p>
                 """
             );
         }
 
+        //Service for reset password of the user
         public async Task ResetPasswordAsync(ResetPasswordDto dto)
         {
-            var resetToken =
-                await _passwordResetRepository.GetByTokenAsync(dto.Token);
+            var resetToken = await _passwordResetRepository.GetByTokenAsync(dto.Token);
 
             if (resetToken == null)
                 throw new BadRequestException("Invalid reset token.");

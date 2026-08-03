@@ -65,9 +65,7 @@ namespace AquaticFishECommerce.API.Middlewares
                 case DatabaseException ex:
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     response.Message = ex.Message;
-                    response.Error = new[]
-                    {
-                    ex.InnerException?.Message ?? ex.Message};
+                    response.Error = new[] {ex.InnerException?.Message ?? ex.Message};
                     break;
 
                 case ConflictException ex:
