@@ -5,6 +5,7 @@ using AquaticFishECommerce.Application.Interfaces.Services.Analysis;
 using AquaticFishECommerce.Application.Interfaces.Services.AuthService;
 using AquaticFishECommerce.Application.Interfaces.Services.Cart;
 using AquaticFishECommerce.Application.Interfaces.Services.Category;
+using AquaticFishECommerce.Application.Interfaces.Services.CategoryService;
 using AquaticFishECommerce.Application.Interfaces.Services.Favorite;
 using AquaticFishECommerce.Application.Interfaces.Services.Order;
 using AquaticFishECommerce.Application.Interfaces.Services.Product;
@@ -42,6 +43,7 @@ namespace AquaticFishECommerce.Infrastructure
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IAdminCategoryService, AdminCategoryService>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IRazorpayService, RazorpayService>();
             services.AddScoped<ICartService, CartService>();

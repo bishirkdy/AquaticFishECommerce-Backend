@@ -46,50 +46,5 @@ namespace AquaticFishECommerce.API.Controllers.User
                 Data = category
             });
         }
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        //Controller for create category
-        public async Task<IActionResult> Create(CreateCategoryDto dto)
-        {
-            var category = await _categoryService.CreateAsync(dto);
-
-            return CreatedAtAction(
-                nameof(GetById),
-                new { id = category.Id },
-                new ApiResponse<CategoryResponseDto>
-                {
-                    Success = true,
-                    Message = "Category created successfully.",
-                    Data = category
-                });
-        }
-
-        [HttpPut("{id:guid}")]
-        [Authorize(Roles = "Admin")]
-        //Controller for update category
-        public async Task<IActionResult> Update(Guid id, UpdateCategoryDto dto)
-        {
-            await _categoryService.UpdateAsync(id, dto);
-
-            return Ok(new ApiResponse
-            {
-                Success = true,
-                Message = "Category updated successfully."
-            });
-        }
-
-        [HttpDelete("{id:guid}")]
-        [Authorize(Roles = "Admin")]
-        //Controller for delete category
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            await _categoryService.DeleteAsync(id);
-            return Ok(new ApiResponse
-            {
-                Success = true,
-                Message = "Category deleted successfully."
-            });
-        }
     }
 }

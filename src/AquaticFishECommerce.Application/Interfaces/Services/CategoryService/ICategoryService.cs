@@ -7,8 +7,5 @@ namespace AquaticFishECommerce.Application.Interfaces.Services.Category
     {
         Task<IEnumerable<CategoryResponseDto>> GetAllAsync();
         Task<CategoryResponseDto> GetByIdAsync(Guid id);
-        Task<CategoryResponseDto> CreateAsync(CreateCategoryDto dto);
-        Task UpdateAsync(Guid id, UpdateCategoryDto dto);
-        Task DeleteAsync(Guid id);
     }
 }
