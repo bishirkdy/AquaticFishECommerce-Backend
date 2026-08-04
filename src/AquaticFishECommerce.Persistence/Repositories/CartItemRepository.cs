@@ -36,7 +36,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
             return await _dbSet
                 .Include(c => c.Product)
                     .ThenInclude(p => p.Images)
-                .Where(c => c.UserId == userId)
+                .Where(c =>c.UserId == userId && c.Product.IsActive && c.Product.Stock > 0)
                 .ToListAsync();
         }
 

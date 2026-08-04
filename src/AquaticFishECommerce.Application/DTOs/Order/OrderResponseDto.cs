@@ -14,5 +14,7 @@ namespace AquaticFishECommerce.Application.DTOs.Order
         public DateTime OrderedAt { get; set; }
         public AddressResponseDto ShippingAddress { get; set; }
         public List<OrderItemResponseDto> Items { get; set; } = [];
+
+
     }
 }

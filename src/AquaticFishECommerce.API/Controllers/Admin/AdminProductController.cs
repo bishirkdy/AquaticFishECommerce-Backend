@@ -11,8 +11,6 @@ namespace AquaticFishECommerce.API.Controllers.Admin
     [ApiController]
     [Route("api/v1/admin/product")]
     [Authorize(Roles = "Admin")]
-
-
     public class AdminProductController : ControllerBase
     {
         private readonly IAdminProductService _adminProductService;
@@ -27,7 +25,6 @@ namespace AquaticFishECommerce.API.Controllers.Admin
 
         //Controller to create product with image
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         //[FromForm] is used when the client sends data as form data instead of JSON.
         public async Task<IActionResult> Create([FromForm] CreateProductRequest request)
         {
@@ -74,7 +71,6 @@ namespace AquaticFishECommerce.API.Controllers.Admin
 
         //Controller to update products for admin
         [HttpPatch("{id:guid}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(
             Guid id,
             [FromForm] UpdateProductRequest request)
@@ -116,7 +112,6 @@ namespace AquaticFishECommerce.API.Controllers.Admin
 
         //Controller to delete products for admin
         [HttpDelete("{id:guid}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _adminProductService.DeleteAsync(id);

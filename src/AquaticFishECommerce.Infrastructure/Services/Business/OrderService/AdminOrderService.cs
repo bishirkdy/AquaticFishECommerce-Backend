@@ -31,41 +31,50 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
             var order = await _orderRepository.GetOrderWithItemsAsync(orderId);
 
             if (order == null)
-                throw new NotFoundException("Order not found");
-            var item = order.Items
-                .FirstOrDefault(x => x.ProductId == productId);
-            
-            if (item == null)
-                throw new NotFoundException("Product not found");
+                throw new NotFoundException("Order not found.");
 
-            item.OrderStatus = dto.Status;
+            var item = order.Items.FirstOrDefault(x => x.ProductId == productId);
+
+            if (item == null)
+                throw new NotFoundException("Product not found.");
+
+            if (item.OrderStatus == OrderStatus.Delivered)
+                throw new BadRequestException("Delivered order cannot be updated.");
+
+            if (item.OrderStatus == OrderStatus.Cancelled)
+                throw new BadRequestException("Cancelled order cannot be updated.");
+
+            if (item.OrderStatus == dto.Status)
+                throw new BadRequestException("Order is already in this status.");
 
             switch (dto.Status)
             {
                 case OrderStatus.Confirmed:
-                    item.ConfirmedAt = DateTime.UtcNow;
+                    item.ConfirmedAt ??= DateTime.UtcNow;
                     break;
 
                 case OrderStatus.Packed:
-                    item.PackedAt = DateTime.UtcNow;
+                    item.PackedAt ??= DateTime.UtcNow;
                     break;
 
                 case OrderStatus.Shipping:
-                    item.ShippingAt = DateTime.UtcNow;
+                    item.ShippingAt ??= DateTime.UtcNow;
                     break;
 
                 case OrderStatus.Shipped:
-                    item.OutForDeliveryAt = DateTime.UtcNow;
+                    item.OutForDeliveryAt ??= DateTime.UtcNow;
                     break;
 
                 case OrderStatus.Delivered:
-                    item.DeliveredAt = DateTime.UtcNow;
+                    item.DeliveredAt ??= DateTime.UtcNow;
                     break;
 
                 case OrderStatus.Cancelled:
-                    item.CancelledAt = DateTime.UtcNow;
+                    item.CancelledAt ??= DateTime.UtcNow;
                     break;
             }
+
+            item.OrderStatus = dto.Status;
 
             await _orderRepository.UpdateAsync(order);
         }

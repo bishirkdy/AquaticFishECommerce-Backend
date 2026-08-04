@@ -47,7 +47,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Payment
 
             Dictionary<string, object> options = new()
     {
-        { "amount", (int)(Math.Floor(totalAmount) * 100) }, // Convert to paise
+        { "amount", (int)(Math.Floor(totalAmount) * 100) },
         { "currency", "INR" },
         { "receipt", Guid.NewGuid().ToString() }
     };

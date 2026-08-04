@@ -1,7 +1,5 @@
 using AquaticFishECommerce.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Application.DTOs.Order
 {
@@ -17,6 +15,12 @@ namespace AquaticFishECommerce.Application.DTOs.Order
         public int Quantity { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public DateTime? CancelledAt { get; set; }
+
+        public DateTime? ConfirmedAt { get; set; }
+        public DateTime? PackedAt { get; set; }
+        public DateTime? ShippingAt { get; set; }
+        public DateTime? OutForDeliveryAt { get; set; }
+        public DateTime? DeliveredAt { get; set; }
 
     }
 }
