@@ -1,8 +1,6 @@
 using AquaticFishECommerce.Application.DTOs.User;
 using AquaticFishECommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Application.Interfaces.Repositories
 {
@@ -12,6 +10,6 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
         Task<bool> EmailExistsAsync(string email);
         Task<IEnumerable<User>> GetAllAsyncUser();
         Task<User?> GetByRefreshTokenHashAsync(string refreshTokenHash);
-
+        Task<(IEnumerable<User> Users, int TotalCount)> GetUsersAsync(int page, int pageSize, string? search, string? status);
     }
 }

@@ -30,8 +30,20 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.AddressService
             {
                 throw new NotFoundException("User not fount");
             }
+
+            var existingAddress =
+            await _addressRepository.FindExistingAddressAsync(userId,dto.Email,dto.Street,dto.Post,dto.District,dto.State,dto.Pincode,dto.Landmark);
+
+            if (existingAddress != null)
+            {
+                existingAddress.UpdatedAt = DateTime.UtcNow;
+                await _addressRepository.UpdateAsync(existingAddress);
+                return _mapper.Map<AddressResponseDto>(existingAddress);
+            }
+
             var address = _mapper.Map<Address>(dto);
             address.UserId = userId;
+            address.UpdatedAt = DateTime.UtcNow;
              await _addressRepository.AddAsync(address);
             return _mapper.Map<AddressResponseDto>(address);
         }
@@ -59,6 +71,15 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.AddressService
             var addresses = await _addressRepository.GetUserAddressesAsync(userId);
 
             return _mapper.Map<IEnumerable<AddressResponseDto>>(addresses);
+        }
+
+        public async Task<AddressResponseDto?> GetLastUsedAddressAsync(Guid userId)
+        {
+            var address = await _addressRepository.GetLastUsedAddressAsync(userId);
+            if (address == null)
+                return null;
+
+            return _mapper.Map<AddressResponseDto>(address);
         }
     }
 }

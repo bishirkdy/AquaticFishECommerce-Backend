@@ -29,6 +29,9 @@ public class CartItemProfile : Profile
                 o => o.MapFrom(s => s.Product.Images
                     .Where(i => i.IsPrimary)
                     .Select(i => i.ImageUrl)
-                    .FirstOrDefault()));
+                    .FirstOrDefault()))
+
+            .ForMember(d => d.AvailableStock,
+            o => o.MapFrom(s => s.Product.Stock));
     }
 }

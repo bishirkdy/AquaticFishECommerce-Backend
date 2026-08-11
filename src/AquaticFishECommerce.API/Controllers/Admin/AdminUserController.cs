@@ -19,7 +19,7 @@ namespace AquaticFishECommerce.API.Controllers.Admin
         }
      
         //Controller for get all users for admin
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
             var users = await _adminUserService.GetAllAsync();
@@ -32,6 +32,12 @@ namespace AquaticFishECommerce.API.Controllers.Admin
             });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetUsers([FromQuery] UserPaginatedQueryDto request)
+        {
+            var result = await _adminUserService.GetUsersAsync(request);
+            return Ok(result);
+        }
 
         //Controller for block and unblock user
         [HttpPatch("{id}/block")]

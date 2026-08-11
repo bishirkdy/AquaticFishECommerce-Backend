@@ -1,4 +1,5 @@
 using AquaticFishECommerce.Application.Common.Exceptions;
+using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.User;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.User;
@@ -27,6 +28,25 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.User
         {
             var users = await _userRepository.GetAllAsyncUser();
             return _mapper.Map<IEnumerable<UserListDto>>(users);
+        }
+
+        //Get user by query
+        public async Task<PaginatedResponse<UserListDto>> GetUsersAsync(UserPaginatedQueryDto request)
+        {
+            var page = request.Page < 1 ? 1 : request.Page;
+            var pageSize = request.PageSize <= 0 ? 6 : Math.Min(request.PageSize, 100);
+            
+            var (users, totalCount) = await _userRepository.GetUsersAsync( page, pageSize, request.Search, request.Status);
+
+            var data = _mapper.Map<IEnumerable<UserListDto>>(users);
+
+            return new PaginatedResponse<UserListDto>
+            {
+                Data = data,
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)};
         }
 
         //block and unblock

@@ -3,14 +3,13 @@ using AquaticFishECommerce.Application.DTOs.Order;
 using AquaticFishECommerce.Application.Interfaces.Services.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace AquaticFishECommerce.API.Controllers.User
 {
     [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    public class OrderController : ControllerBase
+    public class OrderController : BaseController
     {
         private readonly IOrderService _orderService;
 
@@ -19,23 +18,13 @@ namespace AquaticFishECommerce.API.Controllers.User
             _orderService = orderService;
         }
 
-        private Guid GetUserId()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrWhiteSpace(userId))
-                throw new UnauthorizedAccessException("Invalid user.");
-
-            return Guid.Parse(userId);
-        }
 
         // Create Order
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderDto dto)
         {
-            var userId = GetUserId();
 
-            var orderId = await _orderService.CreateOrderAsync(userId, dto);
+            var orderId = await _orderService.CreateOrderAsync(UserId, dto);
 
             return Ok(new ApiResponse<Guid>
             {
@@ -49,9 +38,8 @@ namespace AquaticFishECommerce.API.Controllers.User
         [HttpGet("me")]
         public async Task<IActionResult> GetMyOrders()
         {
-            var userId = GetUserId();
 
-            var orders = await _orderService.GetMyOrdersAsync(userId);
+            var orders = await _orderService.GetMyOrdersAsync(UserId);
 
             return Ok(new ApiResponse<List<OrderResponseDto>>
             {
@@ -65,9 +53,7 @@ namespace AquaticFishECommerce.API.Controllers.User
         [HttpPatch("{orderId:guid}/cancel/{productId:guid}")]
         public async Task<IActionResult> CancelOrderItem(Guid orderId, Guid productId)
         {
-            var userId = GetUserId();
-
-            await _orderService.CancelOrderItemAsync(userId, productId, orderId);
+            await _orderService.CancelOrderItemAsync(UserId, productId, orderId);
 
             return Ok(new ApiResponse
             {

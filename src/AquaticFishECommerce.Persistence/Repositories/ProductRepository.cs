@@ -38,6 +38,7 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .AsNoTracking()
                 .Include(p => p.Images)
                 .Include(p => p.Category)
+                .Where(p => p.Stock > 0)
                 .Where(p => p.IsActive)
                 .Take(6)
                 .ToListAsync();

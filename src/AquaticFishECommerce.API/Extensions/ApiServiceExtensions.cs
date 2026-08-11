@@ -20,7 +20,7 @@ namespace AquaticFishECommerce.API.Extensions
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
-            service.AddCorsPolicy();
+            service.AddCorsPolicy(configuration);
 
             service.AddScoped<IValidator<CreateProductRequest> , CreateProductRequestValidator>();
 

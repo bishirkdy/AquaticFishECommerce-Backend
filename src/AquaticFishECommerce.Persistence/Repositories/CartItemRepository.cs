@@ -1,3 +1,4 @@
+using AquaticFishECommerce.Application.DTOs.Order;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Domain.Entities;
 using AquaticFishECommerce.Persistence.Context;
@@ -57,6 +58,34 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .ToListAsync();
 
             _context.CartItems.RemoveRange(items);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemovePurchasedItemsAsync(Guid userId, IEnumerable<CreateOrderItemDto> items)
+        {
+            var productIds = items.Select(x => x.ProductId).ToList();
+
+            var cartItems = await _context.CartItems
+                .Where(x =>
+                    x.UserId == userId &&
+                    productIds.Contains(x.ProductId))
+                .ToListAsync();
+
+            foreach (var cartItem in cartItems)
+            {
+                var orderedItem = items.First(x => x.ProductId == cartItem.ProductId);
+
+                if (orderedItem.Quantity >= cartItem.Quantity)
+                {
+                    // Purchased entire cart quantity
+                    _context.CartItems.Remove(cartItem);
+                }
+                else
+                {
+                    // Purchased only part of cart quantity
+                    cartItem.Quantity -= orderedItem.Quantity;
+                }
+            }
             await _context.SaveChangesAsync();
         }
     }

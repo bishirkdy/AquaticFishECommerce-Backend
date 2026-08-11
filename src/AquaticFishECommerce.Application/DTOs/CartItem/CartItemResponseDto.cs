@@ -11,6 +11,7 @@ namespace AquaticFishECommerce.Application.DTOs.CartItem
         public decimal DiscountedPrice { get; set; }
 
         public int Quantity { get; set; }
+        public int AvailableStock { get; set; }
         public decimal TotalPrice { get; set; }
 
         public string ImageUrl { get; set; } = string.Empty;

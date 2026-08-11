@@ -64,16 +64,11 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
                     throw new BadRequestException($"{product.Name} has only {product.Stock} items remaining.");
 
                 decimal unitPrice = product.Price;
-
                 decimal costPrice = product.CostPrice;
-
                 decimal finalPrice = Math.Floor(
-                    PriceCalculation.GetDiscountedPrice(
-                        unitPrice,
-                        product.DiscountPercentage));
+                    PriceCalculation.GetDiscountedPrice( unitPrice, product.DiscountPercentage));
 
                 decimal itemTotal = finalPrice * item.Quantity;
-
                 decimal itemProfit = (finalPrice - costPrice) * item.Quantity;
 
                 totalAmount += itemTotal;
@@ -88,15 +83,11 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
                 {
                     ProductId = product.Id,
                     Quantity = item.Quantity,
-
                     UnitPrice = unitPrice,
                     DiscountedUnitPrice = finalPrice,
-
                     CostPrice = costPrice,
                     DiscountPercentage = product.DiscountPercentage,
-
                     TotalPrice = itemTotal,
-
                     OrderStatus = OrderStatus.OrderPlaced
                 });
             }
@@ -117,7 +108,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
             };
             await _orderRepository.AddAsync(order);
             // Clear Cart
-            await _cartItemRepository.ClearCartAsync(userId);
+            await _cartItemRepository.RemovePurchasedItemsAsync(userId,dto.Items);
             return order.Id;
         }
 

@@ -15,5 +15,28 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .ToListAsync();
         }
 
+        public async Task<Address?> GetLastUsedAddressAsync(Guid userId)
+        {
+            return await _context.Addresses
+                .AsNoTracking()
+                .Where(a => a.UserId == userId)
+                .OrderByDescending(a => a.UpdatedAt)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Address?> FindExistingAddressAsync(Guid userId, string email , string street,string post, string district, string state, string pincode, string? landmark)
+        {
+            return await _context.Addresses
+                .FirstOrDefaultAsync(a =>
+                    a.UserId == userId &&
+                    a.Email == email &&
+                    a.Street == street &&
+                    a.Post == post &&
+                    a.District == district &&
+                    a.State == state &&
+                    a.Pincode == pincode &&
+                    a.Landmark == landmark);
+        }
+
     }
 }

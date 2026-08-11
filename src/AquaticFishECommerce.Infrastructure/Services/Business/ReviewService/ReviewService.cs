@@ -30,12 +30,6 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.ReviewService
             if (!productExists)
                 throw new NotFoundException("Product not found");
 
-            var alreadyReviewed = await _reviewRepository
-                .AlreadyReviewedAsync(userId, dto.ProductId);
-
-            if (alreadyReviewed)
-                throw new BadRequestException("You already reviewed this product");
-
             var review = _mapper.Map<Review>(dto);
             review.UserId = userId;
             review.CreatedAt = DateTime.UtcNow;

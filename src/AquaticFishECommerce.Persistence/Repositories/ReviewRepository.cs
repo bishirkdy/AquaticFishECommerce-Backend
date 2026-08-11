@@ -21,12 +21,12 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public async Task<bool> AlreadyReviewedAsync(Guid userId, Guid productId)
-        {
-            return await _dbSet.AnyAsync(r =>
-                r.UserId == userId &&
-                r.ProductId == productId);
-        }
+        //public async Task<bool> AlreadyReviewedAsync(Guid userId, Guid productId)
+        //{
+        //    return await _dbSet.AnyAsync(r =>
+        //        r.UserId == userId &&
+        //        r.ProductId == productId);
+        //}
 
         public async Task DeleteByProductIdAsync(Guid productId)
         {

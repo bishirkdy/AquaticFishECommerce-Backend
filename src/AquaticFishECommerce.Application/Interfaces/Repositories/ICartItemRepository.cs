@@ -1,3 +1,4 @@
+using AquaticFishECommerce.Application.DTOs.Order;
 using AquaticFishECommerce.Domain.Entities;
 
 
@@ -10,5 +11,6 @@ namespace AquaticFishECommerce.Application.Interfaces.Repositories
         Task<IEnumerable<CartItem?>> GetUserCartAsync(Guid userId);
         Task DeleteByProductIdAsync(Guid productId);
         Task DeleteByUserIdAsync(Guid userId);
+        Task RemovePurchasedItemsAsync(Guid userId, IEnumerable<CreateOrderItemDto> orderItems);
     }
 }
