@@ -1,4 +1,5 @@
 using AquaticFishECommerce.Application.Common.Exceptions;
+using AquaticFishECommerce.Application.Common.Responses;
 using AquaticFishECommerce.Application.DTOs.Order;
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Application.Interfaces.Services.Order;
@@ -90,6 +91,33 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
             }
 
             await _orderRepository.DeleteAsync(order);
+        }
+
+        //Service for all order for admin by query
+        public async Task<PaginatedResponse<OrderResponseDto>> GetOrdersAsync(OrderPaginatedQueryDto request)
+        {
+            var page = request.Page <= 0 ? 1 : request.Page;
+            var pageSize = request.PageSize <= 0
+                ? 5
+                : Math.Min(request.PageSize, 100);
+
+            var (orders, totalCount) =
+                await _orderRepository.GetOrdersAsync(
+                    page,
+                    pageSize,
+                    request.Search,
+                    request.Status);
+
+            var data = _mapper.Map<IEnumerable<OrderResponseDto>>(orders);
+
+            return new PaginatedResponse<OrderResponseDto>
+            {
+                Data = data,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+            };
         }
     }
 }

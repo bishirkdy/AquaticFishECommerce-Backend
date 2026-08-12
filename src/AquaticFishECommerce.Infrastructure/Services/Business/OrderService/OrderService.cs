@@ -120,6 +120,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
             return _mapper.Map<List<OrderResponseDto>>(orders);
         }
 
+        //Service for cancel order item
         public async Task CancelOrderItemAsync(Guid userId ,Guid productId , Guid orderId)
         {
             var order = await _orderRepository.GetOrderWithItemsAsync(orderId); 
@@ -138,11 +139,44 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
             {
                 throw new NotFoundException("Order item not fount");
             }
+            if (orderItem.OrderStatus == OrderStatus.Delivered || orderItem.OrderStatus == OrderStatus.Cancelled)
+            {
+                throw new BadRequestException(
+                    "This product cannot be cancelled.");
+            }
             orderItem.OrderStatus = OrderStatus.Cancelled;
             orderItem.CancelledAt = DateTime.UtcNow;
 
-            await _orderRepository.UpdateAsync(order);
+            orderItem.Refunded = true;
+            var remainingItems = order.Items
+                .Where(x => x.OrderStatus != OrderStatus.Cancelled)
+                .ToList();
 
+            order.TotalAmount = remainingItems
+                .Sum(x => x.TotalPrice);
+
+            if (remainingItems.Count == 0)
+            {
+                order.OrderStatus = OrderStatus.Cancelled;
+
+                if (order.PaymentMethod == PaymentMethod.Cash)
+                {
+                    order.PaymentStatus = PaymentStatus.Cancelled;
+                }
+                else if (order.PaymentMethod == PaymentMethod.RazorPay)
+                {
+                    order.PaymentStatus = PaymentStatus.Refunded;
+                }
+            }
+
+            var product = await _productRepository.GetByIdAsync(orderItem.ProductId);
+
+            if (product == null)
+                throw new NotFoundException("Product not found.");
+            product.Stock += orderItem.Quantity;
+
+            await _orderRepository.UpdateAsync(order);
+            await _productRepository.UpdateAsync(product);
         }      
         
     }

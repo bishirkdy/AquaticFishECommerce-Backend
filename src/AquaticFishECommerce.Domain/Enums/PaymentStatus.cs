@@ -5,6 +5,7 @@ namespace AquaticFishECommerce.Domain.Enums
         Pending,
         Paid,
         Failed,
-        Refunded
+        Refunded,
+        Cancelled
     }
 }

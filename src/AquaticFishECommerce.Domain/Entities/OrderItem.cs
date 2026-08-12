@@ -25,5 +25,7 @@ namespace AquaticFishECommerce.Domain.Entities
         public DateTime? OutForDeliveryAt { get; set; }
         public DateTime? DeliveredAt { get; set; }
         public DateTime? CancelledAt { get; set; }
+
+        public bool? Refunded { get; set; }
     }
 }

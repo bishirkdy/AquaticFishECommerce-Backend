@@ -22,5 +22,7 @@ namespace AquaticFishECommerce.Application.DTOs.Order
         public DateTime? OutForDeliveryAt { get; set; }
         public DateTime? DeliveredAt { get; set; }
 
+        public bool refunded { get; set; }
+
     }
 }

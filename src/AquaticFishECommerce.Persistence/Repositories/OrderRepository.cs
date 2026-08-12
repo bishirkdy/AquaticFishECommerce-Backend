@@ -1,5 +1,6 @@
 using AquaticFishECommerce.Application.Interfaces.Repositories;
 using AquaticFishECommerce.Domain.Entities;
+using AquaticFishECommerce.Domain.Enums;
 using AquaticFishECommerce.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,6 +58,51 @@ namespace AquaticFishECommerce.Persistence.Repositories
         public async Task<bool> HasOrdersByUserIdAsync(Guid userId)
         {
             return await _context.Orders.AnyAsync(o => o.UserId == userId);
+        }
+
+        public async Task<(IEnumerable<Order> Orders, int TotalCount)> GetOrdersAsync(int page, int pageSize, string? search, string? status)
+        {
+            var query = _context.Orders
+                .AsNoTracking()
+                .Include(o => o.Address)
+                .Include(o => o.Items)
+                    .ThenInclude(i => i.Product)
+                    .ThenInclude(p => p.Images)
+                .AsQueryable();
+
+            // Search
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+
+                query = query.Where(o =>
+                    o.Id.ToString().Contains(search) ||
+                    o.PaymentMethod.ToString().Contains(search) ||
+                    o.PaymentStatus.ToString().Contains(search) ||
+                    o.Address.FullName.Contains(search) ||
+                    o.Address.PhoneNumber.Contains(search)
+                );
+            }
+
+            // Status
+            if (!string.IsNullOrWhiteSpace(status) && status != "All")
+            {
+                if (Enum.TryParse<OrderStatus>(status, true, out var orderStatus))
+                {
+                    query = query.Where(o =>
+                        o.Items.Any(i => i.OrderStatus == orderStatus));
+                }
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var orders = await query
+                .OrderByDescending(o => o.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (orders, totalCount);
         }
     }
 }

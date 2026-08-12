@@ -19,7 +19,7 @@ namespace AquaticFishECommerce.API.Controllers.Admin
             _adminOrderService = adminOrderService;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllOrders()
         {
             var orders = await _adminOrderService.GetAllOrderAsync();
@@ -53,6 +53,19 @@ namespace AquaticFishECommerce.API.Controllers.Admin
             {
                 Success = true,
                 Message = "Order deleted successfully."
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetOrders(
+        [FromQuery] OrderPaginatedQueryDto request)
+        {
+            var result = await _adminOrderService.GetOrdersAsync(request);
+            return Ok(new ApiResponse<PaginatedResponse<OrderResponseDto>>
+            {
+                Success = true,
+                Message = "Order fetched successfully",
+                Data = result
             });
         }
     }

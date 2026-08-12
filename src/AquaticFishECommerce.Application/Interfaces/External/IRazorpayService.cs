@@ -1,8 +1,6 @@
 using AquaticFishECommerce.Application.DTOs.Payment;
 using AquaticFishECommerce.Application.DTOs.Razorpay;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AquaticFishECommerce.Application.Interfaces.External
 {
@@ -10,6 +8,7 @@ namespace AquaticFishECommerce.Application.Interfaces.External
     {
          Task<RazorpayOrderResponseDto> CreateOrderAsync(CreatePaymentDto dto);
          bool VerifyPayment(string orderId,string paymentId,string signature);
+        //Task RefundAsync(string paymentId, decimal amount);
 
     }
 }

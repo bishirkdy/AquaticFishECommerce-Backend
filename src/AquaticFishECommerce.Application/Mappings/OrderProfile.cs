@@ -22,55 +22,23 @@ namespace AquaticFishECommerce.Application.Mappings
 
             // Order Item Response
             CreateMap<OrderItem, OrderItemResponseDto>()
-                .ForMember(dest => dest.ProductId,
-                    opt => opt.MapFrom(src => src.ProductId))
 
                 .ForMember(dest => dest.ProductName,
-                    opt => opt.MapFrom(src => src.Product.Name))
-
-                .ForMember(dest => dest.Quantity,
-                     opt => opt.MapFrom(src => src.Quantity))
+                     opt => opt.MapFrom(src => src.Product.Name))
 
                 .ForMember(dest => dest.OriginalPrice,
                      opt => opt.MapFrom(src => src.UnitPrice))
 
-                .ForMember(dest => dest.DiscountPercentage,
-                     opt => opt.MapFrom(src => src.DiscountPercentage))
-
                 .ForMember(dest => dest.DiscountedPrice,
-                    opt => opt.MapFrom(src => src.DiscountedUnitPrice))
+                     opt => opt.MapFrom(src => src.DiscountedUnitPrice))
 
                 .ForMember(dest => dest.ProductImage,
-                    opt => opt.MapFrom(src =>
-                     src.Product.Images
-                    .Where(i => i.IsPrimary)
-                    .Select(i => i.ImageUrl)
-                    .FirstOrDefault()))
+                     opt => opt.MapFrom(src =>
+                         src.Product.Images
+                           .Where(i => i.IsPrimary)
+                           .Select(i => i.ImageUrl)
+                           .FirstOrDefault()));
 
-                .ForMember(dest => dest.TotalPrice,
-                    opt => opt.MapFrom(src => src.TotalPrice))
-
-                .ForMember(dest => dest.OrderStatus,
-                    opt => opt.MapFrom(src => src.OrderStatus))
-
-                .ForMember(dest => dest.ConfirmedAt,
-                    opt => opt.MapFrom(src => src.ConfirmedAt))
-
-                .ForMember(dest => dest.PackedAt,
-                    opt => opt.MapFrom(src => src.PackedAt))
-
-                .ForMember(dest => dest.ShippingAt,
-                     opt => opt.MapFrom(src => src.ShippingAt))
-
-                .ForMember(dest => dest.OutForDeliveryAt,
-                    opt => opt.MapFrom(src => src.OutForDeliveryAt))
-
-                .ForMember(dest => dest.DeliveredAt,
-                    opt => opt.MapFrom(src => src.DeliveredAt))
-
-                .ForMember(dest => dest.CancelledAt,
-                    opt => opt.MapFrom(src => src.CancelledAt));
-            
             // Address Response
             CreateMap<Address, AddressResponseDto>();
         }

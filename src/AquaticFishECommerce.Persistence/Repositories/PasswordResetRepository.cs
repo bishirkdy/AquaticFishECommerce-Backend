@@ -16,5 +16,6 @@ namespace AquaticFishECommerce.Persistence.Repositories
                 .Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Token == token);
         }
+
     }
 }
