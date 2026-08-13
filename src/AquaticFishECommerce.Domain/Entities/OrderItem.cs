@@ -16,6 +16,7 @@ namespace AquaticFishECommerce.Domain.Entities
         public decimal CostPrice { get; set; }
         public decimal DiscountPercentage { get; set; }
         public decimal TotalPrice { get; set; }
+        public decimal Profit { get; set; }
 
         public OrderStatus OrderStatus { get; set; }
 

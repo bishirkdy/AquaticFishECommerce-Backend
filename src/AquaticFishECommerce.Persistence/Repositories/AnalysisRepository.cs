@@ -18,7 +18,9 @@ namespace AquaticFishECommerce.Persistence.Repositories
 
         public async Task<List<Order>> GetOrdersAsync()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<RatingSummaryDto> GetRatingSummaryAsync()

@@ -33,9 +33,11 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.Analysis
         public async Task<IEnumerable<MonthlySalesDto>> GetMonthlySalesAsync()
         {
             var orders = await _analysisRepository.GetOrdersAsync();
-
             string[] months =
-            {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+            {
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+             };
 
             var current = DateTime.Now;
             var result = new List<MonthlySalesDto>();
@@ -57,7 +59,6 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.Analysis
             }
             return result;
         }
-
         public async Task<IEnumerable<MonthlyProductDto>> GetMonthlyProductsAsync()
         {
             var products = await _productRepository.GetAllAsync();
@@ -80,7 +81,6 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.Analysis
                     ProductCount = count
                 });
             }
-
             return result;
         }
 

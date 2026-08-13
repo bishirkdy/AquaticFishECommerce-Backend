@@ -1,4 +1,3 @@
-
 namespace AquaticFishECommerce.Application.DTOs.Favorite
 {
     public class FavoriteResponseDto
@@ -9,6 +8,7 @@ namespace AquaticFishECommerce.Application.DTOs.Favorite
         public decimal OriginalPrice { get; set; }
         public decimal DiscountPercentage { get; set; }
         public decimal DiscountedPrice { get; set; }
+        public int Stock { get; set; }
         public bool IsActive { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
     }

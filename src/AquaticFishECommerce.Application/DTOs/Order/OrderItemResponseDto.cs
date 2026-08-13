@@ -24,5 +24,6 @@ namespace AquaticFishECommerce.Application.DTOs.Order
 
         public bool refunded { get; set; }
 
+
     }
 }

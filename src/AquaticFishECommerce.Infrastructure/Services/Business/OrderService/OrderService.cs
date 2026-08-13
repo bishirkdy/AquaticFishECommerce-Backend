@@ -85,6 +85,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
                     Quantity = item.Quantity,
                     UnitPrice = unitPrice,
                     DiscountedUnitPrice = finalPrice,
+                    Profit = itemProfit,
                     CostPrice = costPrice,
                     DiscountPercentage = product.DiscountPercentage,
                     TotalPrice = itemTotal,
@@ -117,7 +118,8 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
         {
             var orders = await _orderRepository.GetOrderByUserIdAsync(userId);
 
-            return _mapper.Map<List<OrderResponseDto>>(orders);
+            var result = _mapper.Map<List<OrderResponseDto>>(orders);
+            return result;
         }
 
         //Service for cancel order item
@@ -152,6 +154,9 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
                 .Where(x => x.OrderStatus != OrderStatus.Cancelled)
                 .ToList();
 
+            decimal cancelledProfit = (orderItem.DiscountedUnitPrice - orderItem.CostPrice) * orderItem.Quantity;
+            order.Profit -= cancelledProfit;
+
             order.TotalAmount = remainingItems
                 .Sum(x => x.TotalPrice);
 
@@ -168,6 +173,7 @@ namespace AquaticFishECommerce.Infrastructure.Services.Business.OrderServices
                     order.PaymentStatus = PaymentStatus.Refunded;
                 }
             }
+
 
             var product = await _productRepository.GetByIdAsync(orderItem.ProductId);
 

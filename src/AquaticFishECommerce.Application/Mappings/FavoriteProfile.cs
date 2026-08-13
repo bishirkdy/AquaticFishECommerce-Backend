@@ -27,7 +27,8 @@ namespace AquaticFishECommerce.Application.Mappings
 
                 .ForMember(d => d.IsActive,
                     o => o.MapFrom(s => s.Product.IsActive))
-
+                .ForMember(d => d.Stock , 
+                    o => o.MapFrom(s => s.Product.Stock))
                 .ForMember(d => d.ImageUrl,
                     o => o.MapFrom(s =>
                         s.Product.Images
