@@ -10,24 +10,30 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # CI: Get source code from GitHub
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # CI: Restore NuGet packages
       - name: Restore
         run: dotnet restore
 
+      # CI: Compile the application
       - name: Build
         run: dotnet build -c Release --no-restore
 
+      # CD: Stop backend so IIS releases DLL files
       - name: Stop Backend App Pool
         run: |
           Import-Module WebAdministration
           Stop-WebAppPool -Name "AquaticFishECommercePool"
 
+      # CD: Publish directly to IIS folder
       - name: Publish
         run: dotnet publish .\src\AquaticFishECommerce.API\AquaticFishECommerce.API.csproj -c Release -o C:\inetpub\AquaticFishECommerce
 
-      - name: Restart Backend App Pool
+      # CD: Start backend with the new files
+      - name: Start Backend App Pool
         run: |
-            Import-Module WebAdministration
-            Restart-WebAppPool -Name "AquaticFishECommercePool"
+          Import-Module WebAdministration
+          Start-WebAppPool -Name "AquaticFishECommercePool"
