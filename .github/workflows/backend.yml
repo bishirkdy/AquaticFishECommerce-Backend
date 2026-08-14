@@ -22,5 +22,7 @@ jobs:
       - name: Publish
         run: dotnet publish .\src\AquaticFishECommerce.API\AquaticFishECommerce.API.csproj -c Release -o C:\inetpub\AquaticFishECommerce
 
-      - name: Restart IIS
-        run: iisreset
+      - name: Restart Backend App Pool
+        run: |
+            Import-Module WebAdministration
+            Restart-WebAppPool -Name "AquaticFishECommercePool"
