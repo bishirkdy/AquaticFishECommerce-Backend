@@ -19,11 +19,8 @@ namespace AquaticFishECommerce.API.Extensions
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
-
             service.AddCorsPolicy(configuration);
-
             service.AddScoped<IValidator<CreateProductRequest> , CreateProductRequestValidator>();
-
             //Whenever a request is received, automatically run the registered FluentValidation validator for the model
             service.AddFluentValidationAutoValidation();
             return service;

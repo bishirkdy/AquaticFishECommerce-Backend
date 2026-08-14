@@ -43,8 +43,8 @@ namespace AquaticFishECommerce.API.Controllers.User
                 new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.None,
+                    //Secure = true,
+                    SameSite = SameSiteMode.Lax,
                     Expires = DateTimeOffset.UtcNow.AddMinutes(15)
                 });
 
@@ -55,8 +55,8 @@ namespace AquaticFishECommerce.API.Controllers.User
                 new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.None,
+                    //Secure = true,
+                    SameSite = SameSiteMode.Lax,
                     Expires = DateTimeOffset.UtcNow.AddMinutes(60)
                 });
 
@@ -83,8 +83,8 @@ namespace AquaticFishECommerce.API.Controllers.User
                 new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.None,
+                    //Secure = true,
+                    SameSite = SameSiteMode.Lax,
                     Expires = DateTimeOffset.UtcNow.AddMinutes(15)
                 });
 
@@ -94,8 +94,8 @@ namespace AquaticFishECommerce.API.Controllers.User
                 new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.None,
+                    //Secure = true,
+                    SameSite = SameSiteMode.Lax,
                     Expires = DateTimeOffset.UtcNow.AddMinutes(60)
                 });
 
@@ -124,16 +124,16 @@ namespace AquaticFishECommerce.API.Controllers.User
             Response.Cookies.Delete("accessToken", new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None,
+                //Secure = true,
+                SameSite = SameSiteMode.Lax,
                 Path = "/"
             });
 
             Response.Cookies.Delete("refreshToken", new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None,
+                //Secure = true,
+                SameSite = SameSiteMode.Lax,
                 Path = "/"
             });
 
