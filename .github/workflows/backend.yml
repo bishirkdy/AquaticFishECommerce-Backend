@@ -10,30 +10,44 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # CI: Get source code from GitHub
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # CI: Restore NuGet packages
       - name: Restore
         run: dotnet restore
 
-      # CI: Compile the application
       - name: Build
         run: dotnet build -c Release --no-restore
 
-      # CD: Stop backend so IIS releases DLL files
       - name: Stop Backend App Pool
         run: |
           Import-Module WebAdministration
-          Stop-WebAppPool -Name "AquaticFishECommercePool"
 
-      # CD: Publish directly to IIS folder
+          $pool = Get-WebAppPoolState -Name "AquaticFishECommercePool"
+
+          if ($pool.Value -eq "Started") {
+              Stop-WebAppPool -Name "AquaticFishECommercePool"
+              Start-Sleep -Seconds 2
+          }
+          else {
+              Write-Host "App Pool is already stopped."
+          }
+
       - name: Publish
-        run: dotnet publish .\src\AquaticFishECommerce.API\AquaticFishECommerce.API.csproj -c Release -o C:\inetpub\AquaticFishECommerce
+        run: |
+          dotnet publish .\src\AquaticFishECommerce.API\AquaticFishECommerce.API.csproj `
+            -c Release `
+            -o C:\inetpub\AquaticFishECommerce
 
-      # CD: Start backend with the new files
       - name: Start Backend App Pool
         run: |
           Import-Module WebAdministration
-          Start-WebAppPool -Name "AquaticFishECommercePool"
+
+          $pool = Get-WebAppPoolState -Name "AquaticFishECommercePool"
+
+          if ($pool.Value -ne "Started") {
+              Start-WebAppPool -Name "AquaticFishECommercePool"
+          }
+          else {
+              Write-Host "App Pool is already running."
+          }
