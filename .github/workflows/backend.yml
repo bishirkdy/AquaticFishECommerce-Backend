@@ -19,6 +19,11 @@ jobs:
       - name: Build
         run: dotnet build -c Release --no-restore
 
+      - name: Stop Backend App Pool
+        run: |
+          Import-Module WebAdministration
+          Stop-WebAppPool -Name "AquaticFishECommercePool"
+
       - name: Publish
         run: dotnet publish .\src\AquaticFishECommerce.API\AquaticFishECommerce.API.csproj -c Release -o C:\inetpub\AquaticFishECommerce
 
