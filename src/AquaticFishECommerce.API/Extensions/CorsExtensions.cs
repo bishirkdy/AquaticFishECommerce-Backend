@@ -5,6 +5,10 @@ namespace AquaticFishECommerce.API.Extensions
         public static IServiceCollection AddCorsPolicy(this IServiceCollection services , IConfiguration configuration)
         {
             var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+            Console.WriteLine(
+     $"CORS Origins: {string.Join(", ", allowedOrigins ?? Array.Empty<string>())}"
+ );
+
             //Register frondent with policy
             services.AddCors(options =>
             {
