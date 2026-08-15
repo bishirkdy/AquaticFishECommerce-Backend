@@ -10,7 +10,8 @@ namespace AquaticFishECommerce.API.Extensions
             {
                 options.AddPolicy("ReactPolicy", policy =>
                 {
-                    policy.WithOrigins(allowedOrigins ?? Array.Empty<string>())
+                    policy
+            .WithOrigins("https://172-198-71-181.nip.io")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
