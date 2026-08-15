@@ -7,10 +7,12 @@ namespace AquaticFishECommerce.API.Extensions
             IConfiguration configuration)
         {
             var allowedOrigin =
-                Environment.GetEnvironmentVariable(
-                    "Cors__AllowedOrigins__0");
+                Environment.GetEnvironmentVariable("Cors__AllowedOrigins__0");
 
-            Console.WriteLine($"CORS Origin: {allowedOrigin}");
+            File.WriteAllText(
+                @"C:\inetpub\AquaticFishECommerce\cors-debug.txt",
+                $"CORS Origin: {allowedOrigin}"
+            );
 
             services.AddCors(options =>
             {
