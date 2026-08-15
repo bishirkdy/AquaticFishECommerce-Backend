@@ -19,10 +19,35 @@ jobs:
       - name: Build
         run: dotnet build -c Release --no-restore
 
-      - name: Publish
-        run: dotnet publish .\src\AquaticFishECommerce.API\AquaticFishECommerce.API.csproj -c Release -o C:\inetpub\AquaticFishECommerce
-
-      - name: Restart Backend App Pool
+      - name: Stop Backend App Pool
         run: |
-            Import-Module WebAdministration
-            Restart-WebAppPool -Name "AquaticFishECommercePool"
+          Import-Module WebAdministration
+
+          $pool = Get-WebAppPoolState -Name "AquaticFishECommercePool"
+
+          if ($pool.Value -eq "Started") {
+              Stop-WebAppPool -Name "AquaticFishECommercePool"
+              Start-Sleep -Seconds 2
+          }
+          else {
+              Write-Host "App Pool is already stopped."
+          }
+
+      - name: Publish
+        run: |
+          dotnet publish .\src\AquaticFishECommerce.API\AquaticFishECommerce.API.csproj `
+            -c Release `
+            -o C:\inetpub\AquaticFishECommerce
+
+      - name: Start Backend App Pool
+        run: |
+          Import-Module WebAdministration
+
+          $pool = Get-WebAppPoolState -Name "AquaticFishECommercePool"
+
+          if ($pool.Value -ne "Started") {
+              Start-WebAppPool -Name "AquaticFishECommercePool"
+          }
+          else {
+              Write-Host "App Pool is already running."
+          }
