@@ -6,8 +6,7 @@ namespace AquaticFishECommerce.API.Extensions
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            var allowedOrigin =
-                configuration["Cors:AllowedOrigin"];
+            var allowedOrigin = configuration["Cors:AllowedOrigin"];
 
             services.AddCors(options =>
             {
