@@ -1,20 +1,23 @@
 namespace AquaticFishECommerce.API.Extensions
 {
-    public static  class CorsExtensions
+    public static class CorsExtensions
     {
-        public static IServiceCollection AddCorsPolicy(this IServiceCollection services , IConfiguration configuration)
+        public static IServiceCollection AddCorsPolicy(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
-            var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
-            //Register frondent with policy
+            var allowedOrigin =
+                configuration["Cors:AllowedOrigin"];
+
             services.AddCors(options =>
             {
                 options.AddPolicy("ReactPolicy", policy =>
                 {
                     policy
-            .WithOrigins("https://172-198-71-181.nip.io")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
+                        .WithOrigins(allowedOrigin!)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
 
