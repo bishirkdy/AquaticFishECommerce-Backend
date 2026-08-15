@@ -6,18 +6,12 @@ namespace AquaticFishECommerce.API.Extensions
         {
             var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 
-
-
-            Console.WriteLine(
-                $"CORS Origins: {string.Join(", ", allowedOrigins ?? Array.Empty<string>())}"
-            );
-
             //Register frondent with policy
             services.AddCors(options =>
             {
                 options.AddPolicy("ReactPolicy", policy =>
                 {
-                    policy.WithOrigins("https://172-198-71-181.nip.io")
+                    policy.WithOrigins(allowedOrigins ?? Array.Empty<string>())
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
